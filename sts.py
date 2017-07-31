@@ -73,9 +73,37 @@ class one_event:
     def get_odds(self,data):
         self.odds = {}
         soup = BeautifulSoup(data, "html.parser")
-        games_all = soup.find_all('table', {'class': 'col3'})
+        games_col3 = soup.find_all('table', {'class': 'col3'})
         #print games
-        for games in games_all:
+        for games in games_col3:
+            odd_t=games.find('thead')
+            #print odd_t
+            try:
+                #print ("TEXT:")
+                #print (odd_t.tr.th.span.text.strip())
+                #print (codecs.encode(odd_t.tr.th.span.text.strip(),encoding='utf-8'))
+                self.odd_type=self.__events_mapping[odd_t.tr.th.span.text.strip()]["name"]
+            except:
+                self.odd_type=odd_t.tr.th.span.text.strip()
+                print ("Nie ma: %s", odd_t.tr.th.span.text.strip() )
+            odd_t2=games.find('tbody')
+            #print "TU JEST KURS:"
+            cols=games.find('tbody').find('tr').find_all('td')
+            i=0
+            self.odds[self.odd_type] = {}
+            for col in cols:
+                #print col.text.strip().split(' ')[-1]
+                x = col.text.strip().replace(' ','').split('\n')
+                #print x
+                try:
+                    self.odds[self.odd_type][x[0]]=float(x[1])
+                except:
+                    print ("nieznany zaklad:")
+                    print (col.text.strip().replace(' ','').split('\n'))
+                    continue
+                i=i+1
+        games_col2 = soup.find_all('table', {'class': 'col2'})
+        for games in games_col2:
             odd_t=games.find('thead')
             #print odd_t
             try:
