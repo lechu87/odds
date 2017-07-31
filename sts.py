@@ -1,13 +1,15 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # encoding=utf8
 from bs4 import BeautifulSoup
 #import urllib2
-import pandas as pd
+#import pandas as pd
 import sqlite3
 from sqlalchemy import create_engine
 import platform
 from selenium import webdriver
 import codecs, sys
+import json
 
 
 class one_event:
@@ -77,12 +79,13 @@ class one_event:
             odd_t=games.find('thead')
             #print odd_t
             try:
-                print ("TEXT:")
-                print (odd_t.tr.th.span.text.strip())
-                print (codecs.encode(odd_t.tr.th.span.text.strip(),encoding='utf-8'))
-                self.odd_type=self.__events_mapping[codecs.encode(odd_t.tr.th.span.text.strip(),encoding='utf-8')]["name"]
+                #print ("TEXT:")
+                #print (odd_t.tr.th.span.text.strip())
+                #print (codecs.encode(odd_t.tr.th.span.text.strip(),encoding='utf-8'))
+                self.odd_type=self.__events_mapping[odd_t.tr.th.span.text.strip()]["name"]
             except:
                 self.odd_type=odd_t.tr.th.span.text.strip()
+                print ("Nie ma: %s", odd_t.tr.th.span.text.strip() )
             odd_t2=games.find('tbody')
             #print "TU JEST KURS:"
             cols=games.find('tbody').find('tr').find_all('td')
@@ -124,10 +127,10 @@ class one_event:
 data=codecs.open('www.sts.pl.htm',mode='r',encoding='utf-8').read()
 meczyk=one_event()
 
-if platform.system() == 'Windows':
-    PHANTOMJS_PATH = './phantomjs.exe'
-else:
-    PHANTOMJS_PATH = './phantomjs'
+#if platform.system() == 'Windows':
+#    PHANTOMJS_PATH = './phantomjs.exe'
+#else:
+#    PHANTOMJS_PATH = './phantomjs'
 
 #browser = webdriver.PhantomJS(PHANTOMJS_PATH)
 #browser = webdriver.Firefox()
