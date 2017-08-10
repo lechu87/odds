@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # encoding=utf8
 from bs4 import BeautifulSoup
-#import urllib2
+import urllib.request as urllib2
 #import pandas as pd
 import sqlite3
 from sqlalchemy import create_engine
@@ -10,19 +10,21 @@ import platform
 from selenium import webdriver
 import codecs, sys
 import json
+import sqlite3
+from collections import defaultdict
 
-
-class one_event:
+class football_event:
     __events_mapping={
         "mecz":{"name":"game"},
+        "mecz  (w Niecieczy)":{"name":"game"},
         "zakład bez remisu (remis=zwrot)":{"name":"dnb"},
-        "liczba goli w meczu 1.5 - poniżej/powyżej ":{"name":"over1.5"},
-        "liczba goli w meczu 2.5 - poniżej/powyżej ": {"name": "over2.5"},
-        "liczba goli w meczu 3.5 - poniżej/powyżej ": {"name": "over3.5"},
-        "liczba goli w meczu 4.5 - poniżej/powyżej ": {"name": "over4.5"},
-        "liczba goli w meczu 5.5 - poniżej/powyżej ": {"name": "over5.5"},
-        "liczba goli w meczu 6.5 - poniżej/powyżej ": {"name": "over6.5"},
-        "liczba goli w meczu 7.5 - poniżej/powyżej ": {"name": "over7.5"},
+        "liczba goli w meczu 1.5 - poniżej/powyżej":{"name":"over1.5"},
+        "liczba goli w meczu 2.5 - poniżej/powyżej": {"name": "over2.5"},
+        "liczba goli w meczu 3.5 - poniżej/powyżej": {"name": "over3.5"},
+        "liczba goli w meczu 4.5 - poniżej/powyżej": {"name": "over4.5"},
+        "liczba goli w meczu 5.5 - poniżej/powyżej": {"name": "over5.5"},
+        "liczba goli w meczu 6.5 - poniżej/powyżej": {"name": "over6.5"},
+        "liczba goli w meczu 7.5 - poniżej/powyżej": {"name": "over7.5"},
         "1 drużyna strzeli gola":{"name":"1st_team_to_score"},
         "2 drużyna strzeli gola":{"name": "2nd_team_to_score"},
         "obie drużyny strzelą gola":{"name": "btts"},
@@ -53,7 +55,76 @@ class one_event:
         "1 gol : minuta": {"name": "1st_goal_time"},
         "która drużyna otrzyma więcej zółtych kartek": {"name": "yellow_more"},
         "jakie wydarzenie odbędzie się jako pierwsze (2)": {"name": "1st_event"},
+        "1 połowa : zakład bez remisu (remis=zwrot)": {"name": "1st_half_dnb"},
+        "1 połowa : liczba goli 0.5 - poniżej/powyżej": {"name": "1st_half_over0.5"},
+        "1 połowa : liczba goli 1.5 - poniżej/powyżej": {"name": "1st_half_over1.5"},
+        "1 połowa : liczba goli 2.5 - poniżej/powyżej": {"name": "1st_half_over2.5"},
+        "1 połowa handicap (-1.5)": {"name": "1st_half_eh-1.5"},
+        "1 połowa handicap (+1.5)": {"name": "1st_half_eh+1.5"},
+        "2 połowa : zakład bez remisu (remis=zwrot)": {"name": "2nd_half_dnb"},
+        "2 połowa : liczba goli 0.5 - poniżej/powyżej": {"name": "2nd_half_over0.5"},
+        "2 połowa : liczba goli 1.5 - poniżej/powyżej": {"name": "2nd_half_over1.5"},
+        "2 połowa : liczba goli 2.5 - poniżej/powyżej": {"name": "2nd_half_over2.5"},
+        "1 drużyna : liczba strzelonych goli 1.5 poniżej/powyżej": {"name": "1st_team_over1.5"},
+        "1 drużyna : liczba strzelonych goli 2.5 poniżej/powyżej": {"name": "1st_team_over2.5"},
+        "2 drużyna : liczba strzelonych goli 1.5 poniżej/powyżej": {"name": "2nd_team_over1.5"},
+        "2 drużyna : liczba strzelonych goli 2.5 poniżej/powyżej": {"name": "2nd_team_over2.5"},
+        "1 drużyna : strzeli gola w obu połowach": {"name": "1st_team_both_half_to_score"},
+        "2 drużyna : strzeli gola w obu połowach": {"name": "2nd_team_both_half_to_score"},
+        "1 drużyna strzeli gola w 1 połowie": {"name": "1st_team_1st_half_to_score"},
+        "2 drużyna strzeli gola w 1 połowie": {"name": "2nd_team_2nd_half_to_score"},
+        "oba zespoły strzelą gola w 1 połowie": {"name": "1st_half_btts"},
+        "1 drużyna strzeli gola w 2 połowie": {"name": "1st_team_2nd_half_to_score"},
+        "2 drużyna strzeli gola w 2 połowie": {"name": "2nd_team_2nd_half_to_score"},
+        "oba zespoły strzelą gola w 2 połowie": {"name": "2nd_half_btts"},
+        "1 drużyna : wygra do zera": {"name": "1st_team_win_to_0"},
+        "2 drużyna : wygra do zera": {"name": "2nd_team_win_to_0"},
+        "1 drużyna : wygra obie połowy meczu": {"name": "1st_team_both_half_to_win"},
+        "2 drużyna : wygra obie połowy meczu": {"name": "2nd_team_both_half_to_win"},
+        "1 drużyna : wygra przynajmniej jedną połowę": {"name": "1st_team_lose_one_half"},
+        "2 drużyna : wygra przynajmniej jedną połowę": {"name": "2nd_team_lose_one_half"},
+        "obie połowy powyżej 1.5 gola": {"name": "both_half_over1.5"},
+        "obie połowy poniżej 1.5 gola": {"name": "both_half_under1.5"},
+        "będzie gol do 27 minuty": {"name": "goal_bf_27min"},
+        "będzie gol po 72 minucie": {"name": "goal_af_72_min"},
+        "liczba rzutów rożnych 8.5 - poniżej/powyżej": {"name": "corners_over8.5"},
+        "liczba rzutów rożnych 9.5 - poniżej/powyżej": {"name": "corners_over9.5"},
+        "liczba rzutów rożnych 10.5 - poniżej/powyżej": {"name": "corners_over10.5"},
+        "liczba rzutów rożnych 11.5 - poniżej/powyżej": {"name": "corners_over11.5"},
+        "liczba rzutów rożnych 12.5 - poniżej/powyżej": {"name": "corners_over12.5"},
+        "rzuty rożne - kto wykona więcej ?  (remis zwrot)": {"name": "corners_which_team_dnb"},
+        "rzuty rożne - kto wykona więcej (handicap)": {"name": "corners_which_team_eh"},
+        "1 drużyna : liczba rz. rożnych mniej/więcej": {"name": "1st_team_corners"},
+        "2 drużyna : liczba rz. rożnych mniej/więcej": {"name": "2nd_team_corners"},
+        "liczba żółtych kartek w meczu": {"name": "yellow_cards_number"},
+        "liczba żółtych kartek w meczu": {"name": "yellow_cards_number"},
+        "liczba żółtych kartek w meczu": {"name": "yellow_cards_number"},
+        "1 drużyna : liczba żółtych kartek mniej/więcej": {"name": "1st_team_yellow_cards_number"},
+        "2 drużyna : liczba żółtych kartek mniej/więcej": {"name": "2nd_team_yellow_cards_number"},
+        "czy będzie czerwona kartka ?": {"name": "red_card"},
+        "czy będzie rzut karny ?": {"name": "penalty"},
+        "czy bedzie gol rezerwowego ?": {"name": "subs_to_score"},
+        "czy będzie gol samobójczy ?": {"name": "own_goal"},
+        "liczba spalonych w meczu": {"name": "offsides_number"},
+        "liczba fauli w meczu": {"name": "fouls_number"},
+        "liczba strzałów w światło bramki": {"name": "shots_on_target"},
+        "strzały w światło bramki - która drużyna więcej  (remis zwrot)": {"name": "shots_on_target_which_team_dnb"},
+        "1 drużyna : liczba strzałów w światło bramki mniej/więcej": {"name": "1st_team_shots_on_target"},
+        "2 drużyna : liczba strzałów w światło bramki mniej/więcej": {"name": "2nd_team_shots_on_target"},
+        "procentowe posiadanie piłki   (remis zwrot)": {"name": "ball_possesion_dnb"},
+        "1 drużyna : procentowe posiadanie piłki mniej/więcej": {"name": "1st_team_ball_possesion"},
+        "padnie bramka w doliczonym czasie gry (1p. lub 2p.)?": {"name": "added_time_goal_1_or_2_half"},
+        "będzie wykorzystany limit zmian zaw.  (6)": {"name": "subs_number"},
+        "zawodnik : strzeli gola" : {"name":"scorer"},
+        "zawodnik : strzeli przynajmniej dwa gole" : {"name": "2goals_scorer"},
+        "zawodnik : strzeli przynajmniej trzy gole" : {"name": "3goals_scorer"},
+        "zawodnik : strzeli i jego zespół wygra" : {"name": "scorer_team_win"},
+        "zawodnik : otrzyma kartkę" : {"name": "card_who"}
+
+
     }
+    discipline='football'
+
 
     def get_name(self,data):
         soup = BeautifulSoup(data, "html.parser")
@@ -64,7 +135,21 @@ class one_event:
         self.away = game_teams.split(' - ')[1]
         self.date = game_teams.split(' - ')[2]
         self.time = game_teams.split(' - ')[3]
+        self.league=soup.find('h2', {'class':'headline'}).text.strip().split(',')[0]
+        self.country=soup.find('h2', {'class':'headline'}).text.strip().split(',')[1]
         return game_teams
+    def correct_name(self,name):
+        if (self.home in name.split('/')[0] and '/' in name):
+            return self.home+'/'+name.split('/')[1]
+        elif (self.away in name.split('/')[0] and '/' in name):
+            return self.away + '/' + name.split('/')[1]
+        else:
+            return name
+    def fix_for_cup(self,name):
+        if 'mecz' in name[0:5]:
+            return 'mecz'
+        else:
+            return name
     #def get_home(self,game_teams):
     #    self.home=game_teams.split(' - ')[0]
     #    self.away=game_teams.split(' - ')[1]
@@ -73,6 +158,7 @@ class one_event:
     def get_odds(self,data):
         self.odds = {}
         soup = BeautifulSoup(data, "html.parser")
+
         games_col3 = soup.find_all('table', {'class': 'col3'})
         #print games
         for games in games_col3:
@@ -82,55 +168,124 @@ class one_event:
                 #print ("TEXT:")
                 #print (odd_t.tr.th.span.text.strip())
                 #print (codecs.encode(odd_t.tr.th.span.text.strip(),encoding='utf-8'))
-                self.odd_type=self.__events_mapping[odd_t.tr.th.span.text.strip()]["name"]
+                name = odd_t.tr.th.span.text.strip()
+                name = self.fix_for_cup(name)
+                self.odd_type=self.__events_mapping[name]["name"]
             except:
                 self.odd_type=odd_t.tr.th.span.text.strip()
                 print ("Nie ma: %s", odd_t.tr.th.span.text.strip() )
             odd_t2=games.find('tbody')
             #print "TU JEST KURS:"
-            cols=games.find('tbody').find('tr').find_all('td')
+            tmp=games.find('tbody').find_all('tr')
+            if len(tmp)>1:
+                cols=tmp[1].find_all('td')
+            else:
+                cols = tmp[0].find_all('td')
             i=0
+            #print ("COLS: ", cols)
+            cols=[]
+            for i in tmp:
+                cols.append(i.find_all('td'))
+
+            #cols=tmp.find_all('td')
+            #POPRAW DLA HANDICAP
             self.odds[self.odd_type] = {}
-            for col in cols:
+            for t in tmp:
                 #print col.text.strip().split(' ')[-1]
-                x = col.text.strip().replace(' ','').split('\n')
+                cols=t.find_all('td')
+                for col in cols:
+                    x = col.text.strip().replace(' ','').split('\n')
                 #print x
-                try:
-                    self.odds[self.odd_type][x[0]]=float(x[1])
-                except:
-                    print ("nieznany zaklad:")
-                    print (col.text.strip().replace(' ','').split('\n'))
-                    continue
-                i=i+1
+                    try:
+                        print ('X0 przed: ', x[0])
+                        x[0]=self.correct_name(x[0])
+                        print ('X0 po: ', x[0])
+                        self.odds[self.odd_type][x[0]]=float(x[1])
+                    except:
+                        print ("nieznany zaklad:")
+                        print (col.text.strip().replace(' ','').split('\n'))
+                        continue
+
+
+
         games_col2 = soup.find_all('table', {'class': 'col2'})
         for games in games_col2:
             odd_t=games.find('thead')
-            #print odd_t
+            #print (odd_t.text.strip())
             try:
                 #print ("TEXT:")
                 #print (odd_t.tr.th.span.text.strip())
                 #print (codecs.encode(odd_t.tr.th.span.text.strip(),encoding='utf-8'))
                 self.odd_type=self.__events_mapping[odd_t.tr.th.span.text.strip()]["name"]
             except:
-                self.odd_type=odd_t.tr.th.span.text.strip()
-                print ("Nie ma: %s", odd_t.tr.th.span.text.strip() )
-            odd_t2=games.find('tbody')
+                continue
+            odd_t2=games.find('tbody').find_all('tr')
+            if len(odd_t2)>1:
+                cols=odd_t2[-1].find_all('td')
+            else:
+                cols=odd_t2[0].find_all('td')
             #print "TU JEST KURS:"
-            cols=games.find('tbody').find('tr').find_all('td')
+            #cols=games.find('tbody').find('tr').find_all('td')
             i=0
             self.odds[self.odd_type] = {}
             for col in cols:
                 #print col.text.strip().split(' ')[-1]
                 x = col.text.strip().replace(' ','').split('\n')
-                #print x
+                #print ("X: ",x)
                 try:
                     self.odds[self.odd_type][x[0]]=float(x[1])
                 except:
-                    print ("nieznany zaklad:")
-                    print (col.text.strip().replace(' ','').split('\n'))
+                    #print ("nieznany zaklad:")
+                    #print (col.text.strip().replace(' ','').split('\n'))
                     continue
                 i=i+1
 
+
+        games_col1 = soup.find_all('table', {'class': 'col1'})
+        #print ("GAMES_COL1: ", games_col1)
+        for games in games_col1:
+            odd_t = games.find('thead')
+            #print (odd_t.text.strip())
+            #print ("TEXT:", odd_t)
+                # print (odd_t.tr.th.span.text.strip())
+            if odd_t is not None:    # print (codecs.encode(odd_t.tr.th.span.text.strip(),encoding='utf-8'))
+                self.odd_type = self.__events_mapping[odd_t.tr.th.span.text.strip()]["name"]
+                self.odds[self.odd_type] = {}
+
+            odd_t2 = games.find('tbody').find_all('tr')
+            self.sub_name=odd_t2[0].text
+
+            cols = odd_t2[1].find('td')
+            # print "TU JEST KURS:"
+            # cols=games.find('tbody').find('tr').find_all('td')
+            i = 0
+
+            self.odds[self.odd_type][self.sub_name] = {}
+            x = cols.text.strip().replace(' ', '').split('\n')
+            #print ("X: ",x)
+            try:
+                self.odds[self.odd_type][self.sub_name] = float(x[1])
+            except:
+                    # print ("nieznany zaklad:")
+                    # print (col.text.strip().replace(' ','').split('\n'))
+                continue
+        return self.odds
+
+    def save_to_db(meczyk):
+        database_name = 'db.sqlite'
+        db = sqlite3.connect(database_name)
+        home = meczyk.get_name(data).split(" - ")[0].strip().replace(' ','')
+        print ("Home:", home)
+        away = meczyk.get_name(data).split(" - ")[1].strip().replace(' ','')
+        print ("Away:", away)
+        date = meczyk.get_name(data).split(" - ")[2]
+        print ("Date:", date)
+        sqldate=meczyk.date.split(' ')[1].split('.')[2]+'-'+meczyk.date.split(' ')[1].split('.')[1]+'-'+meczyk.date.split(' ')[1].split('.')[0]
+
+        db.execute("insert into db_sts (home,away,_1,_0,_2,_10,_02,_12,data,Sport,League,country) values (?,?,?,?,?,?,?,?,?,?,?,?)",
+                   (home, away, meczyk.odds['game'][home], meczyk.odds['game']['X'], meczyk.odds['game'][away], meczyk.odds['game'][home+'/X'],
+                    meczyk.odds['game'][away + '/X'],meczyk.odds['game'][home+'/'+away],sqldate, meczyk.discipline, meczyk.league,meczyk.country))
+        db.commit()
 
 
     def __init__(self):
@@ -147,13 +302,35 @@ class one_event:
         print ("SELF TIME:")
         print (self.time)
         self.get_odds(data)
-        print ("ODD TYPE:")
-        print (self.odd_type)
+        print ("ODDS:")
         print (self.odds)
+        file=open('odd','w')
+        file.write(str(self.odds))
 
 
-data=codecs.open('www.sts.pl.htm',mode='r',encoding='utf-8').read()
-meczyk=one_event()
+strona=urllib2.urlopen('https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6482&league=4269').read()
+soup = BeautifulSoup(strona, "html.parser")
+more_bets=soup.find_all('td', {'class': 'support_bets'})
+for a in more_bets:
+    print ("A: ",a)
+    link=a.find('a', href = True)
+    print ("LINK: ", link['href'])
+    data=urllib2.urlopen(link['href']).read()
+    meczyk=football_event()
+    meczyk.save_to_db()
+
+
+#data=codecs.open('www.sts.pl.htm',mode='r',encoding='utf-8').read()
+data=urllib2.urlopen('https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6535&league=3994&oppty=85142253').read()
+
+#meczyk=football_event()
+#print (meczyk.odds)
+#meczyk.save_to_db()
+###DOROBIC DC###
+
+
+
+
 
 #if platform.system() == 'Windows':
 #    PHANTOMJS_PATH = './phantomjs.exe'
@@ -167,118 +344,3 @@ meczyk=one_event()
 
 #soup = BeautifulSoup(browser.page_source, "html.parser")
 
-soup=BeautifulSoup(data,"html.parser")
-# get all the games
-games = soup.find_all('table', {'class': 'col3'})
-game_teams=soup.find('div',{'class':'shadow_box support_bets_offer'}).h2.text.strip()
-#print "GAME:"
-#print game_teams
-# and print out the html for first game
-#print(games[0].prettify())
-head2=[]
-odds={}
-for game in games:
-    heads=game.find_all('thead')
-    for head in heads:
-        head2.append(head.text.strip())
-    body=game.find('tbody')
-    rows=body.find_all('tr')
-    for row in rows:
-        #print soup.prettify(row)
-#        print heads[0].text.strip()
-#        print row.text.strip().replace("\n"," ").replace("  "," ")
-        x=row.text.strip()
-        odds[game_teams]=row.text.strip().replace("\n"," ").replace("  "," ")
-
-#print "HEAD2:"
-#print head2
-
-#print "ODDS:"
-#print odds
-exit()
-
-tables=soup.find_all('table')[2]
-table_head=tables.find('thead')
-head2=[]
-game=[]
-games={}
-for head in table_head:
-    try:
-        if len(head.text)>0:
-            head2.append(head.text.strip().replace("\n",' '))
-    except:
-        continue
-
-table_body = tables.find('tbody')
-rows=table_body.find_all('tr')
-sport='data-gtm-enhanced-ecommerce-sport'
-league='data-gtm-enhanced-ecommerce-league'
-
-for tr in rows:
-    cols=tr.find_all('td')
-    tmp = []
-    sport_name = tr.get(sport)
-    league_name = tr.get(league)
-    additional_info=[sport_name,league_name]
-    print ("Additional info:")
-    print (additional_info)
-    for td in cols:
-        try:
-            #print ahref[0].text
-            #print td.text
-            #print td.div.span.a.text
-            #print td.text
-            if len(td.text)>0 or len(td.text)<=0:
-                #print "TD.text"
-                #print td.text
-                #x=str(td.text.strip().replace("\n",' '))
-                x=str(td.text[0:100].strip().replace("\n",' ')) #brzydkie obejście
-                #print x
-                y=x.find('  ')
-                if y>0:
-                    z=x[0:y]
-                else:
-                    z=x
-                tmp.append(z)
-                #print z
-            else:
-                #print "Nie poszlo:"
-                #print td
-                #print td.text.strip()
-                continue
-            #print i.text
-            #print td.div.a.text
-            tmp2=tuple(tmp)
-        except:
-            continue
-        #tmp2=tuple(tmp)
-    #print tmp
-#    print "LEN TMP2"
-#    print len(tmp2)
-    tmp3=list(tmp2)+additional_info
-    game.append(tmp3)
-#print("/////////////////")
-head2=head2[0].replace('  ',' ').replace('  ',' ').split(' ')
-head2.append("Sport")
-head2.append("League")
-#print head2
-#print game
-#print len(head2)
-
-
-#for i in game:
-#    print i
-#print head2
-#print game
-x=pd.DataFrame(game, columns=head2)
-#print x
-engine = create_engine('sqlite:///db.sqlite')
-x.to_sql('db_fortuna', engine)
-#x.to_sql('sqlite:///db_table2', sqlite3)
-exit()
-
-
-table=soup.find_all(class_='bet_tables_holder')
-
-#for link in soup.find_all('bet_item_main_text'):
-#    print(link.get('href'))
