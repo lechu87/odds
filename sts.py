@@ -12,12 +12,16 @@ import codecs, sys
 import json
 import sqlite3
 from collections import defaultdict
+import logging
+
 
 class football_event:
+    logging.basicConfig(filename='logfile.log', level=logging.DEBUG)
     __events_mapping={
         "mecz":{"name":"game"},
         "mecz  (w Niecieczy)":{"name":"game"},
         "zakład bez remisu (remis=zwrot)":{"name":"dnb"},
+        "liczba goli w meczu 0.5 - poniżej/powyżej": {"name": "over0.5"},
         "liczba goli w meczu 1.5 - poniżej/powyżej":{"name":"over1.5"},
         "liczba goli w meczu 2.5 - poniżej/powyżej": {"name": "over2.5"},
         "liczba goli w meczu 3.5 - poniżej/powyżej": {"name": "over3.5"},
@@ -25,6 +29,8 @@ class football_event:
         "liczba goli w meczu 5.5 - poniżej/powyżej": {"name": "over5.5"},
         "liczba goli w meczu 6.5 - poniżej/powyżej": {"name": "over6.5"},
         "liczba goli w meczu 7.5 - poniżej/powyżej": {"name": "over7.5"},
+        "liczba goli w meczu 8.5 - poniżej/powyżej": {"name": "over8.5"},
+        "liczba goli w meczu 9.5 - poniżej/powyżej": {"name": "over9.5"},
         "1 drużyna strzeli gola":{"name":"1st_team_to_score"},
         "2 drużyna strzeli gola":{"name": "2nd_team_to_score"},
         "obie drużyny strzelą gola":{"name": "btts"},
@@ -124,7 +130,9 @@ class football_event:
 
     }
     discipline='football'
-
+    def map(self,__events_mapping):
+        print (self.__events_mapping)
+        return self.__events_mapping
 
     def get_name(self,data):
         soup = BeautifulSoup(data, "html.parser")
@@ -137,6 +145,8 @@ class football_event:
         self.time = game_teams.split(' - ')[3]
         self.league=soup.find('h2', {'class':'headline'}).text.strip().split(',')[0]
         self.country=soup.find('h2', {'class':'headline'}).text.strip().split(',')[1]
+        logging.info(game_teams)
+        self.names=self.__events_mapping.values()
         return game_teams
     def correct_name(self,name):
         if (self.home in name.split('/')[0] and '/' in name):
@@ -172,6 +182,7 @@ class football_event:
                 name = self.fix_for_cup(name)
                 self.odd_type=self.__events_mapping[name]["name"]
             except:
+                logging.warning("Nieznany zaklad: "+ name)
                 self.odd_type=odd_t.tr.th.span.text.strip()
                 print ("Nie ma: %s", odd_t.tr.th.span.text.strip() )
             odd_t2=games.find('tbody')
@@ -189,6 +200,7 @@ class football_event:
 
             #cols=tmp.find_all('td')
             #POPRAW DLA HANDICAP
+
             self.odds[self.odd_type] = {}
             for t in tmp:
                 #print col.text.strip().split(' ')[-1]
@@ -197,13 +209,11 @@ class football_event:
                     x = col.text.strip().replace(' ','').split('\n')
                 #print x
                     try:
-                        print ('X0 przed: ', x[0])
                         x[0]=self.correct_name(x[0])
-                        print ('X0 po: ', x[0])
                         self.odds[self.odd_type][x[0]]=float(x[1])
                     except:
-                        print ("nieznany zaklad:")
-                        print (col.text.strip().replace(' ','').split('\n'))
+                        #print ("nieznany zaklad:")
+                        #print (col.text.strip().replace(' ','').split('\n'))
                         continue
 
 
@@ -218,6 +228,7 @@ class football_event:
                 #print (codecs.encode(odd_t.tr.th.span.text.strip(),encoding='utf-8'))
                 self.odd_type=self.__events_mapping[odd_t.tr.th.span.text.strip()]["name"]
             except:
+                logging.warning("Nieznany zaklad: "+ name)
                 continue
             odd_t2=games.find('tbody').find_all('tr')
             if len(odd_t2)>1:
@@ -270,6 +281,88 @@ class football_event:
                     # print (col.text.strip().replace(' ','').split('\n'))
                 continue
         return self.odds
+    def prepare_dict_to_sql(self):
+        self.dict_sql=defaultdict()
+        #for key in self.__events_mapping.values():
+        #    dict[key]=''
+        #ADD MISSING ODDS TO DICT:
+
+        for i in self.names:
+            if i['name'] not in self.odds.keys():
+                self.odds[i['name']]=''
+        def get_odd_2(napis,x):
+            try:
+                return napis.get(x,'')
+            except:
+                logging.warning("Nie znalazlem kursu: ")
+                return ''
+        home = self.get_name(data).split(" - ")[0].strip().replace(' ', '')
+        away = self.get_name(data).split(" - ")[1].strip().replace(' ','')
+        self.dict_sql['home']=self.get_name(data).split(" - ")[0].strip().replace(' ','')
+        self.dict_sql['away']=away = self.get_name(data).split(" - ")[1].strip().replace(' ','')
+        self.dict_sql['_1']=self.odds['game'][home]
+        self.dict_sql['_0']=self.odds['game']['X']
+        self.dict_sql['_2']=self.odds['game'][away]
+        self.dict_sql['_10']=self.odds['game'][home + '/X']
+        self.dict_sql['_02']=self.odds['game'][away + '/X']
+        self.dict_sql['_12']=self.odds['game'][home + '/' + away]
+        self.dict_sql['data']=self.date.split(' ')[1].split('.')[2]+'-'+self.date.split(' ')[1].split('.')[1]+'-'+self.date.split(' ')[1].split('.')[0]
+        self.dict_sql['Sport']=self.discipline
+        self.dict_sql['League']=self.league
+        self.dict_sql['country']=self.country
+        self.dict_sql['dnb_1']=get_odd_2(self.odds['dnb'],home)
+        self.dict_sql['dnb_2']=get_odd_2(self.odds['dnb'],away)
+        self.dict_sql['o_05']=get_odd_2(self.odds['over0.5'],'+')
+        self.dict_sql['u_05'] = get_odd_2(self.odds['over0.5'], '-')
+        self.dict_sql['o_15'] = get_odd_2(self.odds['over1.5'],'+')
+        self.dict_sql['u_15'] = get_odd_2(self.odds['over1.5'], '-')
+        self.dict_sql['o_25'] = get_odd_2(self.odds['over2.5'],'+')
+        self.dict_sql['u_25'] = get_odd_2(self.odds['over2.5'], '-')
+        self.dict_sql['o_35'] = get_odd_2(self.odds['over3.5'],'+')
+        self.dict_sql['u_35'] = get_odd_2(self.odds['over3.5'], '-')
+        self.dict_sql['o_45'] = get_odd_2(self.odds['over4.5'],'+')
+        self.dict_sql['u_45'] = get_odd_2(self.odds['over4.5'], '-')
+        self.dict_sql['o_55'] = get_odd_2(self.odds['over5.5'],'+')
+        self.dict_sql['u_55'] = get_odd_2(self.odds['over5.5'], '-')
+        self.dict_sql['o_65'] = get_odd_2(self.odds['over6.5'],'+')
+        self.dict_sql['u_65'] = get_odd_2(self.odds['over6.5'], '-')
+        self.dict_sql['o_75'] = get_odd_2(self.odds['over7.5'],'+')
+        self.dict_sql['u_75'] = get_odd_2(self.odds['over7.5'], '-')
+        self.dict_sql['o_85'] = get_odd_2(self.odds['over8.5'],'+')
+        self.dict_sql['u_85'] = get_odd_2(self.odds['over8.5'], '-')
+        self.dict_sql['o_95'] = get_odd_2(self.odds['over9.5'],'+')
+        self.dict_sql['u_95'] = get_odd_2(self.odds['over9.5'], '-')
+        self.dict_sql['ht_ft_11'] = get_odd_2(self.odds['half/end'], '1/1')
+        self.dict_sql['ht_ft_1x'] = get_odd_2(self.odds['half/end'], '1/X')
+        self.dict_sql['ht_ft_2x'] = get_odd_2(self.odds['half/end'], '2/X')
+        self.dict_sql['ht_ft_21'] = get_odd_2(self.odds['half/end'], '2/1')
+        self.dict_sql['ht_ft_22'] = get_odd_2(self.odds['half/end'], '2/2')
+        self.dict_sql['ht_ft_x1'] = get_odd_2(self.odds['half/end'], 'X/1')
+        self.dict_sql['ht_ft_x2'] = get_odd_2(self.odds['half/end'], 'X/2')
+        self.dict_sql['ht_ft_12'] = get_odd_2(self.odds['half/end'], '1/2')
+        self.dict_sql['ht_ft_xx'] = get_odd_2(self.odds['half/end'], 'X/X')
+        self.dict_sql['_1st_half_1']= get_odd_2(self.odds['1st_half'], home)
+        self.dict_sql['_1st_half_x'] = get_odd_2(self.odds['1st_half'], 'X')
+        self.dict_sql['_1st_half_2'] = get_odd_2(self.odds['1st_half'], away)
+        self.dict_sql['_1st_half_10'] = get_odd_2(self.odds['1st_half'],[home + '/X'])
+        self.dict_sql['_1st_half_02'] = get_odd_2(self.odds['1st_half'],[away + '/X'])
+        self.dict_sql['_1st_half_12'] = get_odd_2(self.odds['1st_half'],[home + '/' + away])
+        self.dict_sql['eh-1_1'] = get_odd_2(self.odds['eh-1'],home + '(-1)')
+        self.dict_sql['eh-1_x2'] = get_odd_2(self.odds['eh-1'],away + '/X')
+        self.dict_sql['u_25_1'] = get_odd_2(self.odds['goal2.5/result'],'-2.5/1')
+        self.dict_sql['o_25_1'] = get_odd_2(self.odds['goal2.5/result'],'+2.5/1')
+        self.dict_sql['u_25_x'] = get_odd_2(self.odds['goal2.5/result'],'-2.5/X')
+        self.dict_sql['o_25_x'] = get_odd_2(self.odds['goal2.5/result'],'+2.5/X')
+        self.dict_sql['u_25_2'] = get_odd_2(self.odds['goal2.5/result'],'-2.5/2')
+        self.dict_sql['o_25_2'] = get_odd_2(self.odds['goal2.5/result'],'+2.5/2')
+        self.dict_sql['1_st_goal_1'] = get_odd_2(self.odds['1st_goal'],home)
+        self.dict_sql['1_st_goal_2'] = get_odd_2(self.odds['1st_goal'],away)
+        self.dict_sql['1_st_goal_0'] = get_odd_2(self.odds['1st_goal'],'nikt')
+
+
+
+        print ("DICT: ", self.dict_sql)
+        return self.dict_sql
 
     def save_to_db(meczyk):
         database_name = 'db.sqlite'
@@ -280,11 +373,18 @@ class football_event:
         print ("Away:", away)
         date = meczyk.get_name(data).split(" - ")[2]
         print ("Date:", date)
+        try:
+            o_05=meczyk.odds.get('over0.5','-')['+']
+        except:
+            o_05 = '-'
         sqldate=meczyk.date.split(' ')[1].split('.')[2]+'-'+meczyk.date.split(' ')[1].split('.')[1]+'-'+meczyk.date.split(' ')[1].split('.')[0]
-
-        db.execute("insert into db_sts (home,away,_1,_0,_2,_10,_02,_12,data,Sport,League,country) values (?,?,?,?,?,?,?,?,?,?,?,?)",
-                   (home, away, meczyk.odds['game'][home], meczyk.odds['game']['X'], meczyk.odds['game'][away], meczyk.odds['game'][home+'/X'],
-                    meczyk.odds['game'][away + '/X'],meczyk.odds['game'][home+'/'+away],sqldate, meczyk.discipline, meczyk.league,meczyk.country))
+        table='"db_sts"'
+        columns_string = '("' + '","'.join(meczyk.dict_sql.keys()) + '")'
+        values_string = '("' + '","'.join(map(str, meczyk.dict_sql.values())) + '")'
+        sql = """INSERT INTO %s %s
+             VALUES %s""" % (table, columns_string, values_string)
+        print (sql)
+        db.execute(sql)
         db.commit()
 
 
@@ -302,30 +402,36 @@ class football_event:
         print ("SELF TIME:")
         print (self.time)
         self.get_odds(data)
-        print ("ODDS:")
-        print (self.odds)
+        #print (self.odds)
+        self.prepare_dict_to_sql()
         file=open('odd','w')
         file.write(str(self.odds))
 
 
-strona=urllib2.urlopen('https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6482&league=4269').read()
+strona=urllib2.urlopen('https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6482&league=4079').read()
 soup = BeautifulSoup(strona, "html.parser")
 more_bets=soup.find_all('td', {'class': 'support_bets'})
 for a in more_bets:
-    print ("A: ",a)
+#    print ("A: ",a)
     link=a.find('a', href = True)
-    print ("LINK: ", link['href'])
+#    print ("LINK: ", link['href'])
     data=urllib2.urlopen(link['href']).read()
-    meczyk=football_event()
-    meczyk.save_to_db()
+    try:
+        meczyk=football_event()
+        meczyk.save_to_db()
+    except:
+        logging.basicConfig(filename='logfile.log', level=logging.DEBUG)
+        logging.warning("ERROR dla: "+link.text)
+        continue
 
 
-#data=codecs.open('www.sts.pl.htm',mode='r',encoding='utf-8').read()
-data=urllib2.urlopen('https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6535&league=3994&oppty=85142253').read()
+data=codecs.open('www.sts.pl.htm',mode='r',encoding='utf-8').read()
+#data=urllib2.urlopen('https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6535&league=3994&oppty=85142253').read()
 
-#meczyk=football_event()
+meczyk=football_event()
+meczyk.prepare_dict_to_sql()
 #print (meczyk.odds)
-#meczyk.save_to_db()
+meczyk.save_to_db()
 ###DOROBIC DC###
 
 
