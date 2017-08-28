@@ -13,10 +13,12 @@ import json
 import sqlite3
 from collections import defaultdict
 import logging
+from dictionaries import *
+import datetime
 
 
 class football_event:
-    logging.basicConfig(filename='logfile.log', level=logging.DEBUG)
+    logging.basicConfig(filename='logfile_sts.log', level=logging.DEBUG)
     __events_mapping={
         "mecz":{"name":"game"},
         "mecz  (w Niecieczy)":{"name":"game"},
@@ -31,14 +33,19 @@ class football_event:
         "liczba goli w meczu 7.5 - poniżej/powyżej": {"name": "over7.5"},
         "liczba goli w meczu 8.5 - poniżej/powyżej": {"name": "over8.5"},
         "liczba goli w meczu 9.5 - poniżej/powyżej": {"name": "over9.5"},
+        "liczba goli : nieparzysta/parzysta": {"name":"goals_odd_even"},
         "1 drużyna strzeli gola":{"name":"1st_team_to_score"},
         "2 drużyna strzeli gola":{"name": "2nd_team_to_score"},
         "obie drużyny strzelą gola":{"name": "btts"},
+        "zakład bez zwycięstwa 1 drużyny (zw.1dr.=zwrot)":{"name":"1nb"},
+        "zakład bez zwycięstwa 2 drużyny (zw.2dr.=zwrot)": {"name": "2nb"},
         "handicap 0:1": {"name": "eh-1"},
         "handicap 1:0": {"name": "eh+1"},
         "handicap (-2.5)": {"name":"eh-2.5"},
         "handicap (-3.5)": {"name": "eh-3.5"},
         "handicap (-4.5)": {"name": "eh-4.5"},
+        "handicap (+2.5)": {"name": "eh+2.5"},
+        "handicap (+3.5)": {"name": "eh+3.5"},
         "dokładny wynik (1)": {"name": "cs"},
         "dokładny wynik (2)": {"name": "cs"},
         "dokładny wynik (3)": {"name": "cs"},
@@ -48,6 +55,8 @@ class football_event:
         "pierwszy gol w meczu": {"name": "1st_goal"},
         "podwójna szansa": {"name": "dc"},
         "w której połowie więcej goli": {"name": "ht_more"},
+        "1 gol:minuta":{"name":"1st_goal_minute"},
+        " 1 gol:minuta": {"name": "1st_goal_minute"},
         "wynik do 15 minuty": {"name": "to_15_min"},
         "wynik do 30 minuty": {"name": "to_30_min"},
         "wynik do 60 minuty": {"name": "to_60_min"},
@@ -71,6 +80,10 @@ class football_event:
         "2 połowa : liczba goli 0.5 - poniżej/powyżej": {"name": "2nd_half_over0.5"},
         "2 połowa : liczba goli 1.5 - poniżej/powyżej": {"name": "2nd_half_over1.5"},
         "2 połowa : liczba goli 2.5 - poniżej/powyżej": {"name": "2nd_half_over2.5"},
+        "2 połowa handicap (-1.5)": {"name": "2nd_half_eh-1.5"},
+        "2 połowa handicap (+1.5)": {"name": "2nd_half_eh+1.5"},
+        "1 drużyna : liczba strzelonych goli":{"name":"1st_team_goal_number"},
+        "2 drużyna : liczba strzelonych goli": {"name": "2nd_team_goal_number"},
         "1 drużyna : liczba strzelonych goli 1.5 poniżej/powyżej": {"name": "1st_team_over1.5"},
         "1 drużyna : liczba strzelonych goli 2.5 poniżej/powyżej": {"name": "1st_team_over2.5"},
         "2 drużyna : liczba strzelonych goli 1.5 poniżej/powyżej": {"name": "2nd_team_over1.5"},
@@ -98,8 +111,10 @@ class football_event:
         "liczba rzutów rożnych 10.5 - poniżej/powyżej": {"name": "corners_over10.5"},
         "liczba rzutów rożnych 11.5 - poniżej/powyżej": {"name": "corners_over11.5"},
         "liczba rzutów rożnych 12.5 - poniżej/powyżej": {"name": "corners_over12.5"},
+        "liczba rzutów rożnych - nieparzysta/parzysta": {"name": "corners_odd_even"},
         "rzuty rożne - kto wykona więcej ?  (remis zwrot)": {"name": "corners_which_team_dnb"},
         "rzuty rożne - kto wykona więcej (handicap)": {"name": "corners_which_team_eh"},
+        "rzuty rożne - kto wykona więcej ?": {"name": "corners_which_team"},
         "1 drużyna : liczba rz. rożnych mniej/więcej": {"name": "1st_team_corners"},
         "2 drużyna : liczba rz. rożnych mniej/więcej": {"name": "2nd_team_corners"},
         "liczba żółtych kartek w meczu": {"name": "yellow_cards_number"},
@@ -121,6 +136,7 @@ class football_event:
         "1 drużyna : procentowe posiadanie piłki mniej/więcej": {"name": "1st_team_ball_possesion"},
         "padnie bramka w doliczonym czasie gry (1p. lub 2p.)?": {"name": "added_time_goal_1_or_2_half"},
         "będzie wykorzystany limit zmian zaw.  (6)": {"name": "subs_number"},
+        "będzie zmiana w 1. połowie meczu" : {"name":"1st_half_subs"},
         "zawodnik : strzeli gola" : {"name":"scorer"},
         "zawodnik : strzeli przynajmniej dwa gole" : {"name": "2goals_scorer"},
         "zawodnik : strzeli przynajmniej trzy gole" : {"name": "3goals_scorer"},
@@ -129,9 +145,10 @@ class football_event:
 
 
     }
+
     discipline='football'
     def map(self,__events_mapping):
-        print (self.__events_mapping)
+        #print (self.__events_mapping)
         return self.__events_mapping
 
     def get_name(self,data):
@@ -139,13 +156,17 @@ class football_event:
         # get all the games
         games = soup.find_all('table', {'class': 'col3'})
         game_teams = soup.find('div', {'class': 'shadow_box support_bets_offer'}).h2.text.strip()
-        self.home=game_teams.split(' - ')[0]
-        self.away = game_teams.split(' - ')[1]
+        current_time=datetime.datetime.now()
+        self.update_time=str('{:04d}'.format(current_time.year))+'-'+str('{:02d}'.format(current_time.month))+'-'+str('{:02d}'.format(current_time.day))+ \
+                         '-' + str('{:02d}'.format(current_time.hour)) + '-' + str('{:02d}'.format(current_time.minute)) + '-' + str('{:02d}'.format(current_time.second))
+        self.home=unify_name(game_teams.split(' - ')[0].strip(),teams,logging)
+        self.away = unify_name(game_teams.split(' - ')[1].strip(),teams,logging)
         self.date = game_teams.split(' - ')[2]
-        self.time = game_teams.split(' - ')[3]
-        self.league=soup.find('h2', {'class':'headline'}).text.strip().split(',')[0]
+        self.hour = game_teams.split(' - ')[3]
+        #print ("TIME",self.hour)
+        self.league=unify_name(soup.find('h2', {'class':'headline'}).text.strip().split(',')[0]+soup.find('h2', {'class':'headline'}).text.strip().split(',')[1],leagues,logging)
         self.country=soup.find('h2', {'class':'headline'}).text.strip().split(',')[1]
-        logging.info(game_teams)
+        #logging.info(game_teams)
         self.names=self.__events_mapping.values()
         return game_teams
     def correct_name(self,name):
@@ -179,9 +200,10 @@ class football_event:
                 #print (odd_t.tr.th.span.text.strip())
                 #print (codecs.encode(odd_t.tr.th.span.text.strip(),encoding='utf-8'))
                 name = odd_t.tr.th.span.text.strip()
-                name = self.fix_for_cup(name)
+                name = self.fix_for_cup(name.strip())
                 self.odd_type=self.__events_mapping[name]["name"]
             except:
+                logging.warning(self.home+'  '+self.away)
                 logging.warning("Nieznany zaklad: "+ name)
                 self.odd_type=odd_t.tr.th.span.text.strip()
                 print ("Nie ma: %s", odd_t.tr.th.span.text.strip() )
@@ -226,8 +248,10 @@ class football_event:
                 #print ("TEXT:")
                 #print (odd_t.tr.th.span.text.strip())
                 #print (codecs.encode(odd_t.tr.th.span.text.strip(),encoding='utf-8'))
-                self.odd_type=self.__events_mapping[odd_t.tr.th.span.text.strip()]["name"]
+                name=odd_t.tr.th.span.text.strip()
+                self.odd_type=self.__events_mapping[name]["name"]
             except:
+                logging.warning(self.home+' - '+self.away)
                 logging.warning("Nieznany zaklad: "+ name)
                 continue
             odd_t2=games.find('tbody').find_all('tr')
@@ -294,12 +318,13 @@ class football_event:
             try:
                 return napis.get(x,'')
             except:
-                logging.warning("Nie znalazlem kursu: ")
-                return ''
+                pass
         home = self.get_name(data).split(" - ")[0].strip().replace(' ', '')
         away = self.get_name(data).split(" - ")[1].strip().replace(' ','')
-        self.dict_sql['home']=self.get_name(data).split(" - ")[0].strip().replace(' ','')
-        self.dict_sql['away']=away = self.get_name(data).split(" - ")[1].strip().replace(' ','')
+        #self.dict_sql['home']=self.get_name(data).split(" - ")[0].strip().replace(' ','')
+        self.dict_sql['home'] = self.home
+        #self.dict_sql['away']=away = self.get_name(data).split(" - ")[1].strip().replace(' ','')
+        self.dict_sql['away'] = self.away
         self.dict_sql['_1']=self.odds['game'][home]
         self.dict_sql['_0']=self.odds['game']['X']
         self.dict_sql['_2']=self.odds['game'][away]
@@ -310,6 +335,8 @@ class football_event:
         self.dict_sql['Sport']=self.discipline
         self.dict_sql['League']=self.league
         self.dict_sql['country']=self.country
+        self.dict_sql['update_time']=self.update_time
+        self.dict_sql['hour']=self.hour
         self.dict_sql['dnb_1']=get_odd_2(self.odds['dnb'],home)
         self.dict_sql['dnb_2']=get_odd_2(self.odds['dnb'],away)
         self.dict_sql['o_05']=get_odd_2(self.odds['over0.5'],'+')
@@ -344,9 +371,9 @@ class football_event:
         self.dict_sql['_1st_half_1']= get_odd_2(self.odds['1st_half'], home)
         self.dict_sql['_1st_half_x'] = get_odd_2(self.odds['1st_half'], 'X')
         self.dict_sql['_1st_half_2'] = get_odd_2(self.odds['1st_half'], away)
-        self.dict_sql['_1st_half_10'] = get_odd_2(self.odds['1st_half'],[home + '/X'])
-        self.dict_sql['_1st_half_02'] = get_odd_2(self.odds['1st_half'],[away + '/X'])
-        self.dict_sql['_1st_half_12'] = get_odd_2(self.odds['1st_half'],[home + '/' + away])
+        self.dict_sql['_1st_half_10'] = get_odd_2(self.odds['1st_half'],home + '/X')
+        self.dict_sql['_1st_half_02'] = get_odd_2(self.odds['1st_half'],away + '/X')
+        self.dict_sql['_1st_half_12'] = get_odd_2(self.odds['1st_half'],home + '/' + away)
         self.dict_sql['eh-1_1'] = get_odd_2(self.odds['eh-1'],home + '(-1)')
         self.dict_sql['eh-1_x2'] = get_odd_2(self.odds['eh-1'],away + '/X')
         self.dict_sql['u_25_1'] = get_odd_2(self.odds['goal2.5/result'],'-2.5/1')
@@ -361,28 +388,43 @@ class football_event:
 
 
 
-        print ("DICT: ", self.dict_sql)
+        #print ("DICT: ", self.dict_sql)
         return self.dict_sql
 
     def save_to_db(meczyk):
         database_name = 'db.sqlite'
         db = sqlite3.connect(database_name)
-        home = meczyk.get_name(data).split(" - ")[0].strip().replace(' ','')
-        print ("Home:", home)
-        away = meczyk.get_name(data).split(" - ")[1].strip().replace(' ','')
-        print ("Away:", away)
-        date = meczyk.get_name(data).split(" - ")[2]
-        print ("Date:", date)
-        try:
-            o_05=meczyk.odds.get('over0.5','-')['+']
-        except:
-            o_05 = '-'
-        sqldate=meczyk.date.split(' ')[1].split('.')[2]+'-'+meczyk.date.split(' ')[1].split('.')[1]+'-'+meczyk.date.split(' ')[1].split('.')[0]
-        table='"db_sts"'
+        table="'db_sts'"
         columns_string = '("' + '","'.join(meczyk.dict_sql.keys()) + '")'
         values_string = '("' + '","'.join(map(str, meczyk.dict_sql.values())) + '")'
+        cur = db.cursor()
+        #print ("SELECT:")
+        home="'"+meczyk.home+"'"
+        away = "'" + meczyk.away + "'"
+        date = "'" + meczyk.date.split(' ')[1].split('.')[2]+'-'+meczyk.date.split(' ')[1].split('.')[1]+'-'+meczyk.date.split(' ')[1].split('.')[0]+ "'"
+        #print ("select * from %s where home=%s and away=%s and data=%s" % (table,home,away,date))
+        #cur.execute("select * from %s where home=%s and away=%s and data=%s" % (table,home,away,date))
+        #data=cur.fetchall()
+        #x=[]
+        #for i in range(0, len(columns_string) - 1):
+        #    x.append((str(columns_string[i]) + "=" + str(values_string[i])))
+        try:
+            sql_command="DELETE FROM %s WHERE home=%s and away=%s and data=%s" % (table,home,away,date)
+            print ("SQL COMMAND:",sql_command)
+            db.execute(sql_command)
+            print ("USUNIĘTO")
+        except:
+            pass
         sql = """INSERT INTO %s %s
-             VALUES %s""" % (table, columns_string, values_string)
+                     VALUES %s""" % (table, columns_string, values_string)
+        #if data is None:
+        #    print ("NEW")
+        #    sql = """INSERT INTO %s %s
+        #                 VALUES %s""" % (table, columns_string, values_string)
+        #else:
+        #    print("UPDATE")
+        #    sql = """UPDATE %s SET %s WHERE home=%s and away=%s and date=%s""" % (table, tuple(x),meczyk.home,meczyk.away,meczyk.date)
+        #    print ("UPDATE",sql)
         print (sql)
         db.execute(sql)
         db.commit()
@@ -391,16 +433,6 @@ class football_event:
     def __init__(self):
         self.name=self.get_name(data)
         #self.home=self.get_home(self.name)
-        print ("SELF NAME:")
-        print (self.name)
-        print ("SELF HOME:")
-        print (self.home)
-        print ("SELF AWAY:")
-        print (self.away)
-        print ("SELF DATE:")
-        print (self.date)
-        print ("SELF TIME:")
-        print (self.time)
         self.get_odds(data)
         #print (self.odds)
         self.prepare_dict_to_sql()
@@ -408,30 +440,62 @@ class football_event:
         file.write(str(self.odds))
 
 
-strona=urllib2.urlopen('https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6482&league=4079').read()
-soup = BeautifulSoup(strona, "html.parser")
-more_bets=soup.find_all('td', {'class': 'support_bets'})
-for a in more_bets:
-#    print ("A: ",a)
-    link=a.find('a', href = True)
-#    print ("LINK: ", link['href'])
-    data=urllib2.urlopen(link['href']).read()
-    try:
-        meczyk=football_event()
-        meczyk.save_to_db()
-    except:
-        logging.basicConfig(filename='logfile.log', level=logging.DEBUG)
-        logging.warning("ERROR dla: "+link.text)
-        continue
+#data=codecs.open('www.sts.pl.htm',mode='r',encoding='utf-8').read()
+#data=urllib2.urlopen('https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6521&league=4080').read()
 
-
-data=codecs.open('www.sts.pl.htm',mode='r',encoding='utf-8').read()
-#data=urllib2.urlopen('https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6535&league=3994&oppty=85142253').read()
-
-meczyk=football_event()
-meczyk.prepare_dict_to_sql()
+#meczyk=football_event()
+#meczyk.prepare_dict_to_sql()
 #print (meczyk.odds)
-meczyk.save_to_db()
+#meczyk.save_to_db()
+#exit()
+sites=['https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6521&league=4080',
+'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6488&league=3987',
+'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6535&league=3994',
+'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6490&league=4032',
+'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6482&league=4079',
+'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6516&league=4234',
+'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6493&league=4000',
+'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6501&league=3986',
+'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6539&league=4070',
+'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6527&league=4074',
+'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6482&league=3954',
+'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6500&league=4218',
+'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6521&league=4036',
+'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6501&league=4073',
+'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6563&league=4121',
+'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6565&league=4281',
+'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6481&league=3879',
+'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6497&league=4210',
+'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6487&league=4132',
+'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6485&league=3880',
+'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6531&league=4139',
+'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6508&league=3996',
+'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6489&league=5641',
+'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6538&league=4009',
+'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6542&league=4088',
+'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6498&league=3901',
+'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6535&league=4015',
+'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6488&league=4167',
+'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6502&league=4264']
+for site in sites:
+    strona=urllib2.urlopen(site).read()
+    soup = BeautifulSoup(strona, "html.parser")
+    more_bets=soup.find_all('td', {'class': 'support_bets'})
+    for a in more_bets:
+    #    print ("A: ",a)
+        link=a.find('a', href = True)
+    #    print ("LINK: ", link['href'])
+        data=urllib2.urlopen(link['href']).read()
+        try:
+            meczyk=football_event()
+            meczyk.save_to_db()
+        except:
+            logging.basicConfig(filename='logfile.log', level=logging.DEBUG)
+            logging.warning("ERROR dla: "+link['href'])
+            continue
+
+
+
 ###DOROBIC DC###
 
 
