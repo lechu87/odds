@@ -139,7 +139,7 @@ teams = {"Bulgaria":["Bulgaria","Bułgaria"],"Szwecja":["Szwecja"],"Francja":["F
          "Slask Wroclaw": ["Slask W.","Śląsk"], "Cracovia": ["Cracovia","Cracovia "], "Nieciecza": ["Nieciecza"], "Korona K.": ["Korona K.","Korona"],
          "Piast G.": ["Piast G.","Piast"], "Wisla K.": ["Wisla K.","W. Kraków"],
          "Lechia G.": ["Lechia G.","Lechia"], "Sandecja N.S.": ["Sandecja N.S.","Sandecja"], "Pogon Sz.": ["Pogon Sz.","Pogoń"],
-         "Lech P.": ["Lech P.","Lech"], "Arka G.": ["Arka G.","Arka"], "Zag.Lubin": ["Zag.Lubin","Lubin"],"Jagiellonia":["Jagiellonia",],
+         "Lech P.": ["Lech P.","Lech"], "Arka G.": ["Arka G.","Arka"], "Zag.Lubin": ["Zag.Lubin","Lubin","Zagłębie Lubin"],"Jagiellonia":["Jagiellonia",],
 
          "Bournemouth": ["Bournemouth"],"Manch.City": ["Manch.City","Manch. City","Man.City"],"Cr.Palace": ["Cr.Palace","Cr. Palace"],
          "Swansea": ["Swansea"],"Huddersfield": ["Huddersfield"],"Southampton": ["Southampton"],"Newcastle": ["Newcastle"],
