@@ -46,6 +46,15 @@ class football_event:
         "handicap (-4.5)": {"name": "eh-4.5"},
         "handicap (+2.5)": {"name": "eh+2.5"},
         "handicap (+3.5)": {"name": "eh+3.5"},
+        "handicap (+4.5)": {"name": "eh+4.5"},
+        "handicap (-5.5)": {"name":"eh-5.5"},
+        "handicap (+5.5)": {"name": "eh+5.5"},
+        "handicap (-6.5)": {"name": "eh-6.5"},
+        "handicap (+6.5)": {"name": "eh+6.5"},
+        "handicap (-7.5)": {"name": "eh-7.5"},
+        "handicap (+7.5)": {"name": "eh+7.5"},
+        "handicap (-8.5)": {"name": "eh-8.5"},
+        "handicap (+8.5)": {"name": "eh+8.5"},
         "dokładny wynik (1)": {"name": "cs"},
         "dokładny wynik (2)": {"name": "cs"},
         "dokładny wynik (3)": {"name": "cs"},
@@ -70,6 +79,9 @@ class football_event:
         "1 gol : minuta": {"name": "1st_goal_time"},
         "która drużyna otrzyma więcej zółtych kartek": {"name": "yellow_more"},
         "jakie wydarzenie odbędzie się jako pierwsze (2)": {"name": "1st_event"},
+        "kto wykona pierwszy rzut rożny":{"name":"1st_corner"},
+        "kto wykona ostatni rzut rożny":{"name":"last_corner"},
+        "wyścig do 3. rzutów rożnych":{"name":"race_to_3_corners"},
         "1 połowa : zakład bez remisu (remis=zwrot)": {"name": "1st_half_dnb"},
         "1 połowa : liczba goli 0.5 - poniżej/powyżej": {"name": "1st_half_over0.5"},
         "1 połowa : liczba goli 1.5 - poniżej/powyżej": {"name": "1st_half_over1.5"},
@@ -112,6 +124,7 @@ class football_event:
         "liczba rzutów rożnych 11.5 - poniżej/powyżej": {"name": "corners_over11.5"},
         "liczba rzutów rożnych 12.5 - poniżej/powyżej": {"name": "corners_over12.5"},
         "liczba rzutów rożnych - nieparzysta/parzysta": {"name": "corners_odd_even"},
+        "liczba rzutów rożnych w meczu": {"name": "corners"},
         "rzuty rożne - kto wykona więcej ?  (remis zwrot)": {"name": "corners_which_team_dnb"},
         "rzuty rożne - kto wykona więcej (handicap)": {"name": "corners_which_team_eh"},
         "rzuty rożne - kto wykona więcej ?": {"name": "corners_which_team"},
@@ -130,6 +143,7 @@ class football_event:
         "liczba fauli w meczu": {"name": "fouls_number"},
         "liczba strzałów w światło bramki": {"name": "shots_on_target"},
         "strzały w światło bramki - która drużyna więcej  (remis zwrot)": {"name": "shots_on_target_which_team_dnb"},
+        "strzały w światło bramki - która drużyna więcej":{"name": "shots_on_target_which_team"},
         "1 drużyna : liczba strzałów w światło bramki mniej/więcej": {"name": "1st_team_shots_on_target"},
         "2 drużyna : liczba strzałów w światło bramki mniej/więcej": {"name": "2nd_team_shots_on_target"},
         "procentowe posiadanie piłki   (remis zwrot)": {"name": "ball_possesion_dnb"},
@@ -141,7 +155,17 @@ class football_event:
         "zawodnik : strzeli przynajmniej dwa gole" : {"name": "2goals_scorer"},
         "zawodnik : strzeli przynajmniej trzy gole" : {"name": "3goals_scorer"},
         "zawodnik : strzeli i jego zespół wygra" : {"name": "scorer_team_win"},
-        "zawodnik : otrzyma kartkę" : {"name": "card_who"}
+        "zawodnik : otrzyma kartkę" : {"name": "card_who"},
+        "która drużyna popełni więcej fauli?":{"name":"more_fouls"},
+        "1 drużyna : liczba fauli mniej/więcej":{"name":"1st_team_fouls"},
+        "2 drużyna : liczba fauli mniej/więcej": {"name": "2nd_team_fouls"},
+        "procentowe posiadanie piłki   (Remis zwrot)":{"name":"ball_possesion_dnb"},
+        "doliczony czas 1. połowy (1.5 minuty)":{"name":"added_time_1_st_half_15_min"},
+        "doliczony czas 1. połowy (3.5 minuty)": {"name": "added_time_1_st_half_35_min"},
+        "doliczony czas 2. połowy (1.5 minuty)": {"name": "added_time_2nd_half_15_min"},
+        "doliczony czas 2. połowy (3.5 minuty)": {"name": "added_time_2nd_half_35_min"},
+        "R. Lewandowski strzeli bramkę z rzutu karnego":{"name":"lewy_to_score"},
+        "M. Pazdan otrzyma czerwoną kartkę":{"name":"pazdan_red"}
 
 
     }
@@ -476,7 +500,17 @@ sites=['https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?act
 'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6498&league=3901',
 'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6535&league=4015',
 'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6488&league=4167',
-'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6502&league=4264']
+'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6502&league=4264',
+'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6480&league=5443',
+'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6480&league=5444'
+'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6480&league=5538'
+       'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6480&league=4750',
+       'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6480&league=5441',
+       'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6480&league=4054']
+sites2=['https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6480&league=4054',
+
+
+        ]
 for site in sites:
     strona=urllib2.urlopen(site).read()
     soup = BeautifulSoup(strona, "html.parser")

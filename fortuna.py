@@ -8,8 +8,8 @@ import logging
 import datetime
 from collections import defaultdict
 from dictionaries import *
-#data=urllib2.urlopen('https://www.efortuna.pl/pl/strona_glowna/serwis_sportowy/ekstraklasa/index.html').read()
-data=codecs.open('fortuna.html',mode='r',encoding='utf-8').read()
+data=urllib2.urlopen('https://www.efortuna.pl/pl/strona_glowna/serwis_sportowy/ekstraklasa/index.html').read()
+#data=codecs.open('fortuna.html',mode='r',encoding='utf-8').read()
 
 class football_event:
     soup = BeautifulSoup(data,"html.parser")
@@ -218,7 +218,12 @@ class football_event:
 #meczyk.prepare_dict_to_sql()
 ##meczyk.save_to_db()
 #exit()
-sites=['https://www.efortuna.pl/pl/strona_glowna/pilka-nozna/premier-league-premiership',
+comment="""
+
+
+       """
+sites=[
+       'https://www.efortuna.pl/pl/strona_glowna/pilka-nozna/premier-league-premiership',
        'https://www.efortuna.pl/pl/strona_glowna/pilka-nozna/liga-europy',
        'https://www.efortuna.pl/pl/strona_glowna/pilka-nozna/kwalifikacje-mistrzostw-swiata-europa',
        'https://www.efortuna.pl/pl/strona_glowna/pilka-nozna/kwalifikacje-mistrzostw-swiata-ameryka-poludniowa',
@@ -230,7 +235,7 @@ sites=['https://www.efortuna.pl/pl/strona_glowna/pilka-nozna/premier-league-prem
        'https://www.efortuna.pl/pl/strona_glowna/pilka-nozna/liga-mistrzow',
        'https://www.efortuna.pl/pl/strona_glowna/pilka-nozna/primera-division',
        'https://www.efortuna.pl/pl/strona_glowna/pilka-nozna/1-liga-polska',
-       'https://www.efortuna.pl/pl/strona_glowna/pilka-nozna/2-liga-polska'
+       'https://www.efortuna.pl/pl/strona_glowna/pilka-nozna/2-liga-polska',
        'https://www.efortuna.pl/pl/strona_glowna/pilka-nozna/liga-austriacka',
        'https://www.efortuna.pl/pl/strona_glowna/pilka-nozna/liga-belgijska',
        'https://www.efortuna.pl/pl/strona_glowna/pilka-nozna/liga-bialoruska',
@@ -262,8 +267,14 @@ sites=['https://www.efortuna.pl/pl/strona_glowna/pilka-nozna/premier-league-prem
        'https://www.efortuna.pl/pl/strona_glowna/pilka-nozna/2-liga-wloska',
        'https://www.efortuna.pl/pl/strona_glowna/pilka-nozna/ligue-2',
        ]
+sites2=['https://www.efortuna.pl/pl/strona_glowna/pilka-nozna/puchar-polski']
 for site in sites:
-    strona=urllib2.urlopen(site).read()
+    try:
+        strona=urllib2.urlopen(site).read()
+    except:
+        print (site)
+        logging.WARNING("404: ")
+        continue
     soup = BeautifulSoup(strona, "html.parser")
     more_bets=soup.find('table',{'class':'bet_table'}).find_all('span', {'class': 'bet_item_main_text'})
     #print ("MORE BETS:", more_bets)
@@ -274,11 +285,15 @@ for site in sites:
         print ("LINK: ", link['href'])
         #https: // www.efortuna.pl / pl / strona_glowna / pilka - nozna / 2017 - 0
         #8 - 18 - lechia - g - ---sandecja - n - s - -14014159
-        data=urllib2.urlopen('https://www.efortuna.pl'+link['href']).read()
-        meczyk = football_event(events_mapping_fortuna)
-        names.append(meczyk.home)
-        names.append(meczyk.away)
-        #meczyk=football_event()
-        meczyk.save_to_db()
+        try:
+            data=urllib2.urlopen('https://www.efortuna.pl'+link['href']).read()
+            meczyk = football_event(events_mapping_fortuna)
+            names.append(meczyk.home)
+            names.append(meczyk.away)
+            #meczyk=football_event()
+            meczyk.save_to_db()
+        except:
+            logging.WARNING("ERROR dla: "+link['href'])
+            continue
 
 
