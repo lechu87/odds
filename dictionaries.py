@@ -141,11 +141,11 @@ teams = {"Bulgaria":["Bulgaria","Bułgaria"],"Szwecja":["Szwecja"],"Francja":["F
          "Lechia G.": ["Lechia G.","Lechia"], "Sandecja N.S.": ["Sandecja N.S.","Sandecja"], "Pogon Sz.": ["Pogon Sz.","Pogoń"],
          "Lech P.": ["Lech P.","Lech"], "Arka G.": ["Arka G.","Arka"], "Zag.Lubin": ["Zag.Lubin","Lubin","Zagłębie Lubin"],"Jagiellonia":["Jagiellonia",],
 
-         "Bournemouth": ["Bournemouth"],"Manch.City": ["Manch.City","Manch. City","Man.City"],"Cr.Palace": ["Cr.Palace","Cr. Palace"],
-         "Swansea": ["Swansea"],"Huddersfield": ["Huddersfield"],"Southampton": ["Southampton"],"Newcastle": ["Newcastle"],
-         "West Ham": ["West Ham"],"Watford": ["Watford"],"Brighton": ["Brighton"],"Manch.Utd.": ["Manch.Utd.","Manch. Utd"],
-         "Leicester": ["Leicester"],"Chelsea": ["Chelsea"],"Everton": ["Everton"],"W.B.A.": ["W.B.A.","WBA"],"Stoke": ["Stoke"],
-         "Liverpool": ["Liverpool"],"Arsenal": ["Arsenal"],"Tottenham": ["Tottenham"],"Burnley": ["Burnley"],
+         "Bournemouth": ["Bournemouth","Bournemouth AFC"],"Manch.City": ["Manch.City","Manch. City","Man.City","Manchester City"],"Cr.Palace": ["Cr.Palace","Cr. Palace","Crystal Palace"],
+         "Swansea": ["Swansea","Swansea City"],"Huddersfield": ["Huddersfield","Huddersfield Town"],"Southampton": ["Southampton","Southampton FC"],"Newcastle": ["Newcastle","Newcastle United"],
+         "West Ham": ["West Ham","West Ham United"],"Watford": ["Watford","Watford FC"],"Brighton": ["Brighton","FC Brighton & Hove Albion"],"Manch.Utd.": ["Manch.Utd.","Manch. Utd","Manchester United"],
+         "Leicester": ["Leicester","Leicester City"],"Chelsea": ["Chelsea","Chelsea Londyn"],"Everton": ["Everton","FC Everton"],"W.B.A.": ["W.B.A.","WBA","West Bromwich Albion"],"Stoke": ["Stoke","Stoke City"],
+         "Liverpool": ["Liverpool","FC Liverpool"],"Arsenal": ["Arsenal","Arsenal Londyn"],"Tottenham": ["Tottenham","Tottenham Hotspur"],"Burnley": ["Burnley","FC Burnley"],
 
          "S.Sebastian": ["S.Sebastian","Sociedad"],"Villarreal": ["Villarreal"],"Betis": ["Betis"],"Celta Vigo": ["Celta Vigo","Celta"],
          "Alavés": ["Alavés","Alaves"],"Girona": ["Girona"],"Malaga": ["Malaga"],"Levante": ["Levante"],"La Coruna": ["La Coruna"],

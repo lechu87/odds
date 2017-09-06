@@ -8,6 +8,7 @@ import logging
 import datetime
 from collections import defaultdict
 from dictionaries import *
+import re
 user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
 url = "http://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers"
 headers={'User-Agent':user_agent,}
@@ -25,6 +26,8 @@ class football_event:
         soup = BeautifulSoup(data, "html.parser")
         self.game=soup.find('div',{'class':'event-data'})
         game_teams=self.game.find_all('h2')
+        self.raw_home = game_teams[0].text
+        self.raw_away = game_teams[1].text
         self.home=unify_name(game_teams[0].text,teams,logging)
         self.away=unify_name(game_teams[1].text,teams,logging)
         print(self.game.text)
@@ -48,11 +51,161 @@ class football_event:
         except:
             return name
 
+    events_mapping_iforbet = defaultdict(str)
+    events_mapping_iforbet = {
+        "1X2": {"name": "game"},
+        "Remis - nie ma zakładu (remis=zwrot)": {"name": "dnb"},
+        "Podwójna szansa": {"name": "dc"},
+        "Strzeli pierwszego gola": {"name": "1st_goal"},
+        "Strzeli ostatniego gola": {"name": "last_goal"},
+        "Wynik do przerwy/Wynik końcowy": {"name": "half/end"},
+        'Dokładny wynik': {"name": "cs"},
+        "Obie drużyny strzelą bramkę": {"name": "btts"},
+        "Zdobędzie 1. gola w 1 połowie": {"name": "1st_goal_1st_team_1st_half"},
+        "Zdobędzie 1. gola w 2 połowie": {"name": "1st_goal_1st_team_2nd_half"},
+        '1 wygra do zera': {"name": "1st_team_win_to_0"},
+        '2 wygra do zera': {"name": "2nd_team_win_to_0"},
+        '10 minuta spotkania': {"name": "10min"},
+        "Pierwsze 10 minut - wynik":{"name":"10min"},
+        "Liczba goli": {"name": "goals"},
+        "Drużyna ze zdobyczą bramkową":{"name":"teams_to_score"},
+        "Różnica zwycięstwa":{"name":"win_diff"},
+        "1 strzeli / nie strzeli":{"name": "1st_team_to_score"},
+        "2 strzeli / nie strzeli": {"name": "2nd_team_to_score"},
+        "Wynik 1 połowy": {"name": "1st_half"},
+        "Podwójna szansa - 1 połowa": {"name": "1st_half_dc"},
+        "Obie drużyny strzelą w 1. połowie": {"name": "1st_half_btts"},
+        'Dokładny wynik po 1 połowie': {"name": "1st_half_cs"},
+        "Liczba goli w 1 połowie": {"name": "1st_half_goals"},
+        "Remis nie ma zakładu - 1 połowa": {"name": "1st_half_dnb"},
+        "Wynik 2 połowy": {"name": "2nd_half"},
+        "Podwójna szansa - 2 połowa": {"name": "2nd_half_dc"},
+        "Poniżej/Powyżej x gola w 2 połowie": {"name": "2nd_half_goals"},
+        "Obie drużyny strzelą w 2. połowie": {"name": "1st_half_btts"},
+        "Liczba goli w 2 połowie":{"name":"2nd_half_goals"},
+        "Remis nie ma zakładu - 2 połowa": {"name": "2nd_half_dnb"},
+        "Poniżej/Powyżej x goli w 1 połowie" : {"name":"1st_half_goals"},
+        "Poniżej/Powyżej x goli":{"name":"goals"},
+        "Powyżej 1.5 gola w obu połowach":{"name":"o15_both_half"},
+        "Poniżej 1.5 gola w obu połowach": {"name": "u15_both_half"},
+        "1 Poniżej/Powyżej 1.5 gola":{"name":"1_o15"},
+        "1 Poniżej/Powyżej 0.5 gola": {"name": "1_o05"},
+        "1 Poniżej/Powyżej 2.5 gola": {"name": "1_o25"},
+        "1 Poniżej/Powyżej 3.5 gola": {"name": "1_o35"},
+        "1 Poniżej/Powyżej 4.5 gola": {"name": "1_o45"},
+        "2 Poniżej/Powyżej 1.5 gola": {"name": "2_o15"},
+        "2 Poniżej/Powyżej 0.5 gola": {"name": "2_o05"},
+        "2 Poniżej/Powyżej 2.5 gola": {"name": "2_o25"},
+        "2 Poniżej/Powyżej 3.5 gola": {"name": "2_o35"},
+        "2 Poniżej/Powyżej 4.5 gola": {"name": "2_o45"},
+        "1 Poniżej/Powyżej 0.5 gola w 1 połowie":{"name":"1_o05_1st_half"},
+        "1 Poniżej/Powyżej 1.5 gola w 1 połowie": {"name": "1_o15_1st_half"},
+        "1 Poniżej/Powyżej 2.5 gola w 1 połowie": {"name": "1_o25_1st_half"},
+        "1 Poniżej/Powyżej 3.5 gola w 1 połowie": {"name": "1_o35_1st_half"},
+        "1 Poniżej/Powyżej 4.5 gola w 1 połowie": {"name": "1_o45_1st_half"},
+        "2 Poniżej/Powyżej 0.5 gola w 1 połowie": {"name": "2_o05_1st_half"},
+        "2 Poniżej/Powyżej 1.5 gola w 1 połowie": {"name": "2_o15_1st_half"},
+        "2 Poniżej/Powyżej 2.5 gola w 1 połowie": {"name": "2_o25_1st_half"},
+        "2 Poniżej/Powyżej 3.5 gola w 1 połowie": {"name": "2_o35_1st_half"},
+        "2 Poniżej/Powyżej 4.5 gola w 1 połowie": {"name": "2_o45_1st_half"},
+        "1 Poniżej/Powyżej 0.5 gola w 2 połowie": {"name": "1_o05_2nd_half"},
+        "1 Poniżej/Powyżej 1.5 gola w 2 połowie": {"name": "1_o15_2nd_half"},
+        "1 Poniżej/Powyżej 2.5 gola w 2 połowie": {"name": "1_o25_2nd_half"},
+        "1 Poniżej/Powyżej 3.5 gola w 2 połowie": {"name": "1_o35_2nd_half"},
+        "1 Poniżej/Powyżej 4.5 gola w 2 połowie": {"name": "1_o45_2nd_half"},
+        "2 Poniżej/Powyżej 0.5 gola w 2 połowie": {"name": "2_o05_2nd_half"},
+        "2 Poniżej/Powyżej 1.5 gola w 2 połowie": {"name": "2_o15_2nd_half"},
+        "2 Poniżej/Powyżej 2.5 gola w 2 połowie": {"name": "2_o25_2nd_half"},
+        "2 Poniżej/Powyżej 3.5 gola w 2 połowie": {"name": "2_o35_2nd_half"},
+        "2 Poniżej/Powyżej 4.5 gola w 2 połowie": {"name": "2_o45_2nd_half"},
+        "Handicap (1X2) 0:x":{"name":"ah-"},
+        "Handicap (1X2) x:0":{"name":"ah+"},
+        "Handicap -0.5/+0.5":{"name":"eh-05"},
+        "Handicap +0.5/-0.5":{"name":"eh+05"},
+        "Handicap +1.5/-1.5":{"name":"eh+15"},
+        "Handicap +2.5/-2.5": {"name": "eh+25"},
+        "Handicap +3.5/-3.5": {"name": "eh+35"},
+        "Handicap +4.5/-4.5": {"name": "eh+45"},
+        "Handicap +5.5/-5.5": {"name": "eh+55"},
+        "Handicap +6.5/-6.5": {"name": "eh+65"},
+        "Handicap -1.5/+1.5": {"name": "eh-15"},
+        "Handicap -2.5/+2.5": {"name": "eh-25"},
+        "Handicap -3.5/+3.5": {"name": "eh-35"},
+        "Handicap -4.5/+4.5": {"name": "eh-45"},
+        "Handicap -5.5/+5.5": {"name": "eh-55"},
+        "Handicap -6.5/+6.5": {"name": "eh-65"},
+        "Suma goli (1)":{"name":"1st_team_goals"},
+        "Suma goli (2)": {"name": "2nd_team_goals"},
+        "1 strzeli w obu połowach":{"name":"1_to_score_both_half"},
+        "2 strzeli w obu połowach":{"name":"2_to_score_both_half"},
+        "1 wygra obie połowy":{"name":"1_to_win_both_half"},
+        "2 wygra obie połowy": {"name": "2_to_win_both_half"},
+        "1 wygra 1 lub 2 połowę" : {"name": "1_to_win_any_half"},
+        "2 wygra 1 lub 2 połowę": {"name": "2_to_win_any_half"},
+        "Połowa z większą liczbą bramek":{"name":"half_more_goals"},
+        "Czas pierwszego gola":{"name":"1st_goal_time"},
+        "Pierwszy gol i wynik końcowy": {"name": "1st_goal/game"},
+        "Do przerwy/Cały mecz - Dokładny wynik":{"name":"1st_half/2nd_half_cs"},
+        "1 - połowa z większą ilością goli" :{"name":"1_half_more_goals"},
+        "2 - połowa z większą ilością goli": {"name": "2_half_more_goals"},
+        "Wynik końcowy i Poniżej/Powyżej x gola":{"name":"game/goals"},
+        "Dokładny wynik (w tym inny)":{"name":"cs_other"},
+        "Wynik końcowy i obie drużyny strzelą":{"name":"game/btts"},
+        "1 - czyste konto w 1 połowie": {"name": "1_clean_1st_half"},
+        "2 - czyste konto w 1 połowie": {"name": "2_clean_1st_half"},
+        "1 - czyste konto w 2 połowie": {"name": "1_clean_2nd_half"},
+        "2 - czyste konto w 2 połowie": {"name": "2_clean_2nd_half"},
+        "Gospodarz wygra = zwrot" :{"name":"hnb"},
+        "Gość wygra = zwrot":{"name":"anb"},
+        "Wynik 1 połowy i Poniżej/Powyżej 1.5 goli w 1 połowie":{"name":"1st_half_and_o05"},
+        "Obie drużyny strzelą i Poniżej/Powyżej 2.5 gola":{"name":"btts_and_25"},
+        "Handicap 0:1 w 1 połowie":{"name":"1st_half_ah-1"},
+        "Handicap 0:1 w 2 połowie": {"name": "2nd_half_ah-1"},
+        "Handicap 1:0 w 1 połowie":{"name":"1st_half_ah+"},
+        "Handicap 1:0 w 2 połowie": {"name": "2nd_half_ah+1"},
+        "Wynik 1 połowy i obie strzelą w 1 połowie":{"name":"1st_half_and_btts_1st_half"},
+        "Suma goli (nieparzyste/parzyste)":{"name":"goals_odd_even"},
+        "Ilość goli w 1 połowie - Nieparzysta/Parzysta":{"name":"1st_half_goals_odd_even"},
+        "Ilośc goli w 2 połowie - Nieparzysta/Parzysta":{"name":"2nd_half_goals_odd_even"},
+        "1 - suma goli - Nieparzyste/Parzyste":{"name":"1_goals_odd_even"},
+        "2 - suma goli - Nieparzyste/Parzyste":{"name":"2_goals_odd_even"},
+        "Zdobędzie gola w meczu":{"name":"scorer"},
+        "Strzelec ostatniego gola":{"name":"scorer_last_goal"},
+        "Strzelec 1 gola":{"name":"scorer_first_goal"},
+
+    }
+
+    def extract_team_name(self,x, home, away):
+        if len(re.findall(home, x)) > 0:
+            return re.sub(home, '1', x)
+        elif len(re.findall(away, x)) > 0:
+            return re.sub(away, '2', x)
+        else:
+            return x
+    def get_odds2(self):
+        soup = BeautifulSoup(data, "html.parser")
+        self.odds = defaultdict(str)
+        tables = soup.find_all('div', {'class': 'games-panel'})
+        print ("Home:",self.home)
+        print ("Away:", self.away)
+        for table in tables:
+            odd_tittle=table.find('div',{'class':['game-title','event-rates']})
+            print (odd_tittle)
+            #print(self.extract_team_name(odd_tittle.text, self.home, self.away))
+            try:
+                name=self.extract_team_name(odd_tittle.text,self.raw_home,self.raw_away)
+                if name not in self.events_mapping_iforbet.keys():
+                    logging.warning("Nieznany zaklad: "+odd_tittle.text)
+                self.odds[name]={}
+                #print (odd_tittle.text)
+            except:
+                pass
+        print (self.odds)
+
     def get_odds(self):
         soup = BeautifulSoup(data, "html.parser")
         self.odds = defaultdict(str)
         tables = soup.find_all('div', {'class': 'games-panel'})
-
         for table in tables:
             try:
                 head = table.find('thead').find_all('th')
@@ -218,13 +371,34 @@ class football_event:
     def __init__(self, events_mapping_fortuna):
         #self.__events_mapping=events_mapping_fortuna
         self.get_name()
-        #self.get_odds()
+        self.get_odds2()
+
         #self.prepare_dict_to_sql()
         #print ("ODDS:",self.odds)
-
-
 data = urllib2.urlopen(urllib2.Request('https://www.iforbet.pl/zdarzenie/450168',None,headers)).read() # The data u need
 meczyk=football_event(events_mapping_fortuna)
+exit()
+
+
+url='https://www.iforbet.pl/oferta/8/199'
+
+def get_links(url):
+    data = urllib2.urlopen(urllib2.Request(url, None, headers)).read()
+    soup = BeautifulSoup(data, "html.parser")
+    linki = []
+    links=soup.find_all('div',{'class':'event-more'})
+    for link in links:
+        linki.append(str(link).split("'")[1])
+    #self.game = soup.find('div', {'class': 'event-data'})
+    return linki
+linki=get_links(url)
+print (linki)
+for link in linki:
+    data = urllib2.urlopen(
+        urllib2.Request('https://www.iforbet.pl'+link, None, headers)).read()  # The data u need
+#get_links(url)
+    #data = urllib2.urlopen(urllib2.Request('https://www.iforbet.pl/zdarzenie/450168',None,headers)).read() # The data u need
+    meczyk=football_event(events_mapping_fortuna)
 #meczyk.prepare_dict_to_sql()
 ##meczyk.save_to_db()
 exit()
