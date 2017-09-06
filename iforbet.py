@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 from bs4 import BeautifulSoup
+import pprint
 import urllib.request as urllib2
 import sqlite3
 import codecs
@@ -176,7 +177,11 @@ class football_event:
     }
 
     def extract_team_name(self,x, home, away):
-        if len(re.findall(home, x)) > 0:
+        if len(re.findall(home, x)) > 0 and len(re.findall(away, x)) > 0:
+            x2=re.sub(home, '1', x)
+            x3=re.sub(away, '2', x2)
+            return x3
+        elif len(re.findall(home, x)) > 0:
             return re.sub(home, '1', x)
         elif len(re.findall(away, x)) > 0:
             return re.sub(away, '2', x)
@@ -189,18 +194,43 @@ class football_event:
         print ("Home:",self.home)
         print ("Away:", self.away)
         for table in tables:
-            odd_tittle=table.find('div',{'class':['game-title','event-rates']})
-            print (odd_tittle)
+            odd_tittle=table.find('div',{'class':'game-title'})
             #print(self.extract_team_name(odd_tittle.text, self.home, self.away))
             try:
                 name=self.extract_team_name(odd_tittle.text,self.raw_home,self.raw_away)
                 if name not in self.events_mapping_iforbet.keys():
                     logging.warning("Nieznany zaklad: "+odd_tittle.text)
-                self.odds[name]={}
+                self.odds[self.events_mapping_iforbet[name]["name"]]={}
                 #print (odd_tittle.text)
             except:
                 pass
-        print (self.odds)
+            odd_values=table.find_all('div',{'class':'event-rate'})
+#            print ("NAME:",name)
+            for odd in odd_values:
+                rows=odd.find_all('div',{'class':'outcome-row'})
+                if len(rows)==0:
+                    odd_name = odd.find('div', {'class': 'outcome-name'})
+                    print ("ODD_name: ", odd_name.text)
+                    odd_rate = odd.find('span', {'class': 'rate-value'})
+                    print ("ODD_rate: ", odd_rate.text)
+                    odd_name_corr=self.extract_team_name(odd_name.text,self.raw_home,self.raw_away)
+                    # self.odds[name][odd_name.text]={}
+                    self.odds[self.events_mapping_iforbet[name]["name"]][odd_name_corr] = odd_rate.text
+                else:
+                    for row in rows:
+                        odd_name=row.find('div',{'class':'outcome-name'})
+                        print ("ODD_name: ",odd_name.text)
+                        odd_rate=row.find('span',{'class':'rate-value'})
+                        print ("ODD_rate: ", odd_rate.text)
+                    #self.odds[name][odd_name.text]={}
+                        odd_name_corr = self.extract_team_name(odd_name.text, self.raw_home, self.raw_away)
+                        self.odds[self.events_mapping_iforbet[name]["name"]][odd_name_corr]=odd_rate.text
+        import json
+        print (json.dumps(self.odds, indent=4, sort_keys=False))
+        #pp = pprint.PrettyPrinter(depth=3)
+        #pp.pprint(self.odds)
+        #pprint (self.odds,)
+        #pprint
 
     def get_odds(self):
         soup = BeautifulSoup(data, "html.parser")
@@ -375,12 +405,12 @@ class football_event:
 
         #self.prepare_dict_to_sql()
         #print ("ODDS:",self.odds)
-data = urllib2.urlopen(urllib2.Request('https://www.iforbet.pl/zdarzenie/450168',None,headers)).read() # The data u need
+data = urllib2.urlopen(urllib2.Request('https://www.iforbet.pl/zdarzenie/449457',None,headers)).read() # The data u need
 meczyk=football_event(events_mapping_fortuna)
-exit()
+#exit()
 
 
-url='https://www.iforbet.pl/oferta/8/199'
+url='https://www.iforbet.pl/oferta/8/199,511,168,282,2432,321,159,269,223,147,122,273,660,2902,558,641,289'
 
 def get_links(url):
     data = urllib2.urlopen(urllib2.Request(url, None, headers)).read()
