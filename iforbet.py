@@ -27,24 +27,36 @@ class football_event:
         soup = BeautifulSoup(data, "html.parser")
         self.game=soup.find('div',{'class':'event-data'})
         game_teams=self.game.find_all('h2')
-        self.raw_home = game_teams[0].text
-        self.raw_away = game_teams[1].text
-        self.home=unify_name(game_teams[0].text,teams,logging)
-        self.away=unify_name(game_teams[1].text,teams,logging)
+        self.raw_home = self.correct_stupid_names(game_teams[0].text)
+        self.raw_away = self.correct_stupid_names(game_teams[1].text)
+        self.home=self.correct_stupid_names(unify_name(game_teams[0].text,teams,logging))
+        self.away=self.correct_stupid_names(unify_name(game_teams[1].text,teams,logging))
         print(self.game.text)
         print (self.home,self.away)
-        #self.raw_date = soup.find('span', {'class': 'betItemDetailDate'}).text
+        raw_date=soup.find('div',{'class':'small-12 column match-info'}).text
+        cal={'stycznia':'01','lutego':'02','marca':'03','kwietnia':'04','maja':'05','czerwca':'06','lipca':'07',
+             'sierpnia':'08','września':'09','października':'10','listopada':'11','grudnia':'12'}
+        cal2 = {'września': '09'}
+        raw_date2=raw_date
+        for key,v in cal.items():
+            if len(re.findall(key,raw_date))>0:
+                raw_date2=re.sub(key,v,raw_date)
+
+        print ("RAW DATE:", raw_date2)
+
         current_time=datetime.datetime.now()
+        day=raw_date2.split(',')[1].strip().split(' ')[0]
+        month = raw_date2.split(',')[1].strip().split(' ')[1]
+        hour=raw_date2.split(',')[2].strip().split(':')[0]
+        minute=raw_date2.split(',')[2].strip().split(':')[1]
+        print ("DAY:",day,month,hour,minute)
+        full_date=datetime.datetime(current_time.year,int(month),int(day),int(hour),int(minute))
         self.update_time=str('{:04d}'.format(current_time.year))+'-'+str('{:02d}'.format(current_time.month))+'-'+str('{:02d}'.format(current_time.day))+\
         '-' + str('{:02d}'.format(current_time.hour))+'-'+str('{:02d}'.format(current_time.minute))+'-'+str('{:02d}'.format(current_time.second))
-        #full_date = datetime.datetime(current_time.year, int(self.raw_date.split('.')[1]), int(self.raw_date.split('.')[0]),
-        #                              int((self.raw_date.split('.')[2]).split(':')[0]), int((self.raw_date.split('.')[2]).split(':')[1]))
-        #self.date=str(full_date.year)+'-'+str('{:02d}'.format(full_date.month))+'-'+str('{:02d}'.format(full_date.day))
-        #self.hour=str('{:02d}'.format(full_date.hour))+':'+str('{:02d}'.format(full_date.minute))
-        #self.home=unify_name(self.game.text.split('|')[2].split('-')[0].strip(),teams,logging)
-        #self.away =unify_name(self.game.text.split('|')[2].split('-')[1].strip(),teams,logging)
-        #self.sport = self.game.text.split('|')[0].strip()
-        #self.league = unify_name(self.game.text.split('|')[1].strip(),leagues,logging)
+        self.date=str(full_date.year)+'-'+str('{:02d}'.format(full_date.month))+'-'+str('{:02d}'.format(full_date.day))
+        #print("DATTTTEE",self.date)
+        self.hour=str('{:02d}'.format(full_date.hour))+':'+str('{:02d}'.format(full_date.minute))
+
 
     def correct_name(self, name):
         try:
@@ -173,9 +185,15 @@ class football_event:
         "Zdobędzie gola w meczu":{"name":"scorer"},
         "Strzelec ostatniego gola":{"name":"scorer_last_goal"},
         "Strzelec 1 gola":{"name":"scorer_first_goal"},
+        "Karny w meczu?":{"name":"penalty"}
 
     }
-
+    def correct_stupid_names(self,x):
+        correct_names={'RB Lipsk':'RB Leipzig'}
+        if x in correct_names.keys():
+            return correct_names[x]
+        else:
+            return x
     def extract_team_name(self,x, home, away):
         if len(re.findall(home, x)) > 0 and len(re.findall(away, x)) > 0:
             x2=re.sub(home, '1', x)
@@ -210,12 +228,16 @@ class football_event:
                 rows=odd.find_all('div',{'class':'outcome-row'})
                 if len(rows)==0:
                     odd_name = odd.find('div', {'class': 'outcome-name'})
-                    print ("ODD_name: ", odd_name.text)
+                    #print ("ODD_name: ", odd_name.text)
                     odd_rate = odd.find('span', {'class': 'rate-value'})
-                    print ("ODD_rate: ", odd_rate.text)
+                    #print ("ODD_rate: ", odd_rate.text)
                     odd_name_corr=self.extract_team_name(odd_name.text,self.raw_home,self.raw_away)
                     # self.odds[name][odd_name.text]={}
-                    self.odds[self.events_mapping_iforbet[name]["name"]][odd_name_corr] = odd_rate.text
+                    try:
+                        self.odds[self.events_mapping_iforbet[name]["name"]][odd_name_corr] = odd_rate.text
+                    except:
+                        logging.warning("Nieznany zaklad 2: "+name)
+                        pass
                 else:
                     for row in rows:
                         odd_name=row.find('div',{'class':'outcome-name'})
@@ -224,7 +246,11 @@ class football_event:
                         print ("ODD_rate: ", odd_rate.text)
                     #self.odds[name][odd_name.text]={}
                         odd_name_corr = self.extract_team_name(odd_name.text, self.raw_home, self.raw_away)
-                        self.odds[self.events_mapping_iforbet[name]["name"]][odd_name_corr]=odd_rate.text
+                        try:
+                            self.odds[self.events_mapping_iforbet[name]["name"]][odd_name_corr]=odd_rate.text
+                        except:
+                            logging.warning("Nieznany zaklad 3: "+name)
+                            pass
         import json
         print (json.dumps(self.odds, indent=4, sort_keys=False))
         #pp = pprint.PrettyPrinter(depth=3)
@@ -292,81 +318,86 @@ class football_event:
 
     def prepare_dict_to_sql(self):
         self.dict_sql=defaultdict(str)
-        for i in self.__events_mapping.values():
+        for i in self.events_mapping_iforbet.values():
             if i['name'] not in self.odds.keys():
                 self.odds[i['name']]=defaultdict(str)
 
         #Poprawia na potrzeby ubogich meczy:
-        if '+' not in self.odds['goals'].keys():
-            self.odds['goals']['+']=defaultdict(str)
-        if '-' not in self.odds['goals'].keys():
-            self.odds['goals']['-']=defaultdict(str)
+        for i in (0.5,1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,9.5):
+            try:
+                self.odds['goals']['Powyżej '+str(i)+' gola']
+            except:
+                self.odds['goals']['Powyżej '+str(i)+' gola']=''
+            try:
+                self.odds['goals']['Poniżej '+str(i)+' gola']
+            except:
+                self.odds['goals']['Poniżej '+str(i)+' gola']=''
         self.dict_sql['home']=self.home
         self.dict_sql['away']=self.away
         self.dict_sql['_1']=self.odds['game']['1']
-        self.dict_sql['_0']=self.odds['game']['0']
+        self.dict_sql['_0']=self.odds['game']['X']
         self.dict_sql['_2']=self.odds['game']['2']
-        self.dict_sql['_10']=self.odds['game']['10']
-        self.dict_sql['_02']=self.odds['game']['02']
-        self.dict_sql['_12']=self.odds['game']['12']
+        self.dict_sql['_10']=self.odds['dc']['1/X']
+        self.dict_sql['_02']=self.odds['dc']['X/2']
+        self.dict_sql['_12']=self.odds['dc']['1/2']
         #self.dict_sql['data']=self.date.split(' ')[1].split('.')[2]+'-'+self.date.split(' ')[1].split('.')[1]+'-'+self.date.split(' ')[1].split('.')[0]
-        self.dict_sql['Sport']=self.sport
-        self.dict_sql['League']=self.league
+        #self.dict_sql['Sport']=self.sport
+        #self.dict_sql['League']=self.league
         self.dict_sql['data']=self.date
         self.dict_sql['hour']=self.hour
         self.dict_sql['update_time']=self.update_time
-        self.dict_sql['o_35'] = self.odds['goals']['+']['3.5']
+        self.dict_sql['o_35'] = self.odds['goals']['Powyżej 3.5 gola']
         #self.dict_sql['country']=self.
         self.dict_sql['dnb_1']=self.odds['dnb']['1']
         self.dict_sql['dnb_2']=self.odds['dnb']['2']
-        self.dict_sql['o_05'] = self.odds['goals']['+']['0.5']
-        self.dict_sql['u_05'] = self.odds['goals']['-']['0.5']
-        self.dict_sql['o_15'] = self.odds['goals']['+']['1.5']
-        self.dict_sql['u_15'] = self.odds['goals']['-']['1.5']
-        self.dict_sql['o_25'] = self.odds['goals']['+']['2.5']
-        self.dict_sql['u_25'] = self.odds['goals']['-']['2.5']
-        self.dict_sql['u_35'] = self.odds['goals']['-']['3.5']
-        self.dict_sql['o_45'] = self.odds['goals']['+']['4.5']
-        self.dict_sql['u_45'] = self.odds['goals']['-']['4.5']
-        self.dict_sql['o_55'] = self.odds['goals']['+']['5.5']
-        self.dict_sql['u_55'] = self.odds['goals']['-']['5.5']
-        self.dict_sql['o_65'] = self.odds['goals']['+']['6.5']
-        self.dict_sql['u_65'] = self.odds['goals']['-']['6.5']
-        self.dict_sql['o_75'] = self.odds['goals']['+']['7.5']
-        self.dict_sql['u_75'] = self.odds['goals']['-']['7.5']
-        self.dict_sql['o_85'] = self.odds['goals']['+']['8.5']
-        self.dict_sql['u_85'] = self.odds['goals']['-']['8.5']
-        self.dict_sql['o_95'] = self.odds['goals']['+']['9.5']
-        self.dict_sql['u_95'] = self.odds['goals']['-']['9.5']
-        self.dict_sql['ht_ft_11'] = self.odds['half/end'][ '1/1']
-        self.dict_sql['ht_ft_1x'] = self.odds['half/end'][ '1/0']
-        self.dict_sql['ht_ft_2x'] = self.odds['half/end'][ '2/0']
-        self.dict_sql['ht_ft_21'] = self.odds['half/end'][ '2/1']
-        self.dict_sql['ht_ft_22'] = self.odds['half/end'][ '2/2']
-        self.dict_sql['ht_ft_x1'] = self.odds['half/end'][ '0/1']
-        self.dict_sql['ht_ft_x2'] = self.odds['half/end'][ '0/2']
-        self.dict_sql['ht_ft_12'] = self.odds['half/end'][ '1/2']
-        self.dict_sql['ht_ft_xx'] = self.odds['half/end'][ '0/0']
-        self.dict_sql['_1st_half_1']= self.odds['1st_half'][ '1']
-        self.dict_sql['_1st_half_x'] = self.odds['1st_half'][ '0']
-        self.dict_sql['_1st_half_2'] = self.odds['1st_half'][ '2']
-        self.dict_sql['_1st_half_10'] = self.odds['1st_half']['10']
-        self.dict_sql['_1st_half_02'] = self.odds['1st_half']['02']
-        self.dict_sql['_1st_half_12'] = self.odds['1st_half']['12']
-        self.dict_sql['eh-1_1'] = self.odds['eh-1']['1']
-        self.dict_sql['eh-1_x2'] = self.odds['eh-1']['02']
-        self.dict_sql['u_25_1'] = self.odds['game/goals']['1/-2.5']
-        self.dict_sql['o_25_1'] = self.odds['game/goals']['1/+2.5']
-        self.dict_sql['u_25_x'] = self.odds['game/goals']['0/-2.5']
-        self.dict_sql['o_25_x'] = self.odds['game/goals']['0/+2.5']
-        self.dict_sql['u_25_2'] = self.odds['game/goals']['2/-2.5']
-        self.dict_sql['o_25_2'] = self.odds['game/goals']['2/+2.5']
-        self.dict_sql['u_35_1'] = self.odds['game/goals']['1/-3.5']
-        self.dict_sql['o_35_1'] = self.odds['game/goals']['1/+3.5']
-        self.dict_sql['u_35_x'] = self.odds['game/goals']['0/-3.5']
-        self.dict_sql['o_35_x'] = self.odds['game/goals']['0/+3.5']
-        self.dict_sql['u_35_2'] = self.odds['game/goals']['2/-3.5']
-        self.dict_sql['o_35_2'] = self.odds['game/goals']['2/+3.5']
+        self.dict_sql['o_05'] = self.odds['goals']['Powyżej 0.5 gola']
+        self.dict_sql['u_05'] = self.odds['goals']['Poniżej 0.5 gola']
+        self.dict_sql['o_15'] = self.odds['goals']['Powyżej 1.5 gola']
+        self.dict_sql['u_15'] = self.odds['goals']['Poniżej 1.5 gola']
+        self.dict_sql['o_25'] = self.odds['goals']['Powyżej 2.5 gola']
+        self.dict_sql['u_25'] = self.odds['goals']['Poniżej 2.5 gola']
+        self.dict_sql['u_35'] = self.odds['goals']['Poniżej 3.5 gola']
+        self.dict_sql['o_45'] = self.odds['goals']['Powyżej 4.5 gola']
+        self.dict_sql['u_45'] = self.odds['goals']['Poniżej 4.5 gola']
+        self.dict_sql['o_55'] = self.odds['goals']['Powyżej 5.5 gola']
+        self.dict_sql['u_55'] = self.odds['goals']['Poniżej 5.5 gola']
+        self.dict_sql['o_65'] = self.odds['goals']['Powyżej 6.5 gola']
+        self.dict_sql['u_65'] = self.odds['goals']['Poniżej 6.5 gola']
+        self.dict_sql['o_75'] = self.odds['goals']['Powyżej 7.5 gola']
+        self.dict_sql['u_75'] = self.odds['goals']['Poniżej 7.5 gola']
+        self.dict_sql['o_85'] = self.odds['goals']['Powyżej 8.5 gola']
+        self.dict_sql['u_85'] = self.odds['goals']['Poniżej 8.5 gola']
+        self.dict_sql['o_95'] = self.odds['goals']['Powyżej 9.5 gola']
+        self.dict_sql['u_95'] = self.odds['goals']['Poniżej 9.5 gola']
+        self.dict_sql['ht_ft_11'] = self.odds['half/end']['1 / 1']
+        self.dict_sql['ht_ft_1x'] = self.odds['half/end']['1 / X']
+        self.dict_sql['ht_ft_2x'] = self.odds['half/end']['2 / X']
+        self.dict_sql['ht_ft_21'] = self.odds['half/end']['2 / 1']
+        self.dict_sql['ht_ft_22'] = self.odds['half/end']['2 / 2']
+        self.dict_sql['ht_ft_x1'] = self.odds['half/end']['X / 1']
+        self.dict_sql['ht_ft_x2'] = self.odds['half/end']['X / 2']
+        self.dict_sql['ht_ft_12'] = self.odds['half/end']['1 / 2']
+        self.dict_sql['ht_ft_xx'] = self.odds['half/end']['X / X']
+        self.dict_sql['_1st_half_1']= self.odds['1st_half']['1']
+        self.dict_sql['_1st_half_x'] = self.odds['1st_half']['X']
+        self.dict_sql['_1st_half_2'] = self.odds['1st_half']['2']
+        self.dict_sql['_1st_half_10'] = self.odds['1st_half_dc']['1/X']
+        self.dict_sql['_1st_half_02'] = self.odds['1st_half_dc']['X/2']
+        self.dict_sql['_1st_half_12'] = self.odds['1st_half_dc']['1/2']
+        #self.dict_sql['eh-1_1'] = self.odds['eh-1']['1']
+        #self.dict_sql['eh-1_x2'] = self.odds['eh-1']['02']
+        self.dict_sql['u_25_1'] = self.odds['game/goals']['1 i Poniżej 2.5 gola']
+        self.dict_sql['o_25_1'] = self.odds['game/goals']['1 i Powyżej 2.5 gola']
+        self.dict_sql['u_25_x'] = self.odds['game/goals']['X i Poniżej 2.5 gola']
+        self.dict_sql['o_25_x'] = self.odds['game/goals']['X i Powyżej 2.5 gola']
+        self.dict_sql['u_25_2'] = self.odds['game/goals']['2 i Poniżej 2.5 gola']
+        self.dict_sql['o_25_2'] = self.odds['game/goals']['2 i Powyżej 2.5 gola']
+        self.dict_sql['u_35_1'] = self.odds['game/goals']['1 i Poniżej 3.5 gola']
+        self.dict_sql['o_35_1'] = self.odds['game/goals']['1 i Powyżej 3.5 gola']
+        self.dict_sql['u_35_x'] = self.odds['game/goals']['X i Poniżej 3.5 gola']
+        self.dict_sql['o_35_x'] = self.odds['game/goals']['X i Powyżej 3.5 gola']
+        self.dict_sql['u_35_2'] = self.odds['game/goals']['2 i Poniżej 3.5 gola']
+        self.dict_sql['o_35_2'] = self.odds['game/goals']['2 i Powyżej 3.5 gola']
         #self.dict_sql['1_st_goal_1'] = self.odds['1st_goal'][sehome]
         #self.dict_sql['1_st_goal_2'] = self.odds['1st_goal'][away]
         #self.dict_sql['1_st_goal_0'] = self.odds['1st_goal']['nikt']
@@ -382,7 +413,7 @@ class football_event:
         date = meczyk.date
         print ("Date:", date)
         #sqldate=meczyk.date.split(' ')[1].split('.')[2]+'-'+meczyk.date.split(' ')[1].split('.')[1]+'-'+meczyk.date.split(' ')[1].split('.')[0]
-        table='"db_fortuna"'
+        table='"db_iforbet"'
         columns_string = '("' + '","'.join(meczyk.dict_sql.keys()) + '")'
         values_string = '("' + '","'.join(map(str, meczyk.dict_sql.values())) + '")'
         try:
@@ -403,14 +434,16 @@ class football_event:
         self.get_name()
         self.get_odds2()
 
-        #self.prepare_dict_to_sql()
+        self.prepare_dict_to_sql()
+        self.save_to_db()
+        #print (self.dict_sql)
         #print ("ODDS:",self.odds)
-data = urllib2.urlopen(urllib2.Request('https://www.iforbet.pl/zdarzenie/449457',None,headers)).read() # The data u need
+data = urllib2.urlopen(urllib2.Request('https://www.iforbet.pl/zdarzenie/431949',None,headers)).read() # The data u need
 meczyk=football_event(events_mapping_fortuna)
-#exit()
 
 
-url='https://www.iforbet.pl/oferta/8/199,511,168,282,2432,321,159,269,223,147,122,273,660,2902,558,641,289'
+
+url='https://www.iforbet.pl/oferta/8/4437,4569,199,511,168,2432,321,159,269,223,147,122,273,660,2902,558,641,289'
 
 def get_links(url):
     data = urllib2.urlopen(urllib2.Request(url, None, headers)).read()
