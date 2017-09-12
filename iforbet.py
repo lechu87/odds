@@ -31,8 +31,14 @@ class football_event:
         self.raw_away = self.correct_stupid_names(game_teams[1].text)
         self.home=self.correct_stupid_names(unify_name(game_teams[0].text,teams,logging))
         self.away=self.correct_stupid_names(unify_name(game_teams[1].text,teams,logging))
-        print(self.game.text)
-        print (self.home,self.away)
+        raw_league_name=self.game.find('div',{'id':'event-lvl3-name'}).text+' '+self.game.find('div',{'id':'event-lvl2-name'}).text
+        raw_league=soup.find('span',{'class':'header-navigation-site'}).text
+
+        #print ("SOUP:", soup)
+        print ("X: ",raw_league)
+        self.league=unify_name(raw_league_name,leagues,logging)
+        print ("LEAGUE:",self.league)
+
         raw_date=soup.find('div',{'class':'small-12 column match-info'}).text
         cal={'stycznia':'01','lutego':'02','marca':'03','kwietnia':'04','maja':'05','czerwca':'06','lipca':'07',
              'sierpnia':'08','września':'09','października':'10','listopada':'11','grudnia':'12'}
@@ -185,7 +191,76 @@ class football_event:
         "Zdobędzie gola w meczu":{"name":"scorer"},
         "Strzelec ostatniego gola":{"name":"scorer_last_goal"},
         "Strzelec 1 gola":{"name":"scorer_first_goal"},
-        "Karny w meczu?":{"name":"penalty"}
+        "Karny w meczu?":{"name":"penalty"},
+        "Poniżej/Powyżej x rzutów rożnych w 1 połowie":{"name":"corners_1st_half"},
+        "Ilość kartek w 1 połowie":{"name":"cards_1st_half"},
+        "1 - liczba kartek w 1 połowie":{"name":"1_cards_1st_half"},
+        "2 - liczba kartek w 1 połowie": {"name": "2_cards_1st_half"},
+        "Pierwsza kartka w 1 połowie":{"name":"1st_card_1st_half"},
+        "Czerwona kartka w 1 połowie":{"name":"red_card_1st_half"},
+        "Pierwsza kartka":{"name":"1st_card"},
+        "Rzuty rożne handicap -0.5 / +0.5 w 1 połowie":{"name":"corners_eh-05_1st_half"},
+        "Rzuty rożne handicap -1.5 / +1.5 w 1 połowie": {"name": "corners_eh-15_1st_half"},
+        "Rzuty rożne handicap -2.5 / +2.5 w 1 połowie": {"name": "corners_eh-25_1st_half"},
+        "Rzuty rożne handicap -3.5 / +3.5 w 1 połowie": {"name": "corners_eh-35_1st_half"},
+        "Rzuty rożne handicap +0.5 / -0.5 w 1 połowie":{"name":"corners_eh+05_1st_half"},
+        "Rzuty rożne handicap + 0.5 / -0.5 w 1 połowie":{"name":"corners_eh+05_1st_half"},
+        "Rzuty rożne handicap +1.5 / -1.5 w 1 połowie":{"name":"corners_eh+15_1st_half"},
+        "Rzuty rożne handicap +2.5 / -2.5 w 1 połowie": {"name": "corners_eh+25_1st_half"},
+        "Rzuty rożne handicap +3.5 / -3.5 w 1 połowie": {"name": "corners_eh+35_1st_half"},
+        "Rzuty rożne handicap +4.5 / -4.5 w 1 połowie": {"name": "corners_eh+45_1st_half"},
+        "Kto więcej rzutów rożnych w 1 połowie?":{"name":"more_corners_shich_team_1st_half"},
+        "Suma rzutów rożnych w 1 połowie - Nieparzyste/Parzyste":{"name":"1st_half_corners_odd_even"},
+        "Pierwszy rzut rożny w 1 połowie":{"name":"1st_corner_1st_half"},
+        "1 - liczba rzutów rożnych w 1 połowie":{"name":"1_corners_1st_half"},
+        "2 - liczba rzutów rożnych w 1 połowie": {"name": "2_corners_1st_half"},
+        "1 - liczba rzutów rożnych":{"name":"1_corners"},
+        "2 - liczba rzutów rożnych": {"name": "2_corners"},
+        "Ostatni rzut rożny w 1 połowie":{"name":"last_corner_1st_half"},
+        "Liczba rzutów rożnych w 1 połowie":{"name":"corners_1st_half"},
+        "1 - liczba kartek w 1 połowie (czerwona kartka=2)":{"name":"1_cards_1st_half"},
+        "2 - liczba kartek w 1 połowie (czerwona kartka=2)": {"name": "2_cards_1st_half"},
+        "Ilość kartek w meczu (poniżej/powyżej)":{"name":"cards"},
+        "Więcej kartek w 1 połowie (czerwona kartka=2)":{"name":"more_cards_1st_half"},
+        "Liczba kartek w 1 połowie (czerwona kartka=2)":{"name":"cards_1st_half"},
+        "1 - liczba kartek (czerwona kartka=2)":{"name":"1_cards"},
+        "2 - liczba kartek (czerwona kartka=2)": {"name": "2_cards"},
+        "Liczba kartek (czerwona kartka=2)":{"name":"cards"},
+        "Poniżej/Powyżej x punktów kartkowych w 1 połowie":{"name":"card_points_1st_half"},
+        "Poniżej/Powyżej x punktów kartkowych": {"name": "card_points"},
+        "Ilość punktów kartkowych w 1 połowie":{"name":"card_points_1st_half"},
+        "Ilość punktów kartkowych": {"name": "card_points"},
+        "Minimum one red card":{"name":"red_card"},
+        "1 otrzyma czerwoną kartkę":{"name":"1_red_card"},
+        "2 otrzyma czerwoną kartkę": {"name": "2_red_card"},
+        "Kto więcej kartek? (czerwona kartka=2)":{"name":"more_cards"},
+        "Kto więcej rzutów rożnych?":{"name":"more_corners"},
+        "Suma rzutów rożnych - Nieparzyste/Parzyste":{"name":"corners_odd_even"},
+        "Poniżej/Powyżej x rzutów rożnych":{"name":"corners"},
+        "1. rzut rożny":{"name":"first_corner"},
+        "Ostatni rzut rożny":{"name":"last_corner"},
+        "Handicap rzutów rożnych -0.5/ +0.5": {"name": "corners_eh-05"},
+        "Handicap rzutów rożnych -1.5/ +1.5": {"name":"corners_eh-15"},
+        "Handicap rzutów rożnych -2.5/ +2.5": {"name": "corners_eh-25"},
+        "Handicap rzutów rożnych -3.5/ +3.5": {"name": "corners_eh-35"},
+        "Handicap rzutów rożnych -4.5/ +4.5": {"name": "corners_eh-45"},
+        "Handicap rzutów rożnych -5.5/ +5.5": {"name": "corners_eh-55"},
+        "Handicap rzutów rożnych -6.5/ +6.5": {"name": "corners_eh-65"},
+        "Rzuty rożne handicap +0.5/ -0.5":{"name":"corners_eh+05"},
+        "Rzuty rożne handicap +1.5/ -1.5":{"name":"corners_eh+15"},
+        "Rzuty rożne handicap +2.5/ -2.5":{"name":"corners_eh+25"},
+        "Rzuty rożne handicap +3.5/ -3.5": {"name": "corners_eh+35"},
+        "Rzuty rożne handicap +4.5/ -4.5": {"name": "corners_eh+45"},
+        "Liczba rzutów rożnych":{"name":"corners"},
+        "Kto strzeli więcej bramek? (Remis=zwrot)":{"name":"more_goals"},
+        "zawodnik : otrzyma kartkę":{"name":"player_card"},
+
+
+
+
+
+
+
 
     }
     def correct_stupid_names(self,x):
@@ -342,7 +417,7 @@ class football_event:
         self.dict_sql['_12']=self.odds['dc']['1/2']
         #self.dict_sql['data']=self.date.split(' ')[1].split('.')[2]+'-'+self.date.split(' ')[1].split('.')[1]+'-'+self.date.split(' ')[1].split('.')[0]
         #self.dict_sql['Sport']=self.sport
-        #self.dict_sql['League']=self.league
+        self.dict_sql['League']=self.league
         self.dict_sql['data']=self.date
         self.dict_sql['hour']=self.hour
         self.dict_sql['update_time']=self.update_time
@@ -438,9 +513,9 @@ class football_event:
         self.save_to_db()
         #print (self.dict_sql)
         #print ("ODDS:",self.odds)
-data = urllib2.urlopen(urllib2.Request('https://www.iforbet.pl/zdarzenie/431949',None,headers)).read() # The data u need
-meczyk=football_event(events_mapping_fortuna)
-
+#data = urllib2.urlopen(urllib2.Request('https://www.iforbet.pl/zdarzenie/472933',None,headers)).read() # The data u need
+#meczyk=football_event(events_mapping_fortuna)
+#exit()
 
 
 url='https://www.iforbet.pl/oferta/8/4437,4569,199,511,168,2432,321,159,269,223,147,122,273,660,2902,558,641,289'
