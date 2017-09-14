@@ -10,12 +10,15 @@ import datetime
 from collections import defaultdict
 from dictionaries import *
 import re
+#import requests
+#data = requests.get("https://www.iforbet.pl/zdarzenie/460411")
+#html_contents = page.text
 user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
 url = "http://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers"
 headers={'User-Agent':user_agent,}
-#data=urllib2.Request('https://www.iforbet.pl/zdarzenie/450168',None,headers)
+#data=urllib2.Request('https://www.iforbet.pl/zdarzenie/460411',None,headers)
 #response = urllib2.urlopen(urllib2.Request('https://www.iforbet.pl/zdarzenie/450168',None,headers))
-data = urllib2.urlopen(urllib2.Request('https://www.iforbet.pl/zdarzenie/450168',None,headers)).read() # The data u need
+data = urllib2.urlopen(urllib2.Request('https://www.iforbet.pl/zdarzenie/460411',None,headers)).read() # The data u need
 #data=codecs.open('fortuna.html',mode='r',encoding='utf-8').read()
 
 class football_event:
@@ -38,8 +41,13 @@ class football_event:
         print ("X: ",raw_league)
         self.league=unify_name(raw_league_name,leagues,logging)
         print ("LEAGUE:",self.league)
+        print (self.home,self.away)
 
-        raw_date=soup.find('div',{'class':'small-12 column match-info'}).text
+        raw_date=soup.find_all('div',class_=re.compile('column match-info'))[1].text
+
+        #raw_date = soup.find_all('div', class_="small-8 column match-info")
+        #(soup)
+        print ("RAW DATE:",raw_date)
         cal={'stycznia':'01','lutego':'02','marca':'03','kwietnia':'04','maja':'05','czerwca':'06','lipca':'07',
              'sierpnia':'08','września':'09','października':'10','listopada':'11','grudnia':'12'}
         cal2 = {'września': '09'}
@@ -233,6 +241,8 @@ class football_event:
         "Minimum one red card":{"name":"red_card"},
         "1 otrzyma czerwoną kartkę":{"name":"1_red_card"},
         "2 otrzyma czerwoną kartkę": {"name": "2_red_card"},
+        "2 - czerwona kartka w 1 połowie":{"name":"2_red_card_1st_half"},
+        "1 - czerwona kartka w 1 połowie": {"name": "1_red_card_1st_half"},
         "Kto więcej kartek? (czerwona kartka=2)":{"name":"more_cards"},
         "Kto więcej rzutów rożnych?":{"name":"more_corners"},
         "Suma rzutów rożnych - Nieparzyste/Parzyste":{"name":"corners_odd_even"},
@@ -513,13 +523,15 @@ class football_event:
         self.save_to_db()
         #print (self.dict_sql)
         #print ("ODDS:",self.odds)
-#data = urllib2.urlopen(urllib2.Request('https://www.iforbet.pl/zdarzenie/472933',None,headers)).read() # The data u need
-#meczyk=football_event(events_mapping_fortuna)
+data = urllib2.urlopen(urllib2.Request('https://www.iforbet.pl/zdarzenie/460409',None,headers)).read() # The data u need
+meczyk=football_event(events_mapping_fortuna)
 #exit()
 
 
-url='https://www.iforbet.pl/oferta/8/4437,4569,199,511,168,2432,321,159,269,223,147,122,273,660,2902,558,641,289'
-
+#url='https://www.iforbet.pl/oferta/8/4437,4569,199,511,168,2432,321,159,269,223,147,122,273,660,2902,558,641,289'
+url='https://www.iforbet.pl/oferta/8/321,159,269,223,147,122,273,660,2902,558,641,289'
+url='https://www.iforbet.pl/oferta/8/293,380,398,3372,357,7018,555,3096,120,666,123'
+url='https://www.iforbet.pl/oferta/8/908,2911'
 def get_links(url):
     data = urllib2.urlopen(urllib2.Request(url, None, headers)).read()
     soup = BeautifulSoup(data, "html.parser")
