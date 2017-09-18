@@ -18,17 +18,20 @@ url = "http://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers"
 headers={'User-Agent':user_agent,}
 #data=urllib2.Request('https://www.iforbet.pl/zdarzenie/460411',None,headers)
 #response = urllib2.urlopen(urllib2.Request('https://www.iforbet.pl/zdarzenie/450168',None,headers))
-data = urllib2.urlopen(urllib2.Request('https://www.iforbet.pl/zdarzenie/460411',None,headers)).read() # The data u need
+data = urllib2.urlopen(urllib2.Request('https://www.iforbet.pl/zdarzenie/469933',None,headers)).read() # The data u need
 #data=codecs.open('fortuna.html',mode='r',encoding='utf-8').read()
 
 class football_event:
     soup = BeautifulSoup(data,"html.parser")
     logging.basicConfig(filename='logfile_iforbet.log', level=logging.DEBUG)
+
     def get_events_mapping(self):
         return self.__events_mapping
     def get_name(self):
         soup = BeautifulSoup(data, "html.parser")
+        print (soup)
         self.game=soup.find('div',{'class':'event-data'})
+        print (self.game)
         game_teams=self.game.find_all('h2')
         self.raw_home = self.correct_stupid_names(game_teams[0].text)
         self.raw_away = self.correct_stupid_names(game_teams[1].text)

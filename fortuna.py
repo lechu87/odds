@@ -267,8 +267,8 @@ sites=[
        'https://www.efortuna.pl/pl/strona_glowna/pilka-nozna/2-liga-wloska',
        'https://www.efortuna.pl/pl/strona_glowna/pilka-nozna/ligue-2',
        ]
-sites2=['https://www.efortuna.pl/pl/strona_glowna/pilka-nozna/puchar-polski']
-for site in sites:
+sites2=['https://www.efortuna.pl/pl/strona_glowna/pilka-nozna/primera-division']
+for site in sites2:
     try:
         strona=urllib2.urlopen(site).read()
     except:
@@ -277,15 +277,15 @@ for site in sites:
         continue
     soup = BeautifulSoup(strona, "html.parser")
     more_bets=soup.find('table',{'class':'bet_table'}).find_all('span', {'class': 'bet_item_main_text'})
-    #print ("MORE BETS:", more_bets)
+    print ("MORE BETS:", more_bets)
     names=[]
     for a in more_bets:
         #print ("A: ",a)
-        link=a.find('a', href = True)
-        print ("LINK: ", link['href'])
         #https: // www.efortuna.pl / pl / strona_glowna / pilka - nozna / 2017 - 0
         #8 - 18 - lechia - g - ---sandecja - n - s - -14014159
         try:
+            link = a.find('a', href=True)
+            print ("LINK: ", link['href'])
             data=urllib2.urlopen('https://www.efortuna.pl'+link['href']).read()
             meczyk = football_event(events_mapping_fortuna)
             names.append(meczyk.home)
@@ -293,7 +293,7 @@ for site in sites:
             #meczyk=football_event()
             meczyk.save_to_db()
         except:
-            logging.WARNING("ERROR dla: "+link['href'])
+            logging.warning("ERROR dla: "+str(link['href']))
             continue
 
 
