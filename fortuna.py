@@ -268,7 +268,7 @@ sites=[
        'https://www.efortuna.pl/pl/strona_glowna/pilka-nozna/ligue-2',
        ]
 sites2=['https://www.efortuna.pl/pl/strona_glowna/pilka-nozna/primera-division']
-for site in sites2:
+for site in sites:
     try:
         strona=urllib2.urlopen(site).read()
     except:

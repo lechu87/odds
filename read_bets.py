@@ -1,9 +1,9 @@
-import scrapy
+import scrapy_test
 from lxml import html
 import requests
 
 
-class QuotesSpider(scrapy.Spider):
+class QuotesSpider(scrapy_test.Spider):
     name = "quotes"
 
     def start_requests(self):
@@ -11,7 +11,7 @@ class QuotesSpider(scrapy.Spider):
             'https://www.efortuna.pl/pl/strona_glowna/serwis_sportowy/liga_mistrzow/index.html'
         ]
         for url in urls:
-            yield scrapy.Request(url=url, callback=self.parse)
+            yield scrapy_test.Request(url=url, callback=self.parse)
 
     def parse(self, response):
         page = response.url.split("/")[-2]

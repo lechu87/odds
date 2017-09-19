@@ -526,7 +526,7 @@ class football_event:
         self.save_to_db()
         #print (self.dict_sql)
         #print ("ODDS:",self.odds)
-data = urllib2.urlopen(urllib2.Request('https://www.iforbet.pl/zdarzenie/460409',None,headers)).read() # The data u need
+data = urllib2.urlopen(urllib2.Request('https://www.iforbet.pl/zdarzenie/470334',None,headers)).read() # The data u need
 meczyk=football_event(events_mapping_fortuna)
 #exit()
 
