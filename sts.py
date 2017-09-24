@@ -517,10 +517,11 @@ for site in sites:
     more_bets=soup.find_all('td', {'class': 'support_bets'})
     for a in more_bets:
     #    print ("A: ",a)
-        link=a.find('a', href = True)
-    #    print ("LINK: ", link['href'])
-        data=urllib2.urlopen(link['href']).read()
         try:
+            link=a.find('a', href = True)
+    #    print ("LINK: ", link['href'])
+            data=urllib2.urlopen(link['href']).read()
+
             meczyk=football_event()
             meczyk.save_to_db()
         except:
