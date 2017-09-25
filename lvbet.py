@@ -176,20 +176,20 @@ class football_event:
         print (self.dict_sql)
         return self.dict_sql
     def save_to_db(meczyk):
-        database_name = 'db.lvbet'
+        database_name = 'db.sqlite'
         db = sqlite3.connect(database_name)
         home = meczyk.home
         print ("Home:", home)
         away = meczyk.away
         print ("Away:", away)
-        date = meczyk.date
-        print ("Date:", date)
+        #date = meczyk.date
+        #print ("Date:", date)
         #sqldate=meczyk.date.split(' ')[1].split('.')[2]+'-'+meczyk.date.split(' ')[1].split('.')[1]+'-'+meczyk.date.split(' ')[1].split('.')[0]
-        table='"db_fortuna"'
+        table='"db_lvbet"'
         columns_string = '("' + '","'.join(meczyk.dict_sql.keys()) + '")'
         values_string = '("' + '","'.join(map(str, meczyk.dict_sql.values())) + '")'
         try:
-            sql_command="DELETE FROM %s WHERE home=%s and away=%s and data=%s" % (table,"'"+home+"'","'"+away+"'","'"+date+"'")
+            sql_command="DELETE FROM %s WHERE home=%s and away=%s and data=%s" % (table,"'"+home+"'","'"+away+"'")
             print ("SQL COMMAND:",sql_command)
             db.execute(sql_command)
             print ("USUNIĘTO")
@@ -209,3 +209,4 @@ class football_event:
 
 
 meczyk = football_event(events_mapping_lvbet)
+meczyk.save_to_db()
