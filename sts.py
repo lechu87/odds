@@ -184,7 +184,9 @@ class football_event:
         self.update_time=str('{:04d}'.format(current_time.year))+'-'+str('{:02d}'.format(current_time.month))+'-'+str('{:02d}'.format(current_time.day))+ \
                          '-' + str('{:02d}'.format(current_time.hour)) + '-' + str('{:02d}'.format(current_time.minute)) + '-' + str('{:02d}'.format(current_time.second))
         self.home=unify_name(game_teams.split(' - ')[0].strip(),teams,logging)
+        print (self.home)
         self.away = unify_name(game_teams.split(' - ')[1].strip(),teams,logging)
+        print (self.away)
         self.date = game_teams.split(' - ')[2]
         self.hour = game_teams.split(' - ')[3]
         #print ("TIME",self.hour)
@@ -328,6 +330,7 @@ class football_event:
                     # print ("nieznany zaklad:")
                     # print (col.text.strip().replace(' ','').split('\n'))
                 continue
+        print (self.odds)
         return self.odds
     def prepare_dict_to_sql(self):
         self.dict_sql=defaultdict()
@@ -345,6 +348,8 @@ class football_event:
                 pass
         home = self.get_name(data).split(" - ")[0].strip().replace(' ', '')
         away = self.get_name(data).split(" - ")[1].strip().replace(' ','')
+        print(home)
+        print(away)
         #self.dict_sql['home']=self.get_name(data).split(" - ")[0].strip().replace(' ','')
         self.dict_sql['home'] = self.home
         #self.dict_sql['away']=away = self.get_name(data).split(" - ")[1].strip().replace(' ','')
@@ -465,13 +470,14 @@ class football_event:
 
 
 #data=codecs.open('www.sts.pl.htm',mode='r',encoding='utf-8').read()
-#data=urllib2.urlopen('https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6521&league=4080').read()
+data=urllib2.urlopen('https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6516&league=4234&oppty=86642221').read()
 
-#meczyk=football_event()
-#meczyk.prepare_dict_to_sql()
-#print (meczyk.odds)
-#meczyk.save_to_db()
-#exit()
+meczyk=football_event()
+print (meczyk.odds)
+meczyk.prepare_dict_to_sql()
+
+meczyk.save_to_db()
+exit()
 sites=['https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6521&league=4080',
 'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6488&league=3987',
 'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6535&league=3994',
@@ -511,7 +517,7 @@ sites2=['https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?ac
 
 
         ]
-for site in sites2:
+for site in sites:
     strona=urllib2.urlopen(site).read()
     soup = BeautifulSoup(strona, "html.parser")
     more_bets=soup.find_all('td', {'class': 'support_bets'})
