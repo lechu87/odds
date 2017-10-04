@@ -15,6 +15,7 @@ from collections import defaultdict
 import logging
 from dictionaries import *
 import datetime
+import re
 
 
 class football_event:
@@ -184,9 +185,14 @@ class football_event:
         self.update_time=str('{:04d}'.format(current_time.year))+'-'+str('{:02d}'.format(current_time.month))+'-'+str('{:02d}'.format(current_time.day))+ \
                          '-' + str('{:02d}'.format(current_time.hour)) + '-' + str('{:02d}'.format(current_time.minute)) + '-' + str('{:02d}'.format(current_time.second))
         self.home=unify_name(game_teams.split(' - ')[0].strip(),teams,logging)
-        print (self.home)
-        self.away = unify_name(game_teams.split(' - ')[1].strip(),teams,logging)
-        print (self.away)
+        self.away = unify_name(game_teams.split(' - ')[1].strip(), teams, logging)
+        self.home_all_names=teams[self.home]
+        self.away_all_names=teams[self.away]
+        print (sorted(self.home_all_names,key=len,reverse=True), self.home)
+        print (sorted(self.away_all_names, key=len, reverse=True), self.away)
+
+        self.home_raw=game_teams.split(' - ')[0].strip()
+        self.away_raw=game_teams.split(' - ')[1].strip()
         self.date = game_teams.split(' - ')[2]
         self.hour = game_teams.split(' - ')[3]
         #print ("TIME",self.hour)
@@ -195,7 +201,21 @@ class football_event:
         #logging.info(game_teams)
         self.names=self.__events_mapping.values()
         return game_teams
-    def correct_name(self,name):
+    def find_team_name(self,name):
+        if '.' in name:
+            name.replace('.','\.')
+        for i in sorted(self.home_all_names, key=len,reverse=True):
+            if len(re.findall(i,name)) > 0:
+                name=re.sub(i,self.home,name)
+                break
+        for i in sorted(self.away_all_names, key=len,reverse=True):
+            if len(re.findall(i,name)) > 0:
+                name = re.sub(i, self.away, name)
+                break
+        return name
+    def correct_name(self,name2):
+        print ("X:",name2)
+        name=self.find_team_name(name2)
         if (self.home in name.split('/')[0] and '/' in name):
             return self.home+'/'+name.split('/')[1]
         elif (self.away in name.split('/')[0] and '/' in name):
@@ -254,11 +274,10 @@ class football_event:
                 #print col.text.strip().split(' ')[-1]
                 cols=t.find_all('td')
                 for col in cols:
-                    x = col.text.strip().replace(' ','').split('\n')
+                    x = col.text.strip().split('\n')
                 #print x
                     try:
-                        x[0]=self.correct_name(x[0])
-                        self.odds[self.odd_type][x[0]]=float(x[1])
+                        self.odds[self.odd_type][self.correct_name(x[0].strip())]=float(x[1].strip())
                     except:
                         #print ("nieznany zaklad:")
                         #print (col.text.strip().replace(' ','').split('\n'))
@@ -291,10 +310,10 @@ class football_event:
             self.odds[self.odd_type] = {}
             for col in cols:
                 #print col.text.strip().split(' ')[-1]
-                x = col.text.strip().replace(' ','').split('\n')
+                x = col.text.strip().split('\n')
                 #print ("X: ",x)
                 try:
-                    self.odds[self.odd_type][x[0]]=float(x[1])
+                    self.odds[self.odd_type][self.correct_name(x[0].strip())]=float(x[1].strip())
                 except:
                     #print ("nieznany zaklad:")
                     #print (col.text.strip().replace(' ','').split('\n'))
@@ -322,10 +341,10 @@ class football_event:
             i = 0
 
             self.odds[self.odd_type][self.sub_name] = {}
-            x = cols.text.strip().replace(' ', '').split('\n')
+            x = cols.text.strip().split('\n')
             #print ("X: ",x)
             try:
-                self.odds[self.odd_type][self.sub_name] = float(x[1])
+                self.odds[self.odd_type][self.sub_name] = float(x[1].strip())
             except:
                     # print ("nieznany zaklad:")
                     # print (col.text.strip().replace(' ','').split('\n'))
@@ -354,12 +373,12 @@ class football_event:
         self.dict_sql['home'] = self.home
         #self.dict_sql['away']=away = self.get_name(data).split(" - ")[1].strip().replace(' ','')
         self.dict_sql['away'] = self.away
-        self.dict_sql['_1']=self.odds['game'][home]
+        self.dict_sql['_1']=self.odds['game'][self.home]
         self.dict_sql['_0']=self.odds['game']['X']
-        self.dict_sql['_2']=self.odds['game'][away]
-        self.dict_sql['_10']=self.odds['game'][home + '/X']
-        self.dict_sql['_02']=self.odds['game'][away + '/X']
-        self.dict_sql['_12']=self.odds['game'][home + '/' + away]
+        self.dict_sql['_2']=self.odds['game'][self.away]
+        self.dict_sql['_10']=self.odds['game'][self.home + '/X']
+        self.dict_sql['_02']=self.odds['game'][self.away + '/X']
+        self.dict_sql['_12']=self.odds['game'][self.home + '/' + self.away]
         self.dict_sql['data']=self.date.split(' ')[1].split('.')[2]+'-'+self.date.split(' ')[1].split('.')[1]+'-'+self.date.split(' ')[1].split('.')[0]
         self.dict_sql['Sport']=self.discipline
         self.dict_sql['League']=self.league
@@ -470,7 +489,7 @@ class football_event:
 
 
 #data=codecs.open('www.sts.pl.htm',mode='r',encoding='utf-8').read()
-data=urllib2.urlopen('https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6516&league=4234&oppty=86642221').read()
+data=urllib2.urlopen('https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6542&league=4088&oppty=86601960').read()
 
 meczyk=football_event()
 print (meczyk.odds)
@@ -478,7 +497,8 @@ meczyk.prepare_dict_to_sql()
 
 meczyk.save_to_db()
 exit()
-sites=['https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6521&league=4080',
+sites=['https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6502&league=43461',
+'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6521&league=4080',
 'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6488&league=3987',
 'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6535&league=3994',
 'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6490&league=4032',
@@ -513,7 +533,7 @@ sites=['https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?act
        'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6480&league=4750',
        'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6480&league=5441',
        'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6480&league=4054']
-sites2=['https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6499&league=3903',
+sites2=['https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6502&league=43461',
 
 
         ]

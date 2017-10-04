@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 from time import sleep
 from random import randint
 from selenium import webdriver
@@ -12,9 +14,12 @@ class MuncherySpider():
 	# Open headless chromedriver
 	def start_driver(self):
 		print('starting driver...')
-		self.display = Display(visible=0, size=(1280, 960))
-		self.display.start()
-		self.driver = webdriver.Chrome("/var/chromedriver/chromedriver")
+		#self.display = Display(visible=0, size=(1280, 960))
+		#self.display.start()
+		#try:
+		#	self.driver = webdriver.Chrome("C:\\Users\\kkkk\\PycharmProjects\\odds\\chromedriver.exe")
+		#except:
+		self.driver = webdriver.Chrome("chromedriver.exe")
 		sleep(4)
 
 	# Close chromedriver
@@ -80,7 +85,7 @@ class MuncherySpider():
 		self.get_page(self.url_to_crawl)
 		self.login()
 		self.grab_list_items()
-		self.close_driver()
+		#self.close_driver()
 
 		if self.all_items:
 			return self.all_items

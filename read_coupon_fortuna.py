@@ -168,7 +168,7 @@ logging.basicConfig(filename='logfile_fortuna_read_coupon.log', level=logging.DE
 
 #print (events_mapping_fortuna)
 #kupon=codecs.open('fortuna_kupon2.html',mode='r',encoding='utf-8').read()
-kupon=urllib2.urlopen('https://www.efortuna.pl/pl/strona_glowna/nahled_tiketu/index.html?ticket_id=OTk5MDI3NjY4NDM5MzkwMDo0y2pEERzAlV4KwY8%3D&kind=MAIN').read()
+kupon=urllib2.urlopen('https://www.efortuna.pl/pl/strona_glowna/nahled_tiketu/index.html?ticket_id=Mzk5MDE3NjcyMzc1NzEwMDooks0WWyl3R%2F5YXb8%3D&kind=MAIN').read()
 soup = BeautifulSoup(kupon,"html.parser")
 table=soup.find('div', {'class': 'ticket_container_inner'})
 head=table.find('thead')
@@ -179,13 +179,14 @@ for th in head.find('tr').find_all('th'):
 #print (head_text)
 body=table.find('tbody')
 game=[]
+odds=[]
 for tr in body.find_all('tr'):
     name=tr.find('span',{'class':'bet_item_name'})
     discipline=name.text.split(' - ')[0]
-    league=unify_name(name.text.split(' - ')[1].strip(),leagues,logging)
+#    league=unify_name(name.text.split(' - ')[1].strip(),leagues,logging)
     home=unify_name(name.text.split(' - ')[2].strip(),teams,logging)
     away = unify_name(name.text.split(' - ')[3].strip(),teams,logging)
-
+    #print ("Home:",home," Away:",away)
     tds=tr.find_all('td')
     raw_date=tds[3].text.strip()
     current_time = datetime.datetime.now()
@@ -197,21 +198,33 @@ for tr in body.find_all('tr'):
     #print (date)
     type = tds[0].find('div', {'class': 'matchComment'}).text.split('/')[0].strip()
     typ=tds[1].text.strip()
-    #print (type)
     #print (typ)
     for sql_name, name in sql_map_fortuna.items():
         if name==unify_name(events_mapping_fortuna[type]["name"]+typ,sql_map_fortuna,logging):
             x=sql_name
-
     znajdz_typ = unify2(events_mapping_fortuna[type]["name"] + typ, sql_map_fortuna, logging)
+    #print (znajdz_typ)
     ####wyciaga z bazy:
     #print (home, away)
     try:
-        s = select([db_fortuna]).where(and_(db_fortuna.home == home,db_fortuna.away == away,db_fortuna.data == date))
+        #print (home,away,date)
+        s = select([db_fortuna]).where(and_(db_fortuna.home == home,db_fortuna.away == away))
         #s = select([db_sts]).where(and_(db_sts.home == home, db_sts.away == away, db_sts.data == date))
         result = conn.execute(s)
         for r in result:
-            print (r.home, r.away, r.data, r[znajdz_typ])
+            odds.append(r.home)
+            odds.append(r.away)
+            odds.append(r.data)
+            odds.append(r[znajdz_typ])
+        s2 = select([db_sts]).where(and_(db_sts.home == home, db_sts.away == away))
+        result2 = conn.execute(s2)
+        print ("Result2:", result2)
+        for ss in result2:
+            odds.append(ss.home)
+            odds.append(ss.away)
+            odds.append(ss.data)
+            odds.append(ss[znajdz_typ])
+        print (r.home, r.away, r.data, r[znajdz_typ],ss[znajdz_typ])
     except:
         print ("Nie znaleziono kursu",home,away)
     ###########
@@ -226,10 +239,11 @@ for tr in body.find_all('tr'):
     for td in tr.find_all('td'):
 
         game.append(td.text.strip())
-league=(game[0].split(' - ')[1])
+#league=(game[0].split(' - ')[1])
 
 
 print ("MECZ:")
 print (home)
 print (away)
 
+print (odds)
