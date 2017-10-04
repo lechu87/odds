@@ -12,7 +12,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine, Column
 from sqlalchemy.sql import and_, or_, not_
 Base=declarative_base()
-class db_fortuna(Base):
+'''class db_fortuna(Base):
     __tablename__='db_fortuna'
     rowid=Column(primary_key=True)
     home=Column()
@@ -83,7 +83,7 @@ class db_fortuna(Base):
 
     def __repr__(self):
         return "<db_sts('%s','%s','%s')>" % (self.home, self.away,self._1)
-
+'''
 class db_sts(Base):
     __tablename__='db_sts'
     rowid=Column(primary_key=True)
@@ -168,7 +168,7 @@ logging.basicConfig(filename='logfile_fortuna_read_coupon.log', level=logging.DE
 
 #print (events_mapping_fortuna)
 #kupon=codecs.open('fortuna_kupon2.html',mode='r',encoding='utf-8').read()
-kupon=urllib2.urlopen('https://www.efortuna.pl/pl/strona_glowna/nahled_tiketu/index.html?ticket_id=Mzk5MDE3NjcyMzc1NzEwMDooks0WWyl3R%2F5YXb8%3D&kind=MAIN').read()
+kupon=urllib2.urlopen('https://www.efortuna.pl/pl/strona_glowna/nahled_tiketu/index.html?ticket_id=OTQxMzI3Njc3NDQ5MjMwMDoJ%2FjO8GMqJH2mIUjg%3D&kind=MAIN').read()
 soup = BeautifulSoup(kupon,"html.parser")
 table=soup.find('div', {'class': 'ticket_container_inner'})
 head=table.find('thead')
@@ -203,14 +203,15 @@ for tr in body.find_all('tr'):
         if name==unify_name(events_mapping_fortuna[type]["name"]+typ,sql_map_fortuna,logging):
             x=sql_name
     znajdz_typ = unify2(events_mapping_fortuna[type]["name"] + typ, sql_map_fortuna, logging)
-    #print (znajdz_typ)
+    print (znajdz_typ)
     ####wyciaga z bazy:
     #print (home, away)
     try:
         #print (home,away,date)
-        s = select([db_fortuna]).where(and_(db_fortuna.home == home,db_fortuna.away == away))
-        #s = select([db_sts]).where(and_(db_sts.home == home, db_sts.away == away, db_sts.data == date))
+#        s = select([db_fortuna]).where(and_(db_fortuna.home == home,db_fortuna.away == away))
+        s = select([db_sts]).where(and_(db_sts.home == home, db_sts.away == away))
         result = conn.execute(s)
+        print ("Result:", result)
         for r in result:
             odds.append(r.home)
             odds.append(r.away)

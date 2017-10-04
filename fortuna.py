@@ -52,6 +52,7 @@ class football_event:
                 self.odds[self.__events_mapping[name]["name"]] = defaultdict(str)
                 odd_tittle = []
                 for th in head[1:]:
+                    print ("TH.TEXT.STRIP:", th.text.strip())
                     odd_tittle.append(th.text.strip())
                     self.odds[self.__events_mapping[name]["name"]][th.text.strip()]=defaultdict(str)
             except:
@@ -60,17 +61,21 @@ class football_event:
             rows = table.find('tbody').find_all('tr')
             for row in rows:
                 tds = row.find_all('td')
+                print ("TD.TEXT.STRIP:", tds[0].a.text.strip())
                 #wywalalo sie m.in na lidze europejskiej, stad dodany drugi warunek
-                if tds[0].text.strip().find('(')>-1 and tds[0].text.strip().find('spotk')==-1:
+                if tds[0].text.strip().find('(')>-1 and (tds[0].text.strip().find('spotk')==-1 or tds[0].text.strip().find('mecz')==-1) and len(tds[0].text.strip())<30:
                     subtable=1
                 else:
                     subtable=0
                 if subtable==1:
                     subname = self.correct_name(tds[0].text.strip())
+                    print ("TDS0:",tds[0].a.text.strip())
+
                 i=0
                 odds = []
                 for td in tds[1:]:
                     odds.append(td.text.strip())
+                    print ("TD.TEXT.STRIP:",td.text.strip())
                     if subtable==1:
                         if KeyError:
                             try:
@@ -213,11 +218,11 @@ class football_event:
         #print ("ODDS:",self.odds)
 
 
-#data=urllib2.urlopen('https://www.efortuna.pl/pl/strona_glowna/pilka-nozna/2017-09-09-real-m----levante-14237185').read()
-#meczyk=football_event(events_mapping_fortuna)
-#meczyk.prepare_dict_to_sql()
-##meczyk.save_to_db()
-#exit()
+data=urllib2.urlopen('https://www.efortuna.pl/pl/strona_glowna/pilka-nozna/2017-10-05-czarnogora---dania-11251532').read()
+meczyk=football_event(events_mapping_fortuna)
+meczyk.prepare_dict_to_sql()
+meczyk.save_to_db()
+exit()
 comment="""
 
 
