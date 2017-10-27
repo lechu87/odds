@@ -289,7 +289,10 @@ events_mapping_fortuna = {
     "2.druzyna ilosc rz. roznych":{"name":"2nd_team_corner_number"},
     "wiecej rz.roznych":{"name":"more_corners"},
     'rzut karny': {"name": "penalty"},
-    'Strzeli gola (musi wystąpić od początku meczu).': {"name": "player_to_score"}
+    'Strzeli gola (musi wystąpić od początku meczu).': {"name": "player_to_score"},
+    'Strzeli gola (razem z dogrywką, musi wystąpić od początku meczu)': {"name": "player_to_score_with_et"},
+    "1.pol. 1.druzyna dokladna ilosc bramek": {"name": "1st_half_1st_team_goals"},
+    "1.pol. 2.druzyna dokladna ilosc bramek": {"name": "1st_half_2nd_team_goals"},
 }
 events_mapping_sts = {
     "mecz": {"name": "game"},

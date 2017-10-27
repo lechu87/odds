@@ -166,7 +166,10 @@ class football_event:
         "doliczony czas 2. połowy (1.5 minuty)": {"name": "added_time_2nd_half_15_min"},
         "doliczony czas 2. połowy (3.5 minuty)": {"name": "added_time_2nd_half_35_min"},
         "R. Lewandowski strzeli bramkę z rzutu karnego":{"name":"lewy_to_score"},
-        "M. Pazdan otrzyma czerwoną kartkę":{"name":"pazdan_red"}
+        "M. Pazdan otrzyma czerwoną kartkę":{"name":"pazdan_red"},
+        "procentowe posiadanie piłki":{"name":"ball_possesion"},
+        "2 drużyna : procentowe posiadanie piłki mniej/więcej":{"name":"2nd_team_ball_possesion"},
+        "1 drużyna : procentowe posiadanie piłki mniej/więcej": {"name": "2nd_team_ball_possesion"},
 
 
     }
@@ -489,14 +492,14 @@ class football_event:
 
 
 #data=codecs.open('www.sts.pl.htm',mode='r',encoding='utf-8').read()
-data=urllib2.urlopen('https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6542&league=4088&oppty=86601960').read()
+#data=urllib2.urlopen('https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6542&league=4088&oppty=86601960').read()
 
-meczyk=football_event()
-print (meczyk.odds)
-meczyk.prepare_dict_to_sql()
+#meczyk=football_event()
+#print (meczyk.odds)
+#meczyk.prepare_dict_to_sql()
 
-meczyk.save_to_db()
-exit()
+#meczyk.save_to_db()
+#exit()
 sites=['https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6502&league=43461',
 'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6521&league=4080',
 'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6488&league=3987',
