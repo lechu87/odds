@@ -46,10 +46,12 @@ class football_event:
             try:
                 head = table.find('thead').find_all('th')
                 name = head[0].text.strip()
+                #print ("NAME",name)
                 if name not in self.__events_mapping.keys():
                     logging.warning(self.game.text.strip())
                     logging.warning("Nieznany zaklad: " + name)
-                self.odds[self.__events_mapping[name]["name"]] = defaultdict(str)
+                if self.__events_mapping[name]["name"] not in self.odds:
+                    self.odds[self.__events_mapping[name]["name"]] = defaultdict(str)
                 odd_tittle = []
                 for th in head[1:]:
                     #print ("TH.TEXT.STRIP:", th.text.strip())
@@ -166,18 +168,38 @@ class football_event:
         self.dict_sql['_1st_half_12'] = self.odds['1st_half']['12']
         self.dict_sql['eh-1_1'] = self.odds['eh-1']['1']
         self.dict_sql['eh-1_x2'] = self.odds['eh-1']['02']
+        self.dict_sql['eh-1_2'] = self.odds['eh-1']['2']
+        self.dict_sql['eh-1_x'] = self.odds['eh-1']['0']
+        self.dict_sql['eh-1_x1'] = self.odds['eh-1']['10']
+        self.dict_sql['eh+1_1'] = self.odds['eh+1']['1']
+        self.dict_sql['eh+1_x2'] = self.odds['eh+1']['02']
+        self.dict_sql['eh+1_2'] = self.odds['eh+1']['2']
+        self.dict_sql['eh+1_x'] = self.odds['eh+1']['0']
+        self.dict_sql['eh+1_x1'] = self.odds['eh+1']['10']
+        self.dict_sql['u_15_1'] = self.odds['game/goals']['1/-1.5']
+        self.dict_sql['o_15_1'] = self.odds['game/goals']['1/+1.5']
         self.dict_sql['u_25_1'] = self.odds['game/goals']['1/-2.5']
         self.dict_sql['o_25_1'] = self.odds['game/goals']['1/+2.5']
         self.dict_sql['u_25_x'] = self.odds['game/goals']['0/-2.5']
         self.dict_sql['o_25_x'] = self.odds['game/goals']['0/+2.5']
         self.dict_sql['u_25_2'] = self.odds['game/goals']['2/-2.5']
         self.dict_sql['o_25_2'] = self.odds['game/goals']['2/+2.5']
+        self.dict_sql['u_15_2'] = self.odds['game/goals']['2/-1.5']
+        self.dict_sql['o_15_2'] = self.odds['game/goals']['2/+1.5']
         self.dict_sql['u_35_1'] = self.odds['game/goals']['1/-3.5']
         self.dict_sql['o_35_1'] = self.odds['game/goals']['1/+3.5']
         self.dict_sql['u_35_x'] = self.odds['game/goals']['0/-3.5']
         self.dict_sql['o_35_x'] = self.odds['game/goals']['0/+3.5']
         self.dict_sql['u_35_2'] = self.odds['game/goals']['2/-3.5']
         self.dict_sql['o_35_2'] = self.odds['game/goals']['2/+3.5']
+        self.dict_sql['u_15_x'] = self.odds['game/goals']['0/-1.5']
+        self.dict_sql['o_15_x'] = self.odds['game/goals']['0/+1.5']
+        self.dict_sql['btts_1'] = self.odds['game/btts']['1/tak']
+        self.dict_sql['btts_2'] = self.odds['game/btts']['2/tak']
+        self.dict_sql['btts_x'] = self.odds['game/btts']['0/tak']
+        self.dict_sql['btts_no_1'] = self.odds['game/btts']['1/nie']
+        self.dict_sql['btts_no_2'] = self.odds['game/btts']['2/nie']
+        self.dict_sql['btts_no_x'] = self.odds['game/btts']['0/nie']
         #self.dict_sql['1_st_goal_1'] = self.odds['1st_goal'][sehome]
         #self.dict_sql['1_st_goal_2'] = self.odds['1st_goal'][away]
         #self.dict_sql['1_st_goal_0'] = self.odds['1st_goal']['nikt']
@@ -219,16 +241,13 @@ class football_event:
 
 
 
-#data=urllib2.urlopen('https://www.efortuna.pl/pl/strona_glowna/pilka-nozna/2017-10-14-liverpool---manch-utd--14033311').read()
+#data=urllib2.urlopen('https://www.efortuna.pl//pl/strona_glowna/pilka-nozna/2017-11-05-tottenham---cr-palace-14033345').read()
 #meczyk=football_event(events_mapping_fortuna)
 #print (meczyk.odds)
 #meczyk.prepare_dict_to_sql()
 #meczyk.save_to_db()
 #exit()
-comment="""
 
-
-       """
 sites=[
        'https://www.efortuna.pl/pl/strona_glowna/pilka-nozna/premier-league-premiership',
        'https://www.efortuna.pl/pl/strona_glowna/pilka-nozna/liga-europy',
@@ -284,7 +303,7 @@ for site in sites:
         continue
     soup = BeautifulSoup(strona, "html.parser")
     more_bets=soup.find('table',{'class':'bet_table'}).find_all('span', {'class': 'bet_item_main_text'})
-    print ("MORE BETS:", more_bets)
+#    print ("MORE BETS:", more_bets)
     names=[]
     for a in more_bets:
         #print ("A: ",a)
@@ -297,7 +316,7 @@ for site in sites:
             meczyk = football_event(events_mapping_fortuna)
             names.append(meczyk.home)
             names.append(meczyk.away)
-            #meczyk=football_event()
+           #meczyk=football_event()
             meczyk.save_to_db()
         except:
             logging.warning("ERROR dla: "+str(link['href']))

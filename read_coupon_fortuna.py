@@ -168,7 +168,8 @@ logging.basicConfig(filename='logfile_fortuna_read_coupon.log', level=logging.DE
 
 #print (events_mapping_fortuna)
 #kupon=codecs.open('fortuna_kupon2.html',mode='r',encoding='utf-8').read()
-kupon=urllib2.urlopen('https://www.efortuna.pl/pl/strona_glowna/nahled_tiketu/index.html?ticket_id=OTQxMzI3Njc3NDQ5MjMwMDoJ%2FjO8GMqJH2mIUjg%3D&kind=MAIN').read()
+kupon=urllib2.urlopen('https://www.efortuna.pl/pl/strona_glowna/nahled_tiketu/index.html?ticket_id=OTQxMzI3NzA5NDE5OTEwMDqWvf1jhI+KYRYCDDM%3D&kind=MAIN').read()
+#https://www.efortuna.pl/pl/strona_glowna/nahled_tiketu/index.html?ticket_id=OTk5MDQ3NzA4NDg0MzMwMDp5D0b%2BhWJvXFEHkRg%3D&preview=hide_code
 soup = BeautifulSoup(kupon,"html.parser")
 table=soup.find('div', {'class': 'ticket_container_inner'})
 head=table.find('thead')
@@ -196,14 +197,17 @@ for tr in body.find_all('tr'):
     date = str(full_date.year) + '-' + str('{:02d}'.format(full_date.month)) + '-' + str(
         '{:02d}'.format(full_date.day))
     #print (date)
-    type = tds[0].find('div', {'class': 'matchComment'}).text.split('/')[0].strip()
+    type = tds[0].find('div', {'class': 'matchComment'}).text.split(' / ')[0].strip()
     typ=tds[1].text.strip()
-    #print (typ)
+    print (type)
+    print (typ)
+    print ("TypeTyp:",type+typ)
     for sql_name, name in sql_map_fortuna.items():
         if name==unify_name(events_mapping_fortuna[type]["name"]+typ,sql_map_fortuna,logging):
             x=sql_name
-    znajdz_typ = unify2(events_mapping_fortuna[type]["name"] + typ, sql_map_fortuna, logging)
-    print (znajdz_typ)
+    #print ("Szukam:",events_mapping_fortuna[type]["name"]+typ)
+    znajdz_typ = unify_name(type + typ, sql_map_fortuna, logging)
+    print (znajdz_typ+"::::::::::::::::")
     ####wyciaga z bazy:
     #print (home, away)
     try:
@@ -228,20 +232,6 @@ for tr in body.find_all('tr'):
         print (r.home, r.away, r.data, r[znajdz_typ],ss[znajdz_typ])
     except:
         print ("Nie znaleziono kursu",home,away)
-    ###########
-
-
-    #znajdz_typ = unify_name('game2', sql_map_fortuna, logging)
-    #print ("Znajdz TYP:",znajdz_typ)
-
-    #print(events_mapping_fortuna[type]["name"])
-
-    #print (discipline, league, home, away,date,type)
-    for td in tr.find_all('td'):
-
-        game.append(td.text.strip())
-#league=(game[0].split(' - ')[1])
-
 
 print ("MECZ:")
 print (home)
