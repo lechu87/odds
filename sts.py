@@ -554,7 +554,13 @@ sites2=['https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?ac
 
         ]
 for site in sites:
-    strona=urllib2.urlopen(site).read()
+    user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
+    headers = {'User-Agent': user_agent, }
+    request = urllib2.Request(site, None, headers)
+    response = urllib2.urlopen(request)
+    strona = response.read()
+
+    #strona=urllib2.urlopen(site).read()
     soup = BeautifulSoup(strona, "html.parser")
     more_bets=soup.find_all('td', {'class': 'support_bets'})
     for a in more_bets:
@@ -562,7 +568,8 @@ for site in sites:
         try:
             link=a.find('a', href = True)
     #    print ("LINK: ", link['href'])
-            data=urllib2.urlopen(link['href']).read()
+            request = urllib2.Request(link['href'], None, headers)
+            data=urllib2.urlopen(request).read()
 
             meczyk=football_event()
             meczyk.save_to_db()

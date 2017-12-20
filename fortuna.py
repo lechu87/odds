@@ -302,7 +302,10 @@ for site in sites:
         logging.WARNING("404: ")
         continue
     soup = BeautifulSoup(strona, "html.parser")
-    more_bets=soup.find('table',{'class':'bet_table'}).find_all('span', {'class': 'bet_item_main_text'})
+    try:
+        more_bets=soup.find('table',{'class':'bet_table'}).find_all('span', {'class': 'bet_item_main_text'})
+    except:
+        continue
 #    print ("MORE BETS:", more_bets)
     names=[]
     for a in more_bets:
