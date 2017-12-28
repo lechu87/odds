@@ -207,6 +207,34 @@ class football_event:
         #self.get_odds()
         self.prepare_dict_to_sql()
 
+sites=['https://old.lvbet.pl/sports/betting/prematches/5/474/754/2843310/86/',]
+for site in sites:
+    user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
+    headers = {'User-Agent': user_agent, }
+    request = urllib2.Request(site, None, headers)
+    response = urllib2.urlopen(request)
+    strona = response.read()
+    soup=BeautifulSoup(strona,'html.parser')
+    print ("SOUP:",soup)
+    #all_games=TotalMarketsButton_10
+    more_bets = soup.find_all('div', {'class': 'total-markets-button'})
+    print (more_bets)
+    for a in more_bets:
+        try:
+            link = a.find('a', href=True)
+            print ("LINK: ", link['href'])
+            request = urllib2.Request(link['href'], None, headers)
+            data = urllib2.urlopen(request).read()
 
+            print (data)
+            exit()
+            meczyk = football_event()
+            meczyk.save_to_db()
+        except:
+            logging.basicConfig(filename='logfile_lvbet.log', level=logging.DEBUG)
+            logging.warning("ERROR dla: " + link['href'])
+            continue
+
+exit()
 meczyk = football_event(events_mapping_lvbet)
 meczyk.save_to_db()

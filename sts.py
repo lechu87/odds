@@ -236,7 +236,7 @@ class football_event:
     #    self.date=game_teams.split(' - ')[2]
     #    self.time=game_teams.split(' - ')[3]
     def get_odds(self,data):
-        self.odds = {}
+        self.odds = defaultdict(str)
         soup = BeautifulSoup(data, "html.parser")
 
         games_col3 = soup.find_all('table', {'class': 'col3'})
@@ -505,7 +505,7 @@ class football_event:
 
 
 #data=codecs.open('www.sts.pl.htm',mode='r',encoding='utf-8').read()
-#data=urllib2.urlopen('https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6542&league=4088&oppty=86601960').read()
+#data=urllib2.urlopen('https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6521&league=4080&oppty=90055718').read()
 
 #meczyk=football_event()
 #print (meczyk.odds)
