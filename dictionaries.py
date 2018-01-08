@@ -693,8 +693,8 @@ teams = {"Bulgaria":["Bulgaria","Bułgaria"],"Szwecja":["Szwecja"],"Francja":["F
          "Bournemouth": ["Bournemouth","Bournemouth AFC"],"Manch.City": ["Manch.City","Manch. City","Man.City","Manchester City","Man. City"],"Cr.Palace": ["Cr.Palace","Cr. Palace","Crystal Palace"],
          "Swansea": ["Swansea","Swansea City"],"Huddersfield": ["Huddersfield","Huddersfield Town"],"Southampton": ["Southampton","Southampton FC"],"Newcastle": ["Newcastle","Newcastle United"],
          "West Ham": ["West Ham","West Ham United"],"Watford": ["Watford","Watford FC"],"Brighton": ["Brighton","FC Brighton & Hove Albion"],"Manch.Utd.": ["Manch.Utd.","Manch. Utd","Manchester United","Man. Utd"],
-         "Leicester": ["Leicester","Leicester City"],"Chelsea": ["Chelsea","Chelsea Londyn"],"Everton": ["Everton","FC Everton"],"W.B.A.": ["W.B.A.","WBA","West Bromwich Albion","West Bromwich"],"Stoke": ["Stoke","Stoke City"],
-         "Liverpool": ["Liverpool","FC Liverpool"],"Arsenal": ["Arsenal","Arsenal Londyn","Arsenal L."],"Tottenham": ["Tottenham","Tottenham Hotspur"],"Burnley": ["Burnley","FC Burnley"],
+         "Leicester": ["Leicester","Leicester City"],"Chelsea": ["Chelsea","Chelsea Londyn","Chelsea FC"],"Everton": ["Everton","FC Everton"],"W.B.A.": ["W.B.A.","WBA","West Bromwich Albion","West Bromwich"],"Stoke": ["Stoke","Stoke City"],
+         "Liverpool": ["Liverpool","FC Liverpool"],"Arsenal": ["Arsenal","Arsenal Londyn","Arsenal L.","Arsenal FC"],"Tottenham": ["Tottenham","Tottenham Hotspur"],"Burnley": ["Burnley","FC Burnley"],
 
          "S.Sebastian": ["S.Sebastian","Sociedad","Real Sociedad"],"Villarreal": ["Villarreal","FC Villarreal"],"Betis": ["Betis","Betis Sewilla"],"Celta Vigo": ["Celta Vigo","Celta","Celta de Vigo"],
          "Alavés": ["Alavés","Alaves","CD Alaves"],"Girona": ["Girona","Girona CF"],"Malaga": ["Malaga","FC Malaga"],"Levante": ["Levante","UD Levante"],"La Coruna": ["La Coruna","Deportivo La Coruna"],
@@ -1249,7 +1249,7 @@ teams = {"Bulgaria":["Bulgaria","Bułgaria"],"Szwecja":["Szwecja"],"Francja":["F
 
          }
 leagues=defaultdict(str)
-leagues = {"Ekstraklasa Polska":["Ekstraklasa","Ekstraklasa Polska","Polska Ekstraklasa."],"Premiership":["1.Anglia","1 liga Anglia","1. Liga Anglia","Anglia 1. Liga"],"2 Anglia":["2 liga Anglia","2.Anglia"],
+leagues = {"Ekstraklasa Polska":["Ekstraklasa","Ekstraklasa Polska","Polska Ekstraklasa."],"Premiership":["1.Anglia","1 liga Anglia","1. Liga Anglia","Anglia 1. Liga","Premier League"],"2 Anglia":["2 liga Anglia","2.Anglia"],
            "Liga Mistrzow":["Liga Mistrzów.","Liga Mistrzow","Liga Mistrzów Rozgr. klubowe","UEFA Liga Mistrzów","UEFA Liga Mistrzów, Grupa A Międzynarodowe Klubów","UEFA Liga Mistrzów, Grupa B Międzynarodowe Klubów","UEFA Liga Mistrzów, Grupa C Międzynarodowe Klubów",
            "UEFA Liga Mistrzów, Grupa D Międzynarodowe Klubów","UEFA Liga Mistrzów, Grupa E Międzynarodowe Klubów","UEFA Liga Mistrzów, Grupa F Międzynarodowe Klubów","UEFA Liga Mistrzów, Grupa G Międzynarodowe Klubów"
 ,"UEFA Liga Mistrzów, Grupa H Międzynarodowe Klubów","UEFA Liga Mistrzów, Grupa I Międzynarodowe Klubów"],"Mistrzostwa Świata":["Kwalifikacje MS-Europa"],"Primera Division":["1.Hiszpania","1 liga Hiszpania","1. Liga Hiszpania","Hiszpania 1. liga"],
