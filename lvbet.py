@@ -49,18 +49,23 @@ class football_event:
     def get_rate(self,json, name, raw_home):
         for i in range(0, len(json)):
             # print (json[i]['selections'][0]['name'])
-            if json[i]['name'] == name:
+            x=''
+            if json[i]['name'].lower() == name.lower():
                 for j in range(0, len(json[i]['selections'])):
-                    if json[i]['selections'][j]['name'] == raw_home:
+                    if (json[i]['selections'][j]['name']).lower() == (raw_home.lower()):
                         #print ("ZNALAZLEM")
                         #print (json[i]['selections'][j]['rate']['decimal'])
-                        return json[i]['selections'][j]['rate']['decimal']
+                        x=json[i]['selections'][j]['rate']['decimal']
+                        return x
             else:
-                logging.warning("ERROR. Nie znalazlem "+name+" " + raw_home+" dla "+self.raw_home+" "+self.raw_away)
-                return 1.0
+                #
+                #return 1.0
+                continue
                 # print ("NR: ",i)
                 # print (json[i]['selections'])
-
+        if x=='':
+            logging.warning(
+                "ERROR. Nie znalazlem " + name + " " + raw_home + " dla " + self.raw_home + " " + self.raw_away)
     def prepare_dict_to_sql(self, json_var):
         self.dict_sql = defaultdict(str)
         self.dict_sql['home']=self.home
@@ -98,7 +103,8 @@ class football_event:
         self.dict_sql['_0']=self.get_rate(json_var['markets'],"Match Result",'Draw')
         #print (self.dict_sql['_1'])
         self.dict_sql['_2'] =self.get_rate(json_var['markets'],"Match Result",self.raw_away)
-        print (self.dict_sql)
+#        print (self.dict_sql)
+        #self.ge
         self.dict_sql['_10']=self.get_rate(json_var['markets'],"Double Chance",'Team 1 or Draw')
         self.dict_sql['_02']=self.get_rate(json_var['markets'],"Double Chance",'Team 2 or Draw')
         self.dict_sql['_12']=self.get_rate(json_var['markets'],"Double Chance",'Team 1 or Team 2')
@@ -129,16 +135,16 @@ class football_event:
         self.dict_sql['u_85'] = goal_dict[8.5]['under']
         self.dict_sql['o_95'] = goal_dict[9.5]['over']
         self.dict_sql['u_95'] = goal_dict[9.5]['under']
-        self.dict_sql['ht_ft_11'] = self.get_rate(json_var['markets'],"Half time/Full time",self.raw_home+'/'+self.raw_home)
-        self.dict_sql['ht_ft_1x'] = self.get_rate(json_var['markets'],"Half time/Full time",'1/Draw')
-        self.dict_sql['ht_ft_11'] = self.get_rate(json_var['markets'],"Half time/Full time",self.raw_home+'/'+self.raw_home)
-        self.dict_sql['ht_ft_2x'] = self.get_rate(json_var['markets'],"Half time/Full time",self.raw_away+'/Draw')
-        self.dict_sql['ht_ft_21'] = self.get_rate(json_var['markets'],"Half time/Full time",self.raw_away+'/'+self.raw_home)
-        self.dict_sql['ht_ft_22'] = self.get_rate(json_var['markets'],"Half time/Full time",self.raw_away+'/'+self.raw_away)
-        self.dict_sql['ht_ft_x1'] = self.get_rate(json_var['markets'],"Half time/Full time",'Draw/'+self.raw_home)
-        self.dict_sql['ht_ft_x2'] = self.get_rate(json_var['markets'],"Half time/Full time",'Draw/'+self.raw_away)
-        self.dict_sql['ht_ft_12'] = self.get_rate(json_var['markets'],"Half time/Full time",self.raw_home+'/'+self.raw_away)
-        self.dict_sql['ht_ft_xx'] = self.get_rate(json_var['markets'],"Half time/Full time",'Draw/Draw')
+        self.dict_sql['ht_ft_11'] = self.get_rate(json_var['markets'],"Half time/Full-time",self.raw_home+'/'+self.raw_home)
+        self.dict_sql['ht_ft_1x'] = self.get_rate(json_var['markets'],"Half time/Full-time",'1/Draw')
+        self.dict_sql['ht_ft_11'] = self.get_rate(json_var['markets'],"Half time/Full-time",self.raw_home+'/'+self.raw_home)
+        self.dict_sql['ht_ft_2x'] = self.get_rate(json_var['markets'],"Half time/Full-time",self.raw_away+'/Draw')
+        self.dict_sql['ht_ft_21'] = self.get_rate(json_var['markets'],"Half time/Full-time",self.raw_away+'/'+self.raw_home)
+        self.dict_sql['ht_ft_22'] = self.get_rate(json_var['markets'],"Half time/Full-time",self.raw_away+'/'+self.raw_away)
+        self.dict_sql['ht_ft_x1'] = self.get_rate(json_var['markets'],"Half time/Full-time",'Draw/'+self.raw_home)
+        self.dict_sql['ht_ft_x2'] = self.get_rate(json_var['markets'],"Half time/Full-time",'Draw/'+self.raw_away)
+        self.dict_sql['ht_ft_12'] = self.get_rate(json_var['markets'],"Half time/Full-time",self.raw_home+'/'+self.raw_away)
+        self.dict_sql['ht_ft_xx'] = self.get_rate(json_var['markets'],"Half time/Full-time",'Draw/Draw')
         self.dict_sql['_1st_half_1']=self.get_rate(json_var['markets'],"1st Half Result",self.raw_home)
         self.dict_sql['_1st_half_x'] = self.get_rate(json_var['markets'],"1st Half Result",'Draw')
         self.dict_sql['_1st_half_2'] = self.get_rate(json_var['markets'],"1st Half Result",self.raw_away)
@@ -155,8 +161,8 @@ class football_event:
 
         self.dict_sql['u_25_1'] = self.get_rate(json_var['markets'],"Outcome And Total 2.5",self.raw_home+' and Under 2.5')
         self.dict_sql['o_25_1'] = self.get_rate(json_var['markets'],"Outcome And Total 2.5",self.raw_home+' and Over 2.5')
-        self.dict_sql['u_25_x'] = self.get_rate(json_var['markets'],"Outcome And Total 2.5",'Draw and Under 2.5')
-        self.dict_sql['o_25_x'] = self.get_rate(json_var['markets'],"Outcome And Total 2.5",'Draw and Over 2.5')
+        self.dict_sql['u_25_x'] = self.get_rate(json_var['markets'],"Outcome And Total 2.5",'Draw And Under 2.5')
+        self.dict_sql['o_25_x'] = self.get_rate(json_var['markets'],"Outcome And Total 2.5",'Draw And Over 2.5')
         self.dict_sql['u_25_2'] = self.get_rate(json_var['markets'],"Outcome And Total 2.5",self.raw_away +' and Under 2.5')
         self.dict_sql['o_25_2'] = self.get_rate(json_var['markets'],"Outcome And Total 2.5",self.raw_away +' and Over 2.5')
 
@@ -234,12 +240,12 @@ class football_event:
 link='https://app.lvbet.pl/_api/v1/offer/matches/full/2974405'
 meczyk=football_event(events_mapping_lvbet,link)
 x=meczyk.open_site(link)
-team=meczyk.raw_away
+#team=meczyk.raw_away
 #print (x)
 print (x['markets'][1]['name'])
 print (x['markets'][1]['selections'][0]['rate']['decimal'])
 
-meczyk.get_rate(x['markets'],"Match Result",team)
+#meczyk.get_rate(x['markets'],"Match Result",team)
 meczyk.prepare_dict_to_sql(x)
 exit()
 sites=['https://m.totolotek.pl/PalinsestoRest/GetEventsByMarket?filter=Any&sportId=2&tournamentId=114&gameId=0&gameParam=0',
