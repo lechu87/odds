@@ -693,7 +693,7 @@ teams = {"Bulgaria":["Bulgaria","Bułgaria"],"Szwecja":["Szwecja"],"Francja":["F
          "Bournemouth": ["Bournemouth","Bournemouth AFC"],"Manch.City": ["Manch.City","Manch. City","Man.City","Manchester City","Man. City"],"Cr.Palace": ["Cr.Palace","Cr. Palace","Crystal Palace"],
          "Swansea": ["Swansea","Swansea City"],"Huddersfield": ["Huddersfield","Huddersfield Town"],"Southampton": ["Southampton","Southampton FC"],"Newcastle": ["Newcastle","Newcastle United"],
          "West Ham": ["West Ham","West Ham United"],"Watford": ["Watford","Watford FC"],"Brighton": ["Brighton","FC Brighton & Hove Albion"],"Manch.Utd.": ["Manch.Utd.","Manch. Utd","Manchester United","Man. Utd"],
-         "Leicester": ["Leicester","Leicester City"],"Chelsea": ["Chelsea","Chelsea Londyn","Chelsea FC"],"Everton": ["Everton","FC Everton"],"W.B.A.": ["W.B.A.","WBA","West Bromwich Albion","West Bromwich"],"Stoke": ["Stoke","Stoke City"],
+         "Leicester": ["Leicester","Leicester City","Leicester City FC"],"Chelsea": ["Chelsea","Chelsea Londyn","Chelsea FC"],"Everton": ["Everton","FC Everton"],"W.B.A.": ["W.B.A.","WBA","West Bromwich Albion","West Bromwich"],"Stoke": ["Stoke","Stoke City"],
          "Liverpool": ["Liverpool","FC Liverpool"],"Arsenal": ["Arsenal","Arsenal Londyn","Arsenal L.","Arsenal FC"],"Tottenham": ["Tottenham","Tottenham Hotspur"],"Burnley": ["Burnley","FC Burnley"],
 
          "S.Sebastian": ["S.Sebastian","Sociedad","Real Sociedad"],"Villarreal": ["Villarreal","FC Villarreal"],"Betis": ["Betis","Betis Sewilla"],"Celta Vigo": ["Celta Vigo","Celta","Celta de Vigo"],
