@@ -13,21 +13,21 @@ import re
 #import requests
 #data = requests.get("https://www.iforbet.pl/zdarzenie/460411")
 #html_contents = page.text
-user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
-url = "http://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers"
-headers={'User-Agent':user_agent,}
+
+#url = "http://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers"
+
 #data=urllib2.Request('https://www.iforbet.pl/zdarzenie/460411',None,headers)
 #response = urllib2.urlopen(urllib2.Request('https://www.iforbet.pl/zdarzenie/450168',None,headers))
-site='https://www.iforbet.pl/zdarzenie/545630'
-request = urllib2.Request(site, None, headers)
-response = urllib2.urlopen(request)
-data = response.read() # The data u need
+#site='https://www.iforbet.pl/zdarzenie/545659'
+#request = urllib2.Request(site, None, headers)
+#response = urllib2.urlopen(request)
+#data = response.read() # The data u need
 #print ("DATA:", data)
 #exit()
 #data=codecs.open('fortuna.html',mode='r',encoding='utf-8').read()
 
 class football_event:
-    soup = BeautifulSoup(data,"html.parser")
+    #soup = BeautifulSoup(data,"html.parser")
     logging.basicConfig(filename='logfile_iforbet.log', level=logging.DEBUG)
 
     def get_events_mapping(self):
@@ -347,8 +347,9 @@ class football_event:
         db.execute(sql)
         db.commit()
 
-    def __init__(self, events_mapping_fortuna):
+    def __init__(self, events_mapping_fortuna,url):
         #self.__events_mapping=events_mapping_fortuna
+        self.data=url
         self.get_name()
         self.get_odds2()
 
@@ -357,7 +358,7 @@ class football_event:
         #print (self.dict_sql)
         #print ("ODDS:",self.odds)
 #data = urllib2.urlopen(urllib2.Request('https://www.iforbet.pl/zdarzenie/470334',None,headers)).read() # The data u need
-meczyk=football_event(events_mapping_fortuna)
+#meczyk=football_event(events_mapping_fortuna)
 #exit()
 
 
@@ -365,6 +366,8 @@ meczyk=football_event(events_mapping_fortuna)
 url='https://www.iforbet.pl/oferta/8/321,159,269,223,147,122,273,660,2902,558,641,289'
 #url='https://www.iforbet.pl/oferta/8/293,380,398,3372,357,7018,555,3096,120,666,123'
 #url='https://www.iforbet.pl/oferta/8/908,2911'
+user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
+headers={'User-Agent':user_agent,}
 def get_links(url):
     data = urllib2.urlopen(urllib2.Request(url, None, headers)).read()
     soup = BeautifulSoup(data, "html.parser")
@@ -396,7 +399,7 @@ for sites in get_links(url):
         request = urllib2.Request(site, None, headers)
         response = urllib2.urlopen(request)
         data = response.read()
-        meczyk = football_event(events_mapping_fortuna)
+        meczyk = football_event(events_mapping_fortuna,data)
     except:
         logging.WARNING("ERROR dla: " + site)
         continue

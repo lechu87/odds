@@ -168,7 +168,7 @@ logging.basicConfig(filename='logfile_fortuna_read_coupon.log', level=logging.DE
 
 #print (events_mapping_fortuna)
 #kupon=codecs.open('fortuna_kupon2.html',mode='r',encoding='utf-8').read()
-kupon=urllib2.urlopen('https://www.efortuna.pl/pl/strona_glowna/nahled_tiketu/index.html?ticket_id=OTQxMzI3NzA5NDE5OTEwMDqWvf1jhI+KYRYCDDM%3D&kind=MAIN').read()
+kupon=urllib2.urlopen('https://www.efortuna.pl/pl/strona_glowna/nahled_tiketu/index.html?ticket_id=OTk5MDE4NDIxNzAwODgwMDq%2F%2FxySX5XTYWW6ASA%3D&kind=MAIN').read()
 #https://www.efortuna.pl/pl/strona_glowna/nahled_tiketu/index.html?ticket_id=OTk5MDQ3NzA4NDg0MzMwMDp5D0b%2BhWJvXFEHkRg%3D&preview=hide_code
 soup = BeautifulSoup(kupon,"html.parser")
 table=soup.find('div', {'class': 'ticket_container_inner'})
@@ -217,14 +217,16 @@ for tr in body.find_all('tr'):
         result = conn.execute(s)
         print ("Result:", result)
         for r in result:
+            print (r)
             odds.append(r.home)
             odds.append(r.away)
             odds.append(r.data)
             odds.append(r[znajdz_typ])
-        s2 = select([db_sts]).where(and_(db_sts.home == home, db_sts.away == away))
+        s2 = select([db_fortuna]).where(and_(db_fortuna.home == home, db_sts.away == away))
         result2 = conn.execute(s2)
         print ("Result2:", result2)
         for ss in result2:
+            print ("SS:",ss)
             odds.append(ss.home)
             odds.append(ss.away)
             odds.append(ss.data)
