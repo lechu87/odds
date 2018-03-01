@@ -73,13 +73,13 @@ class football_event:
         #print (get_value(json_var['MarketGroups'][0]['Bets'], 'Pierwsza połowa'))
         #print (get_value(json_var['MarketGroups'][0]['Bets'], 'Pierwsza połowa'))
         #self.dict_sql['_1']=json_var['MarketGroups'][0]['Bets'][get_value(json_var['MarketGroups'][0]['Bets'],'Wynik meczu 1X2','0')]['Odds'][0]['Odd']
-        self.dict_sql['_1']=json_var['MarketGroups'][0]['Bets'][0]['Odds'][0]['Odd']
-        self.dict_sql['_0']=json_var['MarketGroups'][0]['Bets'][0]['Odds'][1]['Odd']
+        self.dict_sql['game_1']=json_var['MarketGroups'][0]['Bets'][0]['Odds'][0]['Odd']
+        self.dict_sql['game_0']=json_var['MarketGroups'][0]['Bets'][0]['Odds'][1]['Odd']
         #print (self.dict_sql['_1'])
-        self.dict_sql['_2'] =json_var['MarketGroups'][0]['Bets'][0]['Odds'][2]['Odd']
-        self.dict_sql['_10']=json_var['MarketGroups'][0]['Bets'][0]['Odds'][3]['Odd']
-        self.dict_sql['_02']=json_var['MarketGroups'][0]['Bets'][0]['Odds'][5]['Odd']
-        self.dict_sql['_12']=json_var['MarketGroups'][0]['Bets'][0]['Odds'][4]['Odd']
+        self.dict_sql['game_2'] =json_var['MarketGroups'][0]['Bets'][0]['Odds'][2]['Odd']
+        self.dict_sql['game_10']=json_var['MarketGroups'][0]['Bets'][0]['Odds'][3]['Odd']
+        self.dict_sql['game_02']=json_var['MarketGroups'][0]['Bets'][0]['Odds'][5]['Odd']
+        self.dict_sql['game_12']=json_var['MarketGroups'][0]['Bets'][0]['Odds'][4]['Odd']
         self.dict_sql['League']=self.league
         self.dict_sql['data']=self.date
         self.dict_sql['hour']=self.hour
@@ -151,29 +151,29 @@ class football_event:
         except:
             self.dict_sql['ht_ft_xx'] = 1.0
         try:
-            self.dict_sql['_1st_half_1']=json_var['MarketGroups'][0]['Bets'][get_value(json_var['MarketGroups'][0]['Bets'],'Pierwsza połowa','0')]['Odds'][0]['Odd']
+            self.dict_sql['first_half_1']=json_var['MarketGroups'][0]['Bets'][get_value(json_var['MarketGroups'][0]['Bets'],'Pierwsza połowa','0')]['Odds'][0]['Odd']
         except:
-            self.dict_sql['_1st_half_1'] = 1.0
+            self.dict_sql['first_half_1'] = 1.0
         try:
-            self.dict_sql['_1st_half_x'] = json_var['MarketGroups'][0]['Bets'][get_value(json_var['MarketGroups'][0]['Bets'],'Pierwsza połowa','0')]['Odds'][1]['Odd']
+            self.dict_sql['first_half_x'] = json_var['MarketGroups'][0]['Bets'][get_value(json_var['MarketGroups'][0]['Bets'],'Pierwsza połowa','0')]['Odds'][1]['Odd']
         except:
-            self.dict_sql['_1st_half_x'] = 1.0
+            self.dict_sql['first_half_x'] = 1.0
         try:
-            self.dict_sql['_1st_half_2'] = json_var['MarketGroups'][0]['Bets'][get_value(json_var['MarketGroups'][0]['Bets'],'Pierwsza połowa','0')]['Odds'][2]['Odd']
+            self.dict_sql['first_half_2'] = json_var['MarketGroups'][0]['Bets'][get_value(json_var['MarketGroups'][0]['Bets'],'Pierwsza połowa','0')]['Odds'][2]['Odd']
         except:
-            self.dict_sql['_1st_half_2'] = 1.0
+            self.dict_sql['first_half_2'] = 1.0
         try:
-            self.dict_sql['_1st_half_10'] = json_var['MarketGroups'][0]['Bets'][get_value(json_var['MarketGroups'][0]['Bets'],'Pierwsza połowa','0')]['Odds'][3]['Odd']
+            self.dict_sql['first_half_10'] = json_var['MarketGroups'][0]['Bets'][get_value(json_var['MarketGroups'][0]['Bets'],'Pierwsza połowa','0')]['Odds'][3]['Odd']
         except:
-            self.dict_sql['_1st_half_10'] = 1.0
+            self.dict_sql['first_half_10'] = 1.0
         try:
-            self.dict_sql['_1st_half_02'] = json_var['MarketGroups'][0]['Bets'][get_value(json_var['MarketGroups'][0]['Bets'],'Pierwsza połowa','0')]['Odds'][5]['Odd']
+            self.dict_sql['first_half_02'] = json_var['MarketGroups'][0]['Bets'][get_value(json_var['MarketGroups'][0]['Bets'],'Pierwsza połowa','0')]['Odds'][5]['Odd']
         except:
-            self.dict_sql['_1st_half_02'] = 1.0
+            self.dict_sql['first_half_02'] = 1.0
         try:
-            self.dict_sql['_1st_half_12'] = json_var['MarketGroups'][0]['Bets'][get_value(json_var['MarketGroups'][0]['Bets'],'Pierwsza połowa','0')]['Odds'][4]['Odd']
+            self.dict_sql['first_half_12'] = json_var['MarketGroups'][0]['Bets'][get_value(json_var['MarketGroups'][0]['Bets'],'Pierwsza połowa','0')]['Odds'][4]['Odd']
         except:
-            self.dict_sql['_1st_half_12'] = 1.0
+            self.dict_sql['first_half_12'] = 1.0
             # #self.dict_sql['eh-1_1'] = self.odds['eh-1']['1']
         # #self.dict_sql['eh-1_x2'] = self.odds['eh-1']['02']
         try:
@@ -291,17 +291,17 @@ class football_event:
         # self.dict_sql['eh+1_x'] = self.odds['ah+']['X (Handicap 1:0)']
         # self.dict_sql['eh+1_2'] = self.odds['ah+']['2 (Handicap 1:0)']
         try:
-            self.dict_sql['1_st_goal_1'] = json_var['MarketGroups'][0]['Bets'][get_value(json_var['MarketGroups'][0]['Bets'],'Pierwszy gol','0')]['Odds'][0]['Odd']
+            self.dict_sql['first_goal_1'] = json_var['MarketGroups'][0]['Bets'][get_value(json_var['MarketGroups'][0]['Bets'],'Pierwszy gol','0')]['Odds'][0]['Odd']
         except:
-            self.dict_sql['1_st_goal_1'] = 1.0
+            self.dict_sql['first_goal_1'] = 1.0
         try:
-            self.dict_sql['1_st_goal_2'] = json_var['MarketGroups'][0]['Bets'][get_value(json_var['MarketGroups'][0]['Bets'],'Pierwszy gol','0')]['Odds'][2]['Odd']
+            self.dict_sql['first_goal_2'] = json_var['MarketGroups'][0]['Bets'][get_value(json_var['MarketGroups'][0]['Bets'],'Pierwszy gol','0')]['Odds'][2]['Odd']
         except:
-            self.dict_sql['1_st_goal_2']=1.0
+            self.dict_sql['first_goal_2']=1.0
         try:
-            self.dict_sql['1_st_goal_0'] = json_var['MarketGroups'][0]['Bets'][get_value(json_var['MarketGroups'][0]['Bets'],'Pierwszy gol','0')]['Odds'][1]['Odd']
+            self.dict_sql['first_goal_0'] = json_var['MarketGroups'][0]['Bets'][get_value(json_var['MarketGroups'][0]['Bets'],'Pierwszy gol','0')]['Odds'][1]['Odd']
         except:
-            self.dict_sql['1_st_goal_0']=1.0
+            self.dict_sql['first_goal_0']=1.0
         #
         return self.dict_sql
 

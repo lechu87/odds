@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# encoding=utf8
 from bs4 import BeautifulSoup
 import urllib.request as urllib2
 #import pandas as pd
 import sqlite3
 from sqlalchemy import create_engine
 import platform
-from selenium import webdriver
+#from selenium import webdriver
 import codecs, sys
 import json
 import sqlite3
@@ -376,12 +375,21 @@ class football_event:
         self.dict_sql['home'] = self.home
         #self.dict_sql['away']=away = self.get_name(data).split(" - ")[1].strip().replace(' ','')
         self.dict_sql['away'] = self.away
-        self.dict_sql['_1']=self.odds['game'][self.home]
-        self.dict_sql['_0']=self.odds['game']['X']
-        self.dict_sql['_2']=self.odds['game'][self.away]
-        self.dict_sql['_10']=self.odds['game'][self.home + '/X']
-        self.dict_sql['_02']=self.odds['game'][self.away + '/X']
-        self.dict_sql['_12']=self.odds['game'][self.home + '/' + self.away]
+        self.dict_sql['game_1']=self.odds['game'][self.home]
+        self.dict_sql['game_0']=self.odds['game']['X']
+        self.dict_sql['game_2']=self.odds['game'][self.away]
+        try:
+            self.dict_sql['game_10']=self.odds['game'][self.home + '/X']
+        except:
+            self.dict_sql['game_10'] = self.odds['game'][self.home + 'X']
+        try:
+            self.dict_sql['game_02']=self.odds['game'][self.away + '/X']
+        except:
+            self.dict_sql['game_02'] = self.odds['game'][self.away + 'X']
+        try:
+            self.dict_sql['game_12'] = self.odds['game'][self.home + '/' + self.away]
+        except:
+            self.dict_sql['game_12'] = self.odds['game'][self.home + self.away]
         self.dict_sql['data']=self.date.split(' ')[1].split('.')[2]+'-'+self.date.split(' ')[1].split('.')[1]+'-'+self.date.split(' ')[1].split('.')[0]
         self.dict_sql['Sport']=self.discipline
         self.dict_sql['League']=self.league
@@ -419,15 +427,15 @@ class football_event:
         self.dict_sql['ht_ft_x2'] = get_odd_2(self.odds['half/end'], 'X/2')
         self.dict_sql['ht_ft_12'] = get_odd_2(self.odds['half/end'], '1/2')
         self.dict_sql['ht_ft_xx'] = get_odd_2(self.odds['half/end'], 'X/X')
-        self.dict_sql['_1st_half_1']= get_odd_2(self.odds['1st_half'], home)
-        self.dict_sql['_1st_half_x'] = get_odd_2(self.odds['1st_half'], 'X')
-        self.dict_sql['_1st_half_2'] = get_odd_2(self.odds['1st_half'], away)
-        self.dict_sql['_1st_half_10'] = get_odd_2(self.odds['1st_half'],home + '/X')
-        self.dict_sql['_1st_half_02'] = get_odd_2(self.odds['1st_half'],away + '/X')
-        self.dict_sql['_1st_half_12'] = get_odd_2(self.odds['1st_half'],home + '/' + away)
-        self.dict_sql['eh-1_1'] = get_odd_2(self.odds['eh-1'],home + '(-1)')
-        self.dict_sql['eh-1_x'] = get_odd_2(self.odds['eh-1'], 'X')
-        self.dict_sql['eh-1_x2'] = get_odd_2(self.odds['eh-1'],away + '/X')
+        self.dict_sql['first_half_1']= get_odd_2(self.odds['1st_half'], home)
+        self.dict_sql['first_half_x'] = get_odd_2(self.odds['1st_half'], 'X')
+        self.dict_sql['first_half_2'] = get_odd_2(self.odds['1st_half'], away)
+        self.dict_sql['first_half_10'] = get_odd_2(self.odds['1st_half'],home + '/X')
+        self.dict_sql['first_half_02'] = get_odd_2(self.odds['1st_half'],away + '/X')
+        self.dict_sql['first_half_12'] = get_odd_2(self.odds['1st_half'],home + '/' + away)
+        self.dict_sql['eh_min_1_1'] = get_odd_2(self.odds['eh-1'],home + '(-1)')
+        self.dict_sql['eh_min_1_x'] = get_odd_2(self.odds['eh-1'], 'X')
+        self.dict_sql['eh_min_1_x2'] = get_odd_2(self.odds['eh-1'],away + '/X')
         #self.dict_sql['eh-1_2'] = get_odd_2(self.odds['eh-1'], home + '(-1)')
         self.dict_sql['u_15_1'] = get_odd_2(self.odds['goal1.5/result'],'-1.5/1')
         self.dict_sql['o_15_1'] = get_odd_2(self.odds['goal1.5/result'],'+1.5/1')
@@ -441,9 +449,9 @@ class football_event:
         self.dict_sql['o_25_2'] = get_odd_2(self.odds['goal2.5/result'],'+2.5/2')
         self.dict_sql['u_25_1'] = get_odd_2(self.odds['goal1.5/result'], '-1.5/2')
         self.dict_sql['o_25_1'] = get_odd_2(self.odds['goal1.5/result'], '+1.5/2')
-        self.dict_sql['1_st_goal_1'] = get_odd_2(self.odds['1st_goal'],home)
-        self.dict_sql['1_st_goal_2'] = get_odd_2(self.odds['1st_goal'],away)
-        self.dict_sql['1_st_goal_0'] = get_odd_2(self.odds['1st_goal'],'nikt')
+        self.dict_sql['first_goal_1'] = get_odd_2(self.odds['1st_goal'],home)
+        self.dict_sql['first_goal_2'] = get_odd_2(self.odds['1st_goal'],away)
+        self.dict_sql['first_goal_0'] = get_odd_2(self.odds['1st_goal'],'nikt')
         self.dict_sql['btts_1'] = get_odd_2(self.odds['game/btts'],'1/tak')
         self.dict_sql['btts_2'] = get_odd_2(self.odds['game/btts'],'2/tak')
         self.dict_sql['btts_x'] = get_odd_2(self.odds['game/btts'],'X/tak')

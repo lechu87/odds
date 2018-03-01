@@ -102,15 +102,15 @@ class football_event:
         #print (get_value(json_var['MarketGroups'][0]['Bets'], 'Pierwsza połowa'))
         #print (get_value(json_var['MarketGroups'][0]['Bets'], 'Pierwsza połowa'))
         #self.dict_sql['_1']=json_var['MarketGroups'][0]['Bets'][get_value(json_var['MarketGroups'][0]['Bets'],'Wynik meczu 1X2','0')]['Odds'][0]['Odd']
-        self.dict_sql['_1']=self.get_rate(json_var['markets'],"Zwycięzca meczu",self.raw_home)
-        self.dict_sql['_0']=self.get_rate(json_var['markets'],"Zwycięzca meczu",'Remis')
+        self.dict_sql['game_1']=self.get_rate(json_var['markets'],"Zwycięzca meczu",self.raw_home)
+        self.dict_sql['game_0']=self.get_rate(json_var['markets'],"Zwycięzca meczu",'Remis')
         #print (self.dict_sql['_1'])
-        self.dict_sql['_2'] =self.get_rate(json_var['markets'],"Zwycięzca meczu",self.raw_away)
+        self.dict_sql['game_2'] =self.get_rate(json_var['markets'],"Zwycięzca meczu",self.raw_away)
 #        print (self.dict_sql)
         #self.ge
-        self.dict_sql['_10']=self.get_rate(json_var['markets'],"Podwójna szansa",'Drużyna 1 lub remis')
-        self.dict_sql['_02']=self.get_rate(json_var['markets'],"Podwójna szansa",'Drużyna 2 lub remis')
-        self.dict_sql['_12']=self.get_rate(json_var['markets'],"Podwójna szansa",'Drużyna 1 lub Drużyna 2')
+        self.dict_sql['game_10']=self.get_rate(json_var['markets'],"Podwójna szansa",'Drużyna 1 lub remis')
+        self.dict_sql['game_02']=self.get_rate(json_var['markets'],"Podwójna szansa",'Drużyna 2 lub remis')
+        self.dict_sql['game_12']=self.get_rate(json_var['markets'],"Podwójna szansa",'Drużyna 1 lub Drużyna 2')
         self.dict_sql['League']=self.league
         self.dict_sql['data']=self.date
         #self.dict_sql['hour']=self.hour
@@ -148,12 +148,12 @@ class football_event:
         self.dict_sql['ht_ft_x2'] = self.get_rate(json_var['markets'],"Do przerwy/Koniec meczu",'Remis/'+self.raw_away)
         self.dict_sql['ht_ft_12'] = self.get_rate(json_var['markets'],"Do przerwy/Koniec meczu",self.raw_home+'/'+self.raw_away)
         self.dict_sql['ht_ft_xx'] = self.get_rate(json_var['markets'],"Do przerwy/Koniec meczu",'Remis/Remis')
-        self.dict_sql['_1st_half_1']=self.get_rate(json_var['markets'],"1. połowa - Zwycięzca",self.raw_home)
-        self.dict_sql['_1st_half_x'] = self.get_rate(json_var['markets'],"1. połowa - Zwycięzca",'Remis')
-        self.dict_sql['_1st_half_2'] = self.get_rate(json_var['markets'],"1. połowa - Zwycięzca",self.raw_away)
-        self.dict_sql['_1st_half_10'] = self.get_rate(json_var['markets'],"1. połowa - Podwójna szansa",'Drużyna 1 lub Remis')
-        self.dict_sql['_1st_half_02'] = self.get_rate(json_var['markets'],"1. połowa - Podwójna szansa",'Drużyna 2 lub Remis')
-        self.dict_sql['_1st_half_12'] = self.get_rate(json_var['markets'],"1. połowa - Podwójna szansa",'Drużyna 1 lub Drużyna 2')
+        self.dict_sql['first_half_1']=self.get_rate(json_var['markets'],"1. połowa - Zwycięzca",self.raw_home)
+        self.dict_sql['first_half_x'] = self.get_rate(json_var['markets'],"1. połowa - Zwycięzca",'Remis')
+        self.dict_sql['first_half_2'] = self.get_rate(json_var['markets'],"1. połowa - Zwycięzca",self.raw_away)
+        self.dict_sql['first_half_10'] = self.get_rate(json_var['markets'],"1. połowa - Podwójna szansa",'Drużyna 1 lub Remis')
+        self.dict_sql['first_half_02'] = self.get_rate(json_var['markets'],"1. połowa - Podwójna szansa",'Drużyna 2 lub Remis')
+        self.dict_sql['first_half_12'] = self.get_rate(json_var['markets'],"1. połowa - Podwójna szansa",'Drużyna 1 lub Drużyna 2')
 
         self.dict_sql['u_15_1'] = self.get_rate(json_var['markets'],"Wyniki i liczba bramek 1.5",self.raw_home+' i Poniżej 1.5')
         self.dict_sql['o_15_1'] = self.get_rate(json_var['markets'],"Wyniki i liczba bramek 1.5",self.raw_home+' i Powyżej 1.5')
@@ -184,12 +184,12 @@ class football_event:
         self.dict_sql['btts_no_1'] = self.get_rate(json_var['markets'],"Wynik i obie drużyny strzelą",self.raw_home +' i (Obie drużyny strzelą - Nie)')
         self.dict_sql['btts_no_2'] =  self.get_rate(json_var['markets'],"Wynik i obie drużyny strzelą",self.raw_away +' i (Obie drużyny strzelą - Nie)')
         self.dict_sql['btts_no_x'] = self.get_rate(json_var['markets'],"Wynik i obie drużyny strzelą",'Remis i (Obie drużyny strzelą - Nie)')
-        self.dict_sql['eh-1_1'] = handi_dict[-1.0]['1']
-        self.dict_sql['eh-1_x'] = handi_dict[-1.0]['x']
-        self.dict_sql['eh-1_2'] = handi_dict[-1.0]['2']
-        self.dict_sql['eh+1_1'] = handi_dict[+1.0]['1']
-        self.dict_sql['eh+1_x'] = handi_dict[+1.0]['x']
-        self.dict_sql['eh+1_2'] = handi_dict[+1.0]['2']
+        self.dict_sql['eh_min_1_1'] = handi_dict[-1.0]['1']
+        self.dict_sql['eh_min_1_x'] = handi_dict[-1.0]['x']
+        self.dict_sql['eh_min_1_2'] = handi_dict[-1.0]['2']
+        self.dict_sql['eh_plus_1_1'] = handi_dict[+1.0]['1']
+        self.dict_sql['eh_plus_1_x'] = handi_dict[+1.0]['x']
+        self.dict_sql['eh_plus_1_2'] = handi_dict[+1.0]['2']
         #self.dict_sql['1_st_goal_1'] = json_var['MarketGroups'][0]['Bets'][get_value(json_var['MarketGroups'][0]['Bets'],'Pierwszy gol','0')]['Odds'][0]['Odd']
 
 

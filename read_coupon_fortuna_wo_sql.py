@@ -6,17 +6,17 @@ import logging
 import datetime
 import urllib.request as urllib2
 
-from sqlalchemy.sql import select
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import create_engine, Column
-from sqlalchemy.sql import and_, or_, not_
+
 def read_coupon(adres):
 #adres1='https://www.efortuna.pl/pl/strona_glowna/nahled_tiketu/index.html?ticket_id=OTk5MDQ3NzA4NDg0MzMwMDp5D0b%2BhWJvXFEHkRg%3D&kind=MAIN'
 #adres2='https://www.efortuna.pl/pl/strona_glowna/nahled_tiketu/index.html?ticket_id=OTQxMzI3NzA5MzUzMTEwMDrsspzQo7BGblqFRrA%3D&kind=MAIN'
 #adres='https://www.efortuna.pl/pl/strona_glowna/nahled_tiketu/index.html?ticket_id=Mzk5MDM3NzA5NDA1MjkwMDqZs952+IomQH8BbOE%3D&kind=MAIN'
-    kupon=urllib2.urlopen(adres).read()
-
+    logging.basicConfig(filename='logfile_fortuna_read_coupon.log', level=logging.DEBUG)
+    user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
+    headers = {'User-Agent': user_agent, }
+    request = urllib2.Request(adres, None, headers)
+    kupon=urllib2.urlopen(request).read()
+    #kupon=urllib2.urlopen(adres).read()
     soup = BeautifulSoup(kupon,"html.parser")
     table=soup.find('div', {'class': 'ticket_container_inner'})
     head=table.find('thead')
@@ -51,16 +51,22 @@ def read_coupon(adres):
     #    print (typ)
     #    print ("TypeTyp:",type+typ)
         #print ("Szukam:",events_mapping_fortuna[type]["name"]+typ)
+        #print (type+'_'+typ)
         znajdz_typ = unify_name(type +'_'+ typ, sql_map_fortuna, logging)
      #   print (znajdz_typ+"::::::::::::::::")
         ####wyciaga z bazy:
         #print (home, away)
-        one_event=[home,away,znajdz_typ]
+        one_event=[home,away,znajdz_typ,type+"_"+typ]
+        #one_event = [home, away, znajdz_typ]
         #print (home,away,znajdz_typ)
         all_events.append(one_event)
-    #print (all_events)
+    for el in all_events:
+        print (el,sep=';',end=','+'\n')
+        #for el2 in el:
+         #   print(el2,sep=',',end=',')
+
     return (all_events)
 
-adres='https://www.efortuna.pl/pl/strona_glowna/nahled_tiketu/index.html?ticket_id=Mzk5MDM3NzA5NDA1MjkwMDqZs952+IomQH8BbOE%3D&kind=MAIN'
-print(read_coupon(adres))
+adres='https://www.efortuna.pl/pl/strona_glowna/nahled_tiketu/index.html?ticket_id=OTk5MDI4NDU1MzU2MjQwMDocyIaiaop0XXB3fH8%3D&kind=MAIN'
+#print(read_coupon(adres))
 read_coupon(adres)
