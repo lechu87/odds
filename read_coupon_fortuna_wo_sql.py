@@ -5,7 +5,9 @@ from collections import defaultdict
 import logging
 import datetime
 import urllib.request as urllib2
-
+import sys
+import re
+from urllib import parse
 
 def read_coupon(adres):
 #adres1='https://www.efortuna.pl/pl/strona_glowna/nahled_tiketu/index.html?ticket_id=OTk5MDQ3NzA4NDg0MzMwMDp5D0b%2BhWJvXFEHkRg%3D&kind=MAIN'
@@ -66,7 +68,14 @@ def read_coupon(adres):
          #   print(el2,sep=',',end=',')
 
     return (all_events)
-
-adres='https://www.efortuna.pl/pl/strona_glowna/nahled_tiketu/index.html?ticket_id=OTk5MDI4NDU1MzU2MjQwMDocyIaiaop0XXB3fH8%3D&kind=MAIN'
+coupon_id=sys.argv[1]
+url = sys.argv[1]
+id=re.findall("id=.*&", coupon_id, flags=0)
+if len(re.findall('http',url))>0:
+    kupon=parse.parse_qs(parse.urlparse(url).query)['ticket_id'][0]
+else:
+    kupon=url
+#adres='https://www.efortuna.pl/pl/strona_glowna/nahled_tiketu/index.html?ticket_id='+kupon+'&kind=MAIN'
+adres='https://www.efortuna.pl/pl/strona_glowna/nahled_tiketu/index.html?ticket_id='+kupon+'=&preview=hide_code'
 #print(read_coupon(adres))
 read_coupon(adres)

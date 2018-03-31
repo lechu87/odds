@@ -458,6 +458,8 @@ class football_event:
         self.dict_sql['btts_no_1'] = get_odd_2(self.odds['game/btts'],'1/nie')
         self.dict_sql['btts_no_2'] = get_odd_2(self.odds['game/btts'],'2/nie')
         self.dict_sql['btts_no_x'] = get_odd_2(self.odds['game/btts'],'X/nie')
+        self.dict_sql['btts_yes'] =  get_odd_2(self.odds['btts'],'tak')
+        self.dict_sql['btts_no'] =  get_odd_2(self.odds['btts'],'nie')
 
 
         #print ("DICT: ", self.dict_sql)

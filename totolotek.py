@@ -284,6 +284,16 @@ class football_event:
             self.dict_sql['btts_no_x'] = json_var['MarketGroups'][0]['Bets'][get_value(json_var['MarketGroups'][0]['Bets'],'Wynik meczu/obie strzelą','0')]['Odds'][3]['Odd']
         except:
             self.dict_sql['btts_no_x'] = 1.0
+        try:
+            self.dict_sql['btts_yes'] = json_var['MarketGroups'][0]['Bets'][
+                get_value(json_var['MarketGroups'][0]['Bets'], 'Obie drużyny strzelą bramkę', '0')]['Odds'][0]['Odd']
+        except:
+            self.dict_sql['btts_yes'] = 1.0
+        try:
+            self.dict_sql['btts_no'] = json_var['MarketGroups'][0]['Bets'][
+                get_value(json_var['MarketGroups'][0]['Bets'], 'Obie drużyny strzelą bramkę', '1')]['Odds'][1]['Odd']
+        except:
+            self.dict_sql['btts_no'] = 1.0
             # self.dict_sql['eh-1_1'] = self.odds['ah-']['1 (Handicap 0:1)']
         # self.dict_sql['eh-1_x'] = self.odds['ah-']['X (Handicap 0:1)']
         # self.dict_sql['eh-1_2'] = self.odds['ah-']['2 (Handicap 0:1)']

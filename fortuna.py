@@ -200,6 +200,8 @@ class football_event:
         self.dict_sql['btts_no_1'] = self.odds['game/btts']['1/nie']
         self.dict_sql['btts_no_2'] = self.odds['game/btts']['2/nie']
         self.dict_sql['btts_no_x'] = self.odds['game/btts']['0/nie']
+        self.dict_sql['btts_yes'] = self.odds['btts']['tak']
+        self.dict_sql['btts_no'] = self.odds['btts']['nie']
         #self.dict_sql['1_st_goal_1'] = self.odds['1st_goal'][sehome]
         #self.dict_sql['1_st_goal_2'] = self.odds['1st_goal'][away]
         #self.dict_sql['1_st_goal_0'] = self.odds['1st_goal']['nikt']
