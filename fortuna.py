@@ -294,6 +294,8 @@ sites=[
        'https://www.efortuna.pl/pl/strona_glowna/pilka-nozna/bundesliga-2',
        'https://www.efortuna.pl/pl/strona_glowna/pilka-nozna/2-liga-wloska',
        'https://www.efortuna.pl/pl/strona_glowna/pilka-nozna/ligue-2',
+       'https://www.efortuna.pl/pl/strona_glowna/pilka-nozna/liga-narodow-uefa',
+
        ]
 sites2=['https://www.efortuna.pl/pl/strona_glowna/pilka-nozna/primera-division']
 for site in sites:

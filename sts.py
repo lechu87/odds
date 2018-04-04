@@ -98,8 +98,12 @@ class football_event:
         "2 drużyna : liczba strzelonych goli": {"name": "2nd_team_goal_number"},
         "1 drużyna : liczba strzelonych goli 1.5 poniżej/powyżej": {"name": "1st_team_over1.5"},
         "1 drużyna : liczba strzelonych goli 2.5 poniżej/powyżej": {"name": "1st_team_over2.5"},
+        "1 drużyna : liczba strzelonych goli 3.5 poniżej/powyżej": {"name": "1st_team_over3.5"},
+        "1 drużyna : liczba strzelonych goli 4.5 poniżej/powyżej": {"name": "1st_team_over4.5"},
         "2 drużyna : liczba strzelonych goli 1.5 poniżej/powyżej": {"name": "2nd_team_over1.5"},
         "2 drużyna : liczba strzelonych goli 2.5 poniżej/powyżej": {"name": "2nd_team_over2.5"},
+        "2 drużyna : liczba strzelonych goli 3.5 poniżej/powyżej": {"name": "2nd_team_over3.5"},
+        "2 drużyna : liczba strzelonych goli 4.5 poniżej/powyżej": {"name": "2nd_team_over4.5"},
         "1 drużyna : strzeli gola w obu połowach": {"name": "1st_team_both_half_to_score"},
         "2 drużyna : strzeli gola w obu połowach": {"name": "2nd_team_both_half_to_score"},
         "1 drużyna strzeli gola w 1 połowie": {"name": "1st_team_1st_half_to_score"},
@@ -126,6 +130,9 @@ class football_event:
         "liczba rzutów rożnych - nieparzysta/parzysta": {"name": "corners_odd_even"},
         "liczba rzutów rożnych w meczu": {"name": "corners"},
         "rzuty rożne - kto wykona więcej ?  (remis zwrot)": {"name": "corners_which_team_dnb"},
+        "rzuty rożne - kto wykona więcej ? (remis zwrot)": {"name": "corners_which_team_dnb"},
+        "rzuty rożne - kto wykona więcej ?  (remis = zwrot)": {"name": "corners_which_team_dnb"},
+        "rzuty rożne - kto wykona więcej ? (remis = zwrot)": {"name": "corners_which_team_dnb"},
         "rzuty rożne - kto wykona więcej (handicap)": {"name": "corners_which_team_eh"},
         "rzuty rożne - kto wykona więcej ?": {"name": "corners_which_team"},
         "1 drużyna : liczba rz. rożnych mniej/więcej": {"name": "1st_team_corners"},
@@ -525,6 +532,15 @@ class football_event:
 #exit()
 sites=['https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6502&league=43461',
 'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6521&league=4080',
+'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6534&league=4243',
+'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6534&league=4013',
+'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6534&league=3944',
+'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6534&league=4206',
+'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6534&league=4264',
+'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6534&league=5012',
+'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6534&league=3903',
+'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6534&league=3939',
+'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6534&league=4073',
 'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6488&league=3987',
 'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6535&league=3994',
 'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6490&league=4032',
@@ -563,7 +579,7 @@ sites2=['https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?ac
 
 
         ]
-for site in sites:
+for site in sites[0:15]:
     user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
     headers = {'User-Agent': user_agent, }
     request = urllib2.Request(site, None, headers)

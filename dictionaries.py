@@ -1342,7 +1342,7 @@ leagues = {"Ekstraklasa Polska":["Ekstraklasa","Ekstraklasa Polska","Polska Ekst
            "MS kwale":["Kwalifikacje MS-Ameryka Pld.","Kwalifikacje MS-Azja","Kwalifikacje MS-Afryka","Kwalifikacje MS-Europa","Kwalifikacje MS-Ameryka Pld.","elim. MŚ (Europa) Rozgr. międzynarodowe",
                        "elim. MŚ (Amer. Płd.) Rozgr. międzynarodowe","elim. MŚ (CONCACAF) Rozgr. międzynarodowe","elim. MŚ (Azja) Rozgr. międzynarodowe","elim. MŚ (Afryka) Rozgr. międzynarodowe"],
            "Spotkania towarzyskie":["Spotkania towarzyskie","mecze towarzyskie  Rozgr. międzynarodowe"],
-           "Polska - puchar":["Polska - puchar"],"2.Polska":['2.Polska'],"1.Belgia":['1.Belgia',"1. Liga Belgia","Belgia 1 liga","jupiler-pro-league"],"1.Czechy":['1.Czechy',"1. Liga Czechy"],"1.Slowacja":['1.Slowacja',"1. Liga Słowacja"],"Elite League U20":['Elite League U20'],"1.Austria":['1.Austria',"1. Liga Austria"],
+           "Polska - puchar":["Polska - puchar"],"2.Polska":['2.Polska'],"1.Belgia":['1.Belgia',"1. Liga Belgia","Belgia 1 liga","jupiler-pro-league"],"1.Czechy":['1.Czechy',"1. Liga Czechy"],"1.Slowacja":['1.Slowacja',"1. Liga Słowacja"],"Elite League U20":['Elite League U20'],"1.Austria":['1.Austria',"1. Liga Austria","1 liga Austria"],
 
 
            }
