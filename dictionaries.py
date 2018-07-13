@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 from collections import defaultdict
+import sqlite3
 events_mapping_lvbet=defaultdict(str)
 events_mapping_lvbet = {
     "Zwycięzca meczu": {"name": "game"},
@@ -198,6 +199,7 @@ events_mapping_fortuna=defaultdict(str)
 events_mapping_fortuna = {
     "mecz": {"name": "game"},
     "spotkanie":{"name":"game"},
+    "Spotkania":{"name":"game"},
     "awans": {"name": "awans"},
     "spotkanie/ilosc bramek": {"name": "game/goals"},
     "spotkanie/liczba goli": {"name": "game/goals"},
@@ -215,6 +217,9 @@ events_mapping_fortuna = {
     "liczba goli 4.5": {"name": "goals4.5"},
     "liczba goli 5.5": {"name": "goals5.5"},
     "liczba goli 6.5": {"name": "goals6.5"},
+    "liczba goli P/N":{"name": "goals_odd_even"},
+    "1.połowa liczba goli P/N":{"name": "1st_half_goals_odd_even"},
+    "2.połowa liczba goli P/N":{"name": "2nd_half_goals_odd_even"},
     "podwojna szansa": {"name": "dc"},
     "podwójna szansa (1.poł. lub mecz)": {"name": "dc_1st_half_or_game"},
     "1.polowa": {"name": "1st_half"},
@@ -730,7 +735,7 @@ teams = {"Bulgaria":["Bulgaria","Bułgaria"],"Szwecja":["Szwecja"],"Francja":["F
 "Finlandia":["Finlandia"],"Islandia":["Islandia"],"Gruzja":["Gruzja"],"Irlandia":["Irlandia"],
 "Serbia":["Serbia"],"Moldawia":["Moldawia","Mołdawia"],"Izrael":["Izrael"],"Macedonia":["Macedonia"],
 "Hiszpania":["Hiszpania"],"Wlochy":["Wlochy","Włochy"],"Ukraina":["Ukraina"],"Turcja":["Turcja"],"Walia":["Walia"],
-"Austria":["Austria"],"Chorwacja":["Chorwacja"],"Kosowo":["Kosowo"],
+"Austria":["Austria"],"Chorwacja":["Chorwacja"],"Kosowo":["Kosowo"],"Rosja":["Rosja"],
 
 
 "Wenezuela":["Wenezuela"],"Kolumbia":["Kolumbia"],"Chile":["Chile"],
@@ -743,7 +748,7 @@ teams = {"Bulgaria":["Bulgaria","Bułgaria"],"Szwecja":["Szwecja"],"Francja":["F
          "Oman":["Oman"],"Afganistan":['Afganistan'],
          
 "Uganda":["Uganda"],"Egipt":["Egipt"],"Gwinea":["Gwinea"],
-"Libia":["Libia"],"Ghana":["Ghana"],"Kongo":["Kongo"],
+"Libia":["Libia"],"Ghana":["Ghana"],"Kongo":["Kongo"],"Arabia S.":["Arabia S."],
 "Nigeria":["Nigeria"],"Kamerun":["Kamerun"],"W.Ziel.Przyl.":["W.Ziel.Przyl.","Wyspy Ziel. Przylądka"],
 "RPA":["RPA"],"Maroko":["Maroko"],"Mali":["Mali"],
 "Tunezja":["Tunezja"],"DR Kongo":["DR Kongo","DR Konga"],"Zambia":["Zambia"],
@@ -842,7 +847,7 @@ teams = {"Bulgaria":["Bulgaria","Bułgaria"],"Szwecja":["Szwecja"],"Francja":["F
 "Genk": ["Genk","KRC Genk"],
 "Mechelen": ["Mechelen","Yellow-Red KV Mechelen","KV Mechelen"],
 "Club Brugge": ["Club Brugge","FC Brugge","Club Brugge KV"], #check!!!!!!!!!!!!!
-"St.Liege": ["St.Liege","Standard Liege","Standard L."],
+"St.Liege": ["St.Liege","Standard Liege","Standard L.","St. Liege"],
 "Gent": ["Gent","KAA Gent"],
 "Oostende": ["Oostende","KV Oostende","Kv Oostende"],
 "FC Antwerp": ["FC Antwerp","Royal Antwerpia","Royal Antwerp Fc","Royal Antwerp FC"],
@@ -1342,7 +1347,7 @@ leagues = {"Ekstraklasa Polska":["Ekstraklasa","Ekstraklasa Polska","Polska Ekst
            "MS kwale":["Kwalifikacje MS-Ameryka Pld.","Kwalifikacje MS-Azja","Kwalifikacje MS-Afryka","Kwalifikacje MS-Europa","Kwalifikacje MS-Ameryka Pld.","elim. MŚ (Europa) Rozgr. międzynarodowe",
                        "elim. MŚ (Amer. Płd.) Rozgr. międzynarodowe","elim. MŚ (CONCACAF) Rozgr. międzynarodowe","elim. MŚ (Azja) Rozgr. międzynarodowe","elim. MŚ (Afryka) Rozgr. międzynarodowe"],
            "Spotkania towarzyskie":["Spotkania towarzyskie","mecze towarzyskie  Rozgr. międzynarodowe"],
-           "Polska - puchar":["Polska - puchar"],"2.Polska":['2.Polska'],"1.Belgia":['1.Belgia',"1. Liga Belgia","Belgia 1 liga","jupiler-pro-league"],"1.Czechy":['1.Czechy',"1. Liga Czechy"],"1.Slowacja":['1.Slowacja',"1. Liga Słowacja"],"Elite League U20":['Elite League U20'],"1.Austria":['1.Austria',"1. Liga Austria","1 liga Austria"],
+           "Polska - puchar":["Polska - puchar"],"2.Polska":['2.Polska'],"1.Belgia":['1.Belgia',"1. Liga Belgia","Belgia 1 liga","jupiler-pro-league","1 liga Belgia"],"1.Czechy":['1.Czechy',"1. Liga Czechy"],"1.Slowacja":['1.Slowacja',"1. Liga Słowacja"],"Elite League U20":['Elite League U20'],"1.Austria":['1.Austria',"1. Liga Austria","1 liga Austria"],
 
 
            }
@@ -1456,3 +1461,69 @@ def unify2(raw_name, name_dict,log):
         log.info("Nieznana nazwa2: " + raw_name)
     return corrected_name
 
+def save_to_db_common(meczyk,data):
+        database_name = 'db.sqlite'
+        db = sqlite3.connect(database_name)
+        table_name="'db_bets'"
+        table2_name='db_bets'
+        columns_string = '("' + '","'.join(meczyk.dict_sql.keys()) + '")'
+        values_string = '("' + '","'.join(map(str, meczyk.dict_sql.values())) + '")'
+        cur = db.cursor()
+        #print ("SELECT:")
+        home="'"+meczyk.home+"'"
+        away = "'" + meczyk.away + "'"
+        date=data
+        #print ("select * from %s where home=%s and away=%s and data=%s" % (table,home,away,date))
+        #cur.execute("select * from %s where home=%s and away=%s and data=%s" % (table,home,away,date))
+        #data=cur.fetchall()
+        #x=[]
+        #for i in range(0, len(columns_string) - 1):
+        #    x.append((str(columns_string[i]) + "=" + str(values_string[i])))
+#        try:
+#            sql_command="DELETE FROM %s WHERE home=%s and away=%s and data=%s" % (table,home,away,date)
+#            print ("SQL COMMAND:",sql_command)
+#            db.execute(sql_command)
+#            print ("USUNIĘTO")
+#        except:
+#            pass
+        #UPDATE employee SET role = 'code_monkey', name='fred' WHERE id = 1;
+        sql_update_command= 'UPDATE ' + str(table_name) + " SET "
+        print ("SQL UPDATE")
+        for k,v in meczyk.dict_sql.items():
+            sql_update_command = sql_update_command + '"'+str(k) + '"="' + str(v)+'",'
+        #print (sql_update_command)
+        sql_update_cmd=sql_update_command[:-1] + " WHERE home=" + str(home) + "and away = "+ str(away) + " and data = "+str(date)
+        sql_update = """UPDADE %s SET %s = %s WHERE home = %s
+                      and away = %s and data = %s""" % (table_name, columns_string, values_string,home,away,date)
+        sql_insert = """INSERT INTO %s %s
+                     VALUES %s""" % (table_name, columns_string, values_string)
+
+        print (sql_update_cmd)
+        polecenie="SELECT * FROM "+str(table_name)+ " WHERE home="+str(home) +" and away=" + str(away) +" and data="+str(date)
+        try:
+            x=cur.execute(polecenie).fetchone()
+        except Exception as e: print(e)
+        print (polecenie)
+        try:
+            if x==None:
+                print ("NIE MA W BAZIE",x)
+                db.execute(sql_insert)
+                print(sql_insert)
+                db.commit()
+            else:
+                print("NIE UDALO SIE INS")
+                db.execute(sql_update_cmd)
+                print(sql_update_cmd)
+                db.commit()
+                print("ALE UDALO SIE UP")
+        except Exception as e: print(e)
+            #
+            #pass
+        #print (sql_update)
+
+#        try:
+#            db.execute(sql_insert)
+#            db.commit()
+#        except:
+#            print ("NIE UDALO SIE INSERTNAC")
+#            pass

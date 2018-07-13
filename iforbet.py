@@ -234,117 +234,117 @@ class football_event:
                 self.odds['goals']['Poniżej '+str(i)+' gola']=''
         self.dict_sql['home']=self.home
         self.dict_sql['away']=self.away
-        self.dict_sql['game_1']=self.odds['game']['1']
-        self.dict_sql['game_0']=self.odds['game']['X']
-        self.dict_sql['game_2']=self.odds['game']['2']
-        self.dict_sql['game_10']=self.odds['dc']['1/X']
-        self.dict_sql['game_02']=self.odds['dc']['X/2']
-        self.dict_sql['game_12']=self.odds['dc']['1/2']
+        self.dict_sql['iforbet_game_1']=self.odds['game']['1']
+        self.dict_sql['iforbet_game_0']=self.odds['game']['X']
+        self.dict_sql['iforbet_game_2']=self.odds['game']['2']
+        self.dict_sql['iforbet_game_10']=self.odds['dc']['1/X']
+        self.dict_sql['iforbet_game_02']=self.odds['dc']['X/2']
+        self.dict_sql['iforbet_game_12']=self.odds['dc']['1/2']
         #self.dict_sql['data']=self.date.split(' ')[1].split('.')[2]+'-'+self.date.split(' ')[1].split('.')[1]+'-'+self.date.split(' ')[1].split('.')[0]
         #self.dict_sql['Sport']=self.sport
         self.dict_sql['League']=self.league
         self.dict_sql['data']=self.date
         self.dict_sql['hour']=self.hour
-        self.dict_sql['update_time']=self.update_time
-        self.dict_sql['o_35'] = self.odds['goals']['Powyżej 3.5 bramki']
+        self.dict_sql['iforbet_update_time']=self.update_time
+        self.dict_sql['iforbet_o_35'] = self.odds['goals']['Powyżej 3.5 bramki']
         #self.dict_sql['country']=self.
-        self.dict_sql['dnb_1']=self.odds['dnb']['1']
-        self.dict_sql['dnb_2']=self.odds['dnb']['2']
-        self.dict_sql['o_05'] = self.odds['goals']['Powyżej 0.5 bramki']
-        self.dict_sql['u_05'] = self.odds['goals']['Poniżej 0.5 bramki']
-        self.dict_sql['o_15'] = self.odds['goals']['Powyżej 1.5 bramki']
-        self.dict_sql['u_15'] = self.odds['goals']['Poniżej 1.5 bramki']
-        self.dict_sql['o_25'] = self.odds['goals']['Powyżej 2.5 bramki']
-        self.dict_sql['u_25'] = self.odds['goals']['Poniżej 2.5 bramki']
-        self.dict_sql['u_35'] = self.odds['goals']['Poniżej 3.5 bramki']
-        self.dict_sql['o_45'] = self.odds['goals']['Powyżej 4.5 bramki']
-        self.dict_sql['u_45'] = self.odds['goals']['Poniżej 4.5 bramki']
-        self.dict_sql['o_55'] = self.odds['goals']['Powyżej 5.5 bramki']
-        self.dict_sql['u_55'] = self.odds['goals']['Poniżej 5.5 bramki']
-        self.dict_sql['o_65'] = self.odds['goals']['Powyżej 6.5 bramki']
-        self.dict_sql['u_65'] = self.odds['goals']['Poniżej 6.5 bramki']
-        self.dict_sql['o_75'] = self.odds['goals']['Powyżej 7.5 bramki']
-        self.dict_sql['u_75'] = self.odds['goals']['Poniżej 7.5 bramki']
-        self.dict_sql['o_85'] = self.odds['goals']['Powyżej 8.5 bramki']
-        self.dict_sql['u_85'] = self.odds['goals']['Poniżej 8.5 bramki']
-        self.dict_sql['o_95'] = self.odds['goals']['Powyżej 9.5 bramki']
-        self.dict_sql['u_95'] = self.odds['goals']['Poniżej 9.5 bramki']
-        self.dict_sql['ht_ft_11'] = self.odds['half/end']['1 / 1']
-        self.dict_sql['ht_ft_1x'] = self.odds['half/end']['1 / X']
-        self.dict_sql['ht_ft_2x'] = self.odds['half/end']['2 / X']
-        self.dict_sql['ht_ft_21'] = self.odds['half/end']['2 / 1']
-        self.dict_sql['ht_ft_22'] = self.odds['half/end']['2 / 2']
-        self.dict_sql['ht_ft_x1'] = self.odds['half/end']['X / 1']
-        self.dict_sql['ht_ft_x2'] = self.odds['half/end']['X / 2']
-        self.dict_sql['ht_ft_12'] = self.odds['half/end']['1 / 2']
-        self.dict_sql['ht_ft_xx'] = self.odds['half/end']['X / X']
-        self.dict_sql['first_half_1']= self.odds['1st_half']['1']
-        self.dict_sql['first_half_x'] = self.odds['1st_half']['X']
-        self.dict_sql['first_half_2'] = self.odds['1st_half']['2']
-        self.dict_sql['first_half_10'] = self.odds['1st_half_dc']['1/X']
-        self.dict_sql['first_half_02'] = self.odds['1st_half_dc']['X/2']
-        self.dict_sql['first_half_12'] = self.odds['1st_half_dc']['1/2']
-        #self.dict_sql['eh-1_1'] = self.odds['eh-1']['1']
-        #self.dict_sql['eh-1_x2'] = self.odds['eh-1']['02']
-        self.dict_sql['u_15_1'] = self.odds['game/goals']['1 i Poniżej 1.5 bramki']
-        self.dict_sql['o_15_1'] = self.odds['game/goals']['1 i Powyżej 1.5 bramki']
-        self.dict_sql['u_15_x'] = self.odds['game/goals']['X i Poniżej 1.5 bramki']
-        self.dict_sql['o_15_x'] = self.odds['game/goals']['X i Powyżej 1.5 bramki']
-        self.dict_sql['u_15_2'] = self.odds['game/goals']['2 i Poniżej 1.5 bramki']
-        self.dict_sql['o_15_2'] = self.odds['game/goals']['2 i Powyżej 1.5 bramki']
-        self.dict_sql['u_25_1'] = self.odds['game/goals']['1 i Poniżej 2.5 bramki']
-        self.dict_sql['o_25_1'] = self.odds['game/goals']['1 i Powyżej 2.5 bramki']
-        self.dict_sql['u_25_x'] = self.odds['game/goals']['X i Poniżej 2.5 bramki']
-        self.dict_sql['o_25_x'] = self.odds['game/goals']['X i Powyżej 2.5 bramki']
-        self.dict_sql['u_25_2'] = self.odds['game/goals']['2 i Poniżej 2.5 bramki']
-        self.dict_sql['o_25_2'] = self.odds['game/goals']['2 i Powyżej 2.5 bramki']
-        self.dict_sql['u_35_1'] = self.odds['game/goals']['1 i Poniżej 3.5 bramki']
-        self.dict_sql['o_35_1'] = self.odds['game/goals']['1 i Powyżej 3.5 bramki']
-        self.dict_sql['u_35_x'] = self.odds['game/goals']['X i Poniżej 3.5 bramki']
-        self.dict_sql['o_35_x'] = self.odds['game/goals']['X i Powyżej 3.5 bramki']
-        self.dict_sql['u_35_2'] = self.odds['game/goals']['2 i Poniżej 3.5 bramki']
-        self.dict_sql['o_35_2'] = self.odds['game/goals']['2 i Powyżej 3.5 bramki']
-        self.dict_sql['btts_1'] = self.odds['game/btts']['1 i Tak']
-        self.dict_sql['btts_2'] = self.odds['game/btts']['2 i Tak']
-        self.dict_sql['btts_x'] = self.odds['game/btts']['X i Tak']
-        self.dict_sql['btts_no_1'] = self.odds['game/btts']['1 i Nie']
-        self.dict_sql['btts_no_2'] = self.odds['game/btts']['2 i Nie']
-        self.dict_sql['btts_no_x'] = self.odds['game/btts']['X i Nie']
-        self.dict_sql['eh_min_1_1'] = self.odds['ah-']['1 (Handicap 0:1)']
-        self.dict_sql['eh_min_1_x'] = self.odds['ah-']['X (Handicap 0:1)']
-        self.dict_sql['eh_min_1_2'] = self.odds['ah-']['2 (Handicap 0:1)']
-        self.dict_sql['eh_plus_1_1'] = self.odds['ah+']['1 (Handicap 1:0)']
-        self.dict_sql['eh_plus_1_x'] = self.odds['ah+']['X (Handicap 1:0)']
-        self.dict_sql['eh_plus_1_2'] = self.odds['ah+']['2 (Handicap 1:0)']
-        self.dict_sql['btts_yes'] = self.odds['btts']['Tak']
-        self.dict_sql['btts_no'] = self.odds['btts']['Nie']
-        self.dict_sql['corners_o_65']=self.odds['corners']['Powyżej 6.5 rzutów rożnych']
-        self.dict_sql['corners_u_65'] = self.odds['corners']['Poniżej 6.5 rzutów rożnych']
-        self.dict_sql['corners_o_75'] = self.odds['corners']['Powyżej 7.5 rzutów rożnych']
-        self.dict_sql['corners_u_75'] = self.odds['corners']['Poniżej 7.5 rzutów rożnych']
-        self.dict_sql['corners_o_85'] = self.odds['corners']['Powyżej 8.5 rzutów rożnych']
-        self.dict_sql['corners_u_85'] = self.odds['corners']['Poniżej 8.5 rzutów rożnych']
-        self.dict_sql['corners_o_95'] = self.odds['corners']['Powyżej 9.5 rzutów rożnych']
-        self.dict_sql['corners_u_95'] = self.odds['corners']['Poniżej 9.5 rzutów rożnych']
-        self.dict_sql['corners_o_105'] = self.odds['corners']['Powyżej 10.5 rzutów rożnych']
-        self.dict_sql['corners_u_105'] = self.odds['corners']['Poniżej 10.5 rzutów rożnych']
-        self.dict_sql['corners_o_115'] = self.odds['corners']['Powyżej 11.5 rzutów rożnych']
-        self.dict_sql['corners_u_115'] = self.odds['corners']['Poniżej 11.5 rzutów rożnych']
-        self.dict_sql['corners_o_125'] = self.odds['corners']['Powyżej 12.5 rzutów rożnych']
-        self.dict_sql['corners_u_125'] = self.odds['corners']['Poniżej 12.5 rzutów rożnych']
-        self.dict_sql['corners_o_135'] = self.odds['corners']['Powyżej 13.5 rzutów rożnych']
-        self.dict_sql['corners_u_135'] = self.odds['corners']['Poniżej 13.5 rzutów rożnych']
-        self.dict_sql['corners_o_145'] = self.odds['corners']['Powyżej 14.5 rzutów rożnych']
-        self.dict_sql['corners_u_145'] = self.odds['corners']['Poniżej 14.5 rzutów rożnych']
-        self.dict_sql['corners_o_155'] = self.odds['corners']['Powyżej 15.5 rzutów rożnych']
-        self.dict_sql['corners_u_155'] = self.odds['corners']['Poniżej 15.5 rzutów rożnych']
-        self.dict_sql['corners_o_165'] = self.odds['corners']['Powyżej 16.5 rzutów rożnych']
-        self.dict_sql['corners_u_165'] = self.odds['corners']['Poniżej 16.5 rzutów rożnych']
-        self.dict_sql['corners_o_175'] = self.odds['corners']['Powyżej 17.5 rzutów rożnych']
-        self.dict_sql['corners_u_175'] = self.odds['corners']['Poniżej 17.5 rzutów rożnych']
-        #self.dict_sql['1_st_goal_1'] = self.odds['1st_goal'][sehome]
-        #self.dict_sql['1_st_goal_2'] = self.odds['1st_goal'][away]
-        #self.dict_sql['1_st_goal_0'] = self.odds['1st_goal']['nikt']
+        self.dict_sql['iforbet_dnb_1']=self.odds['dnb']['1']
+        self.dict_sql['iforbet_dnb_2']=self.odds['dnb']['2']
+        self.dict_sql['iforbet_o_05'] = self.odds['goals']['Powyżej 0.5 bramki']
+        self.dict_sql['iforbet_u_05'] = self.odds['goals']['Poniżej 0.5 bramki']
+        self.dict_sql['iforbet_o_15'] = self.odds['goals']['Powyżej 1.5 bramki']
+        self.dict_sql['iforbet_u_15'] = self.odds['goals']['Poniżej 1.5 bramki']
+        self.dict_sql['iforbet_o_25'] = self.odds['goals']['Powyżej 2.5 bramki']
+        self.dict_sql['iforbet_u_25'] = self.odds['goals']['Poniżej 2.5 bramki']
+        self.dict_sql['iforbet_u_35'] = self.odds['goals']['Poniżej 3.5 bramki']
+        self.dict_sql['iforbet_o_45'] = self.odds['goals']['Powyżej 4.5 bramki']
+        self.dict_sql['iforbet_u_45'] = self.odds['goals']['Poniżej 4.5 bramki']
+        self.dict_sql['iforbet_o_55'] = self.odds['goals']['Powyżej 5.5 bramki']
+        self.dict_sql['iforbet_u_55'] = self.odds['goals']['Poniżej 5.5 bramki']
+        self.dict_sql['iforbet_o_65'] = self.odds['goals']['Powyżej 6.5 bramki']
+        self.dict_sql['iforbet_u_65'] = self.odds['goals']['Poniżej 6.5 bramki']
+        self.dict_sql['iforbet_o_75'] = self.odds['goals']['Powyżej 7.5 bramki']
+        self.dict_sql['iforbet_u_75'] = self.odds['goals']['Poniżej 7.5 bramki']
+        self.dict_sql['iforbet_o_85'] = self.odds['goals']['Powyżej 8.5 bramki']
+        self.dict_sql['iforbet_u_85'] = self.odds['goals']['Poniżej 8.5 bramki']
+        self.dict_sql['iforbet_o_95'] = self.odds['goals']['Powyżej 9.5 bramki']
+        self.dict_sql['iforbet_u_95'] = self.odds['goals']['Poniżej 9.5 bramki']
+        self.dict_sql['iforbet_ht_ft_11'] = self.odds['half/end']['1 / 1']
+        self.dict_sql['iforbet_ht_ft_1x'] = self.odds['half/end']['1 / X']
+        self.dict_sql['iforbet_ht_ft_2x'] = self.odds['half/end']['2 / X']
+        self.dict_sql['iforbet_ht_ft_21'] = self.odds['half/end']['2 / 1']
+        self.dict_sql['iforbet_ht_ft_22'] = self.odds['half/end']['2 / 2']
+        self.dict_sql['iforbet_ht_ft_x1'] = self.odds['half/end']['X / 1']
+        self.dict_sql['iforbet_ht_ft_x2'] = self.odds['half/end']['X / 2']
+        self.dict_sql['iforbet_ht_ft_12'] = self.odds['half/end']['1 / 2']
+        self.dict_sql['iforbet_ht_ft_xx'] = self.odds['half/end']['X / X']
+        self.dict_sql['iforbet_first_half_1']= self.odds['1st_half']['1']
+        self.dict_sql['iforbet_first_half_x'] = self.odds['1st_half']['X']
+        self.dict_sql['iforbet_first_half_2'] = self.odds['1st_half']['2']
+        self.dict_sql['iforbet_first_half_10'] = self.odds['1st_half_dc']['1/X']
+        self.dict_sql['iforbet_first_half_02'] = self.odds['1st_half_dc']['X/2']
+        self.dict_sql['iforbet_first_half_12'] = self.odds['1st_half_dc']['1/2']
+        #self.dict_sql['iforbet_eh-1_1'] = self.odds['eh-1']['1']
+        #self.dict_sql['iforbet_eh-1_x2'] = self.odds['eh-1']['02']
+        self.dict_sql['iforbet_u_15_1'] = self.odds['game/goals']['1 i Poniżej 1.5 bramki']
+        self.dict_sql['iforbet_o_15_1'] = self.odds['game/goals']['1 i Powyżej 1.5 bramki']
+        self.dict_sql['iforbet_u_15_x'] = self.odds['game/goals']['X i Poniżej 1.5 bramki']
+        self.dict_sql['iforbet_o_15_x'] = self.odds['game/goals']['X i Powyżej 1.5 bramki']
+        self.dict_sql['iforbet_u_15_2'] = self.odds['game/goals']['2 i Poniżej 1.5 bramki']
+        self.dict_sql['iforbet_o_15_2'] = self.odds['game/goals']['2 i Powyżej 1.5 bramki']
+        self.dict_sql['iforbet_u_25_1'] = self.odds['game/goals']['1 i Poniżej 2.5 bramki']
+        self.dict_sql['iforbet_o_25_1'] = self.odds['game/goals']['1 i Powyżej 2.5 bramki']
+        self.dict_sql['iforbet_u_25_x'] = self.odds['game/goals']['X i Poniżej 2.5 bramki']
+        self.dict_sql['iforbet_o_25_x'] = self.odds['game/goals']['X i Powyżej 2.5 bramki']
+        self.dict_sql['iforbet_u_25_2'] = self.odds['game/goals']['2 i Poniżej 2.5 bramki']
+        self.dict_sql['iforbet_o_25_2'] = self.odds['game/goals']['2 i Powyżej 2.5 bramki']
+        self.dict_sql['iforbet_u_35_1'] = self.odds['game/goals']['1 i Poniżej 3.5 bramki']
+        self.dict_sql['iforbet_o_35_1'] = self.odds['game/goals']['1 i Powyżej 3.5 bramki']
+        self.dict_sql['iforbet_u_35_x'] = self.odds['game/goals']['X i Poniżej 3.5 bramki']
+        self.dict_sql['iforbet_o_35_x'] = self.odds['game/goals']['X i Powyżej 3.5 bramki']
+        self.dict_sql['iforbet_u_35_2'] = self.odds['game/goals']['2 i Poniżej 3.5 bramki']
+        self.dict_sql['iforbet_o_35_2'] = self.odds['game/goals']['2 i Powyżej 3.5 bramki']
+        self.dict_sql['iforbet_btts_1'] = self.odds['game/btts']['1 i Tak']
+        self.dict_sql['iforbet_btts_2'] = self.odds['game/btts']['2 i Tak']
+        self.dict_sql['iforbet_btts_x'] = self.odds['game/btts']['X i Tak']
+        self.dict_sql['iforbet_btts_no_1'] = self.odds['game/btts']['1 i Nie']
+        self.dict_sql['iforbet_btts_no_2'] = self.odds['game/btts']['2 i Nie']
+        self.dict_sql['iforbet_btts_no_x'] = self.odds['game/btts']['X i Nie']
+        self.dict_sql['iforbet_eh_min_1_1'] = self.odds['ah-']['1 (Handicap 0:1)']
+        self.dict_sql['iforbet_eh_min_1_x'] = self.odds['ah-']['X (Handicap 0:1)']
+        self.dict_sql['iforbet_eh_min_1_2'] = self.odds['ah-']['2 (Handicap 0:1)']
+        self.dict_sql['iforbet_eh_plus_1_1'] = self.odds['ah+']['1 (Handicap 1:0)']
+        self.dict_sql['iforbet_eh_plus_1_x'] = self.odds['ah+']['X (Handicap 1:0)']
+        self.dict_sql['iforbet_eh_plus_1_2'] = self.odds['ah+']['2 (Handicap 1:0)']
+        self.dict_sql['iforbet_btts_yes'] = self.odds['btts']['Tak']
+        self.dict_sql['iforbet_btts_no'] = self.odds['btts']['Nie']
+        self.dict_sql['iforbet_corners_o_65']=self.odds['corners']['Powyżej 6.5 rzutów rożnych']
+        self.dict_sql['iforbet_corners_u_65'] = self.odds['corners']['Poniżej 6.5 rzutów rożnych']
+        self.dict_sql['iforbet_corners_o_75'] = self.odds['corners']['Powyżej 7.5 rzutów rożnych']
+        self.dict_sql['iforbet_corners_u_75'] = self.odds['corners']['Poniżej 7.5 rzutów rożnych']
+        self.dict_sql['iforbet_corners_o_85'] = self.odds['corners']['Powyżej 8.5 rzutów rożnych']
+        self.dict_sql['iforbet_corners_u_85'] = self.odds['corners']['Poniżej 8.5 rzutów rożnych']
+        self.dict_sql['iforbet_corners_o_95'] = self.odds['corners']['Powyżej 9.5 rzutów rożnych']
+        self.dict_sql['iforbet_corners_u_95'] = self.odds['corners']['Poniżej 9.5 rzutów rożnych']
+        self.dict_sql['iforbet_corners_o_105'] = self.odds['corners']['Powyżej 10.5 rzutów rożnych']
+        self.dict_sql['iforbet_corners_u_105'] = self.odds['corners']['Poniżej 10.5 rzutów rożnych']
+        self.dict_sql['iforbet_corners_o_115'] = self.odds['corners']['Powyżej 11.5 rzutów rożnych']
+        self.dict_sql['iforbet_corners_u_115'] = self.odds['corners']['Poniżej 11.5 rzutów rożnych']
+        self.dict_sql['iforbet_corners_o_125'] = self.odds['corners']['Powyżej 12.5 rzutów rożnych']
+        self.dict_sql['iforbet_corners_u_125'] = self.odds['corners']['Poniżej 12.5 rzutów rożnych']
+        self.dict_sql['iforbet_corners_o_135'] = self.odds['corners']['Powyżej 13.5 rzutów rożnych']
+        self.dict_sql['iforbet_corners_u_135'] = self.odds['corners']['Poniżej 13.5 rzutów rożnych']
+        self.dict_sql['iforbet_corners_o_145'] = self.odds['corners']['Powyżej 14.5 rzutów rożnych']
+        self.dict_sql['iforbet_corners_u_145'] = self.odds['corners']['Poniżej 14.5 rzutów rożnych']
+        self.dict_sql['iforbet_corners_o_155'] = self.odds['corners']['Powyżej 15.5 rzutów rożnych']
+        self.dict_sql['iforbet_corners_u_155'] = self.odds['corners']['Poniżej 15.5 rzutów rożnych']
+        self.dict_sql['iforbet_corners_o_165'] = self.odds['corners']['Powyżej 16.5 rzutów rożnych']
+        self.dict_sql['iforbet_corners_u_165'] = self.odds['corners']['Poniżej 16.5 rzutów rożnych']
+        self.dict_sql['iforbet_corners_o_175'] = self.odds['corners']['Powyżej 17.5 rzutów rożnych']
+        self.dict_sql['iforbet_corners_u_175'] = self.odds['corners']['Poniżej 17.5 rzutów rożnych']
+        #self.dict_sql['iforbet_1_st_goal_1'] = self.odds['1st_goal'][sehome]
+        #self.dict_sql['iforbet_1_st_goal_2'] = self.odds['1st_goal'][away]
+        #self.dict_sql['iforbet_1_st_goal_0'] = self.odds['1st_goal']['nikt']
 
         return self.dict_sql
     def save_to_db(meczyk):
@@ -357,21 +357,40 @@ class football_event:
         date = meczyk.date
         print ("Date:", date)
         #sqldate=meczyk.date.split(' ')[1].split('.')[2]+'-'+meczyk.date.split(' ')[1].split('.')[1]+'-'+meczyk.date.split(' ')[1].split('.')[0]
-        table='"db_iforbet"'
+        table="'db_bets'"
+        table2='db_bets'
         columns_string = '("' + '","'.join(meczyk.dict_sql.keys()) + '")'
         values_string = '("' + '","'.join(map(str, meczyk.dict_sql.values())) + '")'
-        try:
-            sql_command="DELETE FROM %s WHERE home=%s and away=%s and data=%s" % (table,"'"+home+"'","'"+away+"'","'"+date+"'")
-            print ("SQL COMMAND:",sql_command)
-            db.execute(sql_command)
-            print ("USUNIĘTO")
-        except:
-            pass
+        sql_update_command= 'UPDATE ' + str(table) + " SET "
+        print ("SQL UPDATE")
+        for k,v in meczyk.dict_sql.items():
+            sql_update_command = sql_update_command + '"'+str(k) + '"="' + str(v)+'",'
+        #print (sql_update_command)
+        sql_update_cmd=sql_update_command[:-1] + " WHERE home=" + str(home) + "and away = "+ str(away) + " and data = "+str(date)
         sql = """INSERT INTO %s %s
              VALUES %s""" % (table, columns_string, values_string)
-        print (sql)
-        db.execute(sql)
-        db.commit()
+        sql_insert = """INSERT INTO %s %s
+                     VALUES %s""" % (table, columns_string, values_string)
+        print (sql_update_cmd)
+        print ("HOME", home)
+        polecenie="SELECT * FROM "+str(table2)+ " WHERE home="+str(home) +" and away=" + str(away) +" and data="+str(date)
+        print(polecenie)
+        cur = db.cursor()
+        try:
+            x=cur.execute(polecenie).fetchone()
+        except Exception as e: print(e)
+
+        print (polecenie)
+        try:
+            if x==None:
+                db.execute(sql_insert)
+                db.commit()
+            else:
+                print("NIE UDALO SIE INS")
+                db.execute(sql_update_cmd)
+                db.commit()
+                print("ALE UDALO SIE UP")
+        except Exception as e: print(e)
 
     def __init__(self, events_mapping_fortuna,url):
         #self.__events_mapping=events_mapping_fortuna
@@ -380,7 +399,8 @@ class football_event:
         self.get_odds2()
 
         self.prepare_dict_to_sql()
-        self.save_to_db()
+        print ("DATAAAAA:",self.date)
+        save_to_db_common(self,"'"+str(self.date)+"'")
         #print (self.dict_sql)
         #print ("ODDS:",self.odds)
 #data = urllib2.urlopen(urllib2.Request('https://www.iforbet.pl/zdarzenie/470334',None,headers)).read() # The data u need
@@ -389,7 +409,7 @@ class football_event:
 
 
 #url='https://www.iforbet.pl/oferta/8/4437,4569,199,511,168,2432,321,159,269,223,147,122,273,660,2902,558,641,289'
-url='https://www.iforbet.pl/oferta/8/321,159,269,223,147,122,273,660,2902,558,641,289'
+url='https://www.iforbet.pl/oferta/8/321,159,269,223,147,122,273,660,2902,558,641,289,2432'
 #url='https://www.iforbet.pl/oferta/8/293,380,398,3372,357,7018,555,3096,120,666,123'
 #url='https://www.iforbet.pl/oferta/8/908,2911'
 user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
@@ -420,14 +440,14 @@ print (get_links(url))
 
 sites2=['https://www.efortuna.pl/pl/strona_glowna/pilka-nozna/puchar-polski']
 for sites in get_links(url):
-    try:
+#    try:
         site = 'https://www.iforbet.pl/'+sites
         request = urllib2.Request(site, None, headers)
         response = urllib2.urlopen(request)
         data = response.read()
         meczyk = football_event(events_mapping_fortuna,data)
-    except:
-        logging.WARNING("ERROR dla: " + site)
+ #   except:
+ #       logging.WARNING("ERROR dla: " + site)
         continue
 
 

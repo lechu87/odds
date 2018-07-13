@@ -102,94 +102,130 @@ class football_event:
         #print (get_value(json_var['MarketGroups'][0]['Bets'], 'Pierwsza połowa'))
         #print (get_value(json_var['MarketGroups'][0]['Bets'], 'Pierwsza połowa'))
         #self.dict_sql['_1']=json_var['MarketGroups'][0]['Bets'][get_value(json_var['MarketGroups'][0]['Bets'],'Wynik meczu 1X2','0')]['Odds'][0]['Odd']
-        self.dict_sql['game_1']=self.get_rate(json_var['markets'],"Zwycięzca meczu",self.raw_home)
-        self.dict_sql['game_0']=self.get_rate(json_var['markets'],"Zwycięzca meczu",'Remis')
-        #print (self.dict_sql['_1'])
-        self.dict_sql['game_2'] =self.get_rate(json_var['markets'],"Zwycięzca meczu",self.raw_away)
-#        print (self.dict_sql)
-        #self.ge
-        self.dict_sql['game_10']=self.get_rate(json_var['markets'],"Podwójna szansa",'Drużyna 1 lub remis')
-        self.dict_sql['game_02']=self.get_rate(json_var['markets'],"Podwójna szansa",'Drużyna 2 lub remis')
-        self.dict_sql['game_12']=self.get_rate(json_var['markets'],"Podwójna szansa",'Drużyna 1 lub Drużyna 2')
         self.dict_sql['League']=self.league
         self.dict_sql['data']=self.date
-        #self.dict_sql['hour']=self.hour
-        self.dict_sql['update_time']=self.update_time
-        #self.dict_sql['country']=self
-        self.dict_sql['dnb_1']=self.get_rate(json_var['markets'],"Zakład bez remisu",'Drużyna 1')
-        self.dict_sql['dnb_2']=self.get_rate(json_var['markets'],"Zakład bez remisu",'Drużyna 2')
-        self.dict_sql['o_05'] = goal_dict[0.5]['over']
-        self.dict_sql['u_05'] = goal_dict[0.5]['under']
-        self.dict_sql['o_15'] = goal_dict[1.5]['over']
-        self.dict_sql['u_15'] = goal_dict[1.5]['under']
-        self.dict_sql['o_25'] = goal_dict[2.5]['over']
-        self.dict_sql['u_25'] = goal_dict[2.5]['under']
-        self.dict_sql['u_35'] = goal_dict[3.5]['under']
-        self.dict_sql['o_35'] = goal_dict[3.5]['over']
-        self.dict_sql['o_45'] = goal_dict[4.5]['over']
-        self.dict_sql['u_45'] = goal_dict[4.5]['under']
-        self.dict_sql['o_55'] = goal_dict[5.5]['over']
-        self.dict_sql['u_55'] = goal_dict[5.5]['under']
-        self.dict_sql['o_65'] = goal_dict[6.5]['over']
-        self.dict_sql['u_65'] = goal_dict[6.5]['under']
-        self.dict_sql['o_75'] = goal_dict[7.5]['over']
-        self.dict_sql['u_75'] = goal_dict[7.5]['under']
-        self.dict_sql['o_85'] = goal_dict[8.5]['over']
-        self.dict_sql['u_85'] = goal_dict[8.5]['under']
-        self.dict_sql['o_95'] = goal_dict[9.5]['over']
-        self.dict_sql['u_95'] = goal_dict[9.5]['under']
-        self.dict_sql['ht_ft_11'] = self.get_rate(json_var['markets'],"Do przerwy/Koniec meczu",self.raw_home+'/'+self.raw_home)
-        self.dict_sql['ht_ft_1x'] = self.get_rate(json_var['markets'],"Do przerwy/Koniec meczu",'1'+'/Draw')
-        self.dict_sql['ht_ft_11'] = self.get_rate(json_var['markets'],"Do przerwy/Koniec meczu",self.raw_home+'/'+self.raw_home)
-        self.dict_sql['ht_ft_2x'] = self.get_rate(json_var['markets'],"Do przerwy/Koniec meczu",self.raw_away+'/Remis')
-        self.dict_sql['ht_ft_21'] = self.get_rate(json_var['markets'],"Do przerwy/Koniec meczu",self.raw_away+'/'+self.raw_home)
-        self.dict_sql['ht_ft_22'] = self.get_rate(json_var['markets'],"Do przerwy/Koniec meczu",self.raw_away+'/'+self.raw_away)
-        self.dict_sql['ht_ft_x1'] = self.get_rate(json_var['markets'],"Do przerwy/Koniec meczu",'Remis/'+self.raw_home)
-        self.dict_sql['ht_ft_x2'] = self.get_rate(json_var['markets'],"Do przerwy/Koniec meczu",'Remis/'+self.raw_away)
-        self.dict_sql['ht_ft_12'] = self.get_rate(json_var['markets'],"Do przerwy/Koniec meczu",self.raw_home+'/'+self.raw_away)
-        self.dict_sql['ht_ft_xx'] = self.get_rate(json_var['markets'],"Do przerwy/Koniec meczu",'Remis/Remis')
-        self.dict_sql['first_half_1']=self.get_rate(json_var['markets'],"1. połowa - Zwycięzca",self.raw_home)
-        self.dict_sql['first_half_x'] = self.get_rate(json_var['markets'],"1. połowa - Zwycięzca",'Remis')
-        self.dict_sql['first_half_2'] = self.get_rate(json_var['markets'],"1. połowa - Zwycięzca",self.raw_away)
-        self.dict_sql['first_half_10'] = self.get_rate(json_var['markets'],"1. połowa - Podwójna szansa",'Drużyna 1 lub Remis')
-        self.dict_sql['first_half_02'] = self.get_rate(json_var['markets'],"1. połowa - Podwójna szansa",'Drużyna 2 lub Remis')
-        self.dict_sql['first_half_12'] = self.get_rate(json_var['markets'],"1. połowa - Podwójna szansa",'Drużyna 1 lub Drużyna 2')
+        self.dict_sql['lvbet_game_1'] = self.get_rate(json_var['markets'], "Zwycięzca meczu", self.raw_home)
+        self.dict_sql['lvbet_game_0'] = self.get_rate(json_var['markets'], "Zwycięzca meczu", 'Remis')
+        # print (self.dict_sql['lvbet__1'])
+        self.dict_sql['lvbet_game_2'] = self.get_rate(json_var['markets'], "Zwycięzca meczu", self.raw_away)
+        # print (self.dict_sql)
+        # self.ge
+        self.dict_sql['lvbet_game_10'] = self.get_rate(json_var['markets'], "Podwójna szansa", 'Drużyna 1 lub remis')
+        self.dict_sql['lvbet_game_02'] = self.get_rate(json_var['markets'], "Podwójna szansa", 'Drużyna 2 lub remis')
+        self.dict_sql['lvbet_game_12'] = self.get_rate(json_var['markets'], "Podwójna szansa",
+                                                       'Drużyna 1 lub Drużyna 2')
 
-        self.dict_sql['u_15_1'] = self.get_rate(json_var['markets'],"Wyniki i liczba bramek 1.5",self.raw_home+' i Poniżej 1.5')
-        self.dict_sql['o_15_1'] = self.get_rate(json_var['markets'],"Wyniki i liczba bramek 1.5",self.raw_home+' i Powyżej 1.5')
-        self.dict_sql['u_15_x'] = self.get_rate(json_var['markets'],"Wyniki i liczba bramek 1.5",'Remis i Poniżej 1.5')
-        self.dict_sql['o_15_x'] = self.get_rate(json_var['markets'],"Wyniki i liczba bramek 1.5",'Remis i Powyżej 1.5')
-        self.dict_sql['u_15_2'] = self.get_rate(json_var['markets'],"Wyniki i liczba bramek 1.5",self.raw_away +' i Poniżej 1.5')
-        self.dict_sql['o_15_2'] = self.get_rate(json_var['markets'],"Wyniki i liczba bramek 1.5",self.raw_away +' i Powyżej 1.5')
+        # self.dict_sql['lvbet_hour']=self.hour
+        self.dict_sql['lvbet_update_time'] = self.update_time
+        # self.dict_sql['lvbet_country']=self
+        self.dict_sql['lvbet_dnb_1'] = self.get_rate(json_var['markets'], "Zakład bez remisu", 'Drużyna 1')
+        self.dict_sql['lvbet_dnb_2'] = self.get_rate(json_var['markets'], "Zakład bez remisu", 'Drużyna 2')
+        self.dict_sql['lvbet_o_05'] = goal_dict[0.5]['over']
+        self.dict_sql['lvbet_u_05'] = goal_dict[0.5]['under']
+        self.dict_sql['lvbet_o_15'] = goal_dict[1.5]['over']
+        self.dict_sql['lvbet_u_15'] = goal_dict[1.5]['under']
+        self.dict_sql['lvbet_o_25'] = goal_dict[2.5]['over']
+        self.dict_sql['lvbet_u_25'] = goal_dict[2.5]['under']
+        self.dict_sql['lvbet_u_35'] = goal_dict[3.5]['under']
+        self.dict_sql['lvbet_o_35'] = goal_dict[3.5]['over']
+        self.dict_sql['lvbet_o_45'] = goal_dict[4.5]['over']
+        self.dict_sql['lvbet_u_45'] = goal_dict[4.5]['under']
+        self.dict_sql['lvbet_o_55'] = goal_dict[5.5]['over']
+        self.dict_sql['lvbet_u_55'] = goal_dict[5.5]['under']
+        self.dict_sql['lvbet_o_65'] = goal_dict[6.5]['over']
+        self.dict_sql['lvbet_u_65'] = goal_dict[6.5]['under']
+        self.dict_sql['lvbet_o_75'] = goal_dict[7.5]['over']
+        self.dict_sql['lvbet_u_75'] = goal_dict[7.5]['under']
+        self.dict_sql['lvbet_o_85'] = goal_dict[8.5]['over']
+        self.dict_sql['lvbet_u_85'] = goal_dict[8.5]['under']
+        self.dict_sql['lvbet_o_95'] = goal_dict[9.5]['over']
+        self.dict_sql['lvbet_u_95'] = goal_dict[9.5]['under']
+        self.dict_sql['lvbet_ht_ft_11'] = self.get_rate(json_var['markets'], "Do przerwy/Koniec meczu",
+                                                        self.raw_home + '/' + self.raw_home)
+        self.dict_sql['lvbet_ht_ft_1x'] = self.get_rate(json_var['markets'], "Do przerwy/Koniec meczu", '1' + '/Draw')
+        self.dict_sql['lvbet_ht_ft_11'] = self.get_rate(json_var['markets'], "Do przerwy/Koniec meczu",
+                                                        self.raw_home + '/' + self.raw_home)
+        self.dict_sql['lvbet_ht_ft_2x'] = self.get_rate(json_var['markets'], "Do przerwy/Koniec meczu",
+                                                        self.raw_away + '/Remis')
+        self.dict_sql['lvbet_ht_ft_21'] = self.get_rate(json_var['markets'], "Do przerwy/Koniec meczu",
+                                                        self.raw_away + '/' + self.raw_home)
+        self.dict_sql['lvbet_ht_ft_22'] = self.get_rate(json_var['markets'], "Do przerwy/Koniec meczu",
+                                                        self.raw_away + '/' + self.raw_away)
+        self.dict_sql['lvbet_ht_ft_x1'] = self.get_rate(json_var['markets'], "Do przerwy/Koniec meczu",
+                                                        'Remis/' + self.raw_home)
+        self.dict_sql['lvbet_ht_ft_x2'] = self.get_rate(json_var['markets'], "Do przerwy/Koniec meczu",
+                                                        'Remis/' + self.raw_away)
+        self.dict_sql['lvbet_ht_ft_12'] = self.get_rate(json_var['markets'], "Do przerwy/Koniec meczu",
+                                                        self.raw_home + '/' + self.raw_away)
+        self.dict_sql['lvbet_ht_ft_xx'] = self.get_rate(json_var['markets'], "Do przerwy/Koniec meczu", 'Remis/Remis')
+        self.dict_sql['lvbet_first_half_1'] = self.get_rate(json_var['markets'], "1. połowa - Zwycięzca", self.raw_home)
+        self.dict_sql['lvbet_first_half_x'] = self.get_rate(json_var['markets'], "1. połowa - Zwycięzca", 'Remis')
+        self.dict_sql['lvbet_first_half_2'] = self.get_rate(json_var['markets'], "1. połowa - Zwycięzca", self.raw_away)
+        self.dict_sql['lvbet_first_half_10'] = self.get_rate(json_var['markets'], "1. połowa - Podwójna szansa",
+                                                             'Drużyna 1 lub Remis')
+        self.dict_sql['lvbet_first_half_02'] = self.get_rate(json_var['markets'], "1. połowa - Podwójna szansa",
+                                                             'Drużyna 2 lub Remis')
+        self.dict_sql['lvbet_first_half_12'] = self.get_rate(json_var['markets'], "1. połowa - Podwójna szansa",
+                                                             'Drużyna 1 lub Drużyna 2')
 
-        self.dict_sql['u_25_1'] = self.get_rate(json_var['markets'],"Wynik i liczba bramek 2.5",self.raw_home+' i Poniżej 2.5')
-        self.dict_sql['o_25_1'] = self.get_rate(json_var['markets'],"Wynik i liczba bramek 2.5",self.raw_home+' i Powyżej 2.5')
-        self.dict_sql['u_25_x'] = self.get_rate(json_var['markets'],"Wynik i liczba bramek 2.5",'Remis i Poniżej 2.5')
-        self.dict_sql['o_25_x'] = self.get_rate(json_var['markets'],"Wynik i liczba bramek 2.5",'Remis i Powyżej 2.5')
-        self.dict_sql['u_25_2'] = self.get_rate(json_var['markets'],"Wynik i liczba bramek 2.5",self.raw_away +' i Poniżej 2.5')
-        self.dict_sql['o_25_2'] = self.get_rate(json_var['markets'],"Wynik i liczba bramek 2.5",self.raw_away +' i Powyżej 2.5')
+        self.dict_sql['lvbet_u_15_1'] = self.get_rate(json_var['markets'], "Wyniki i liczba bramek 1.5",
+                                                      self.raw_home + ' i Poniżej 1.5')
+        self.dict_sql['lvbet_o_15_1'] = self.get_rate(json_var['markets'], "Wyniki i liczba bramek 1.5",
+                                                      self.raw_home + ' i Powyżej 1.5')
+        self.dict_sql['lvbet_u_15_x'] = self.get_rate(json_var['markets'], "Wyniki i liczba bramek 1.5",
+                                                      'Remis i Poniżej 1.5')
+        self.dict_sql['lvbet_o_15_x'] = self.get_rate(json_var['markets'], "Wyniki i liczba bramek 1.5",
+                                                      'Remis i Powyżej 1.5')
+        self.dict_sql['lvbet_u_15_2'] = self.get_rate(json_var['markets'], "Wyniki i liczba bramek 1.5",
+                                                      self.raw_away + ' i Poniżej 1.5')
+        self.dict_sql['lvbet_o_15_2'] = self.get_rate(json_var['markets'], "Wyniki i liczba bramek 1.5",
+                                                      self.raw_away + ' i Powyżej 1.5')
 
+        self.dict_sql['lvbet_u_25_1'] = self.get_rate(json_var['markets'], "Wynik i liczba bramek 2.5",
+                                                      self.raw_home + ' i Poniżej 2.5')
+        self.dict_sql['lvbet_o_25_1'] = self.get_rate(json_var['markets'], "Wynik i liczba bramek 2.5",
+                                                      self.raw_home + ' i Powyżej 2.5')
+        self.dict_sql['lvbet_u_25_x'] = self.get_rate(json_var['markets'], "Wynik i liczba bramek 2.5",
+                                                      'Remis i Poniżej 2.5')
+        self.dict_sql['lvbet_o_25_x'] = self.get_rate(json_var['markets'], "Wynik i liczba bramek 2.5",
+                                                      'Remis i Powyżej 2.5')
+        self.dict_sql['lvbet_u_25_2'] = self.get_rate(json_var['markets'], "Wynik i liczba bramek 2.5",
+                                                      self.raw_away + ' i Poniżej 2.5')
+        self.dict_sql['lvbet_o_25_2'] = self.get_rate(json_var['markets'], "Wynik i liczba bramek 2.5",
+                                                      self.raw_away + ' i Powyżej 2.5')
 
-        self.dict_sql['u_35_1'] = self.get_rate(json_var['markets'],"Wynik i liczba bramek 3.5",self.raw_home+' i Poniżej 3.5')
-        self.dict_sql['o_35_1'] = self.get_rate(json_var['markets'],"Wynik i liczba bramek 3.5",self.raw_home+' i Powyżej 3.5')
-        self.dict_sql['u_35_x'] = self.get_rate(json_var['markets'],"Wynik i liczba bramek 3.5",'Remis i Poniżej 3.5')
-        self.dict_sql['o_35_x'] = self.get_rate(json_var['markets'],"Wynik i liczba bramek 3.5",'Remis i Powyżej 3.5')
-        self.dict_sql['u_35_2'] = self.get_rate(json_var['markets'],"Wynik i liczba bramek 3.5",self.raw_away +' i Poniżej 3.5')
-        self.dict_sql['o_35_2'] = self.get_rate(json_var['markets'],"Wynik i liczba bramek 3.5",self.raw_away +' i Powyżej 3.5')
-        self.dict_sql['btts_yes'] = self.get_rate(json_var['markets'], "Obie drużyny strzelą gola",'Tak')
-        self.dict_sql['btts_no'] = self.get_rate(json_var['markets'], "Obie drużyny strzelą gola", 'Nie')
-        self.dict_sql['btts_1'] = self.get_rate(json_var['markets'],"Wynik i obie drużyny strzelą",self.raw_home +' i (Obie drużyny strzelą - Tak)')
-        self.dict_sql['btts_2'] = self.get_rate(json_var['markets'],"Wynik i obie drużyny strzelą",self.raw_away +' i (Obie drużyny strzelą - Tak)')
-        self.dict_sql['btts_x'] = self.get_rate(json_var['markets'],"Wynik i obie drużyny strzelą",'Remis i (Obie drużyny strzelą - Tak)')
-        self.dict_sql['btts_no_1'] = self.get_rate(json_var['markets'],"Wynik i obie drużyny strzelą",self.raw_home +' i (Obie drużyny strzelą - Nie)')
-        self.dict_sql['btts_no_2'] =  self.get_rate(json_var['markets'],"Wynik i obie drużyny strzelą",self.raw_away +' i (Obie drużyny strzelą - Nie)')
-        self.dict_sql['btts_no_x'] = self.get_rate(json_var['markets'],"Wynik i obie drużyny strzelą",'Remis i (Obie drużyny strzelą - Nie)')
-        self.dict_sql['eh_min_1_1'] = handi_dict[-1.0]['1']
-        self.dict_sql['eh_min_1_x'] = handi_dict[-1.0]['x']
-        self.dict_sql['eh_min_1_2'] = handi_dict[-1.0]['2']
-        self.dict_sql['eh_plus_1_1'] = handi_dict[+1.0]['1']
-        self.dict_sql['eh_plus_1_x'] = handi_dict[+1.0]['x']
-        self.dict_sql['eh_plus_1_2'] = handi_dict[+1.0]['2']
+        self.dict_sql['lvbet_u_35_1'] = self.get_rate(json_var['markets'], "Wynik i liczba bramek 3.5",
+                                                      self.raw_home + ' i Poniżej 3.5')
+        self.dict_sql['lvbet_o_35_1'] = self.get_rate(json_var['markets'], "Wynik i liczba bramek 3.5",
+                                                      self.raw_home + ' i Powyżej 3.5')
+        self.dict_sql['lvbet_u_35_x'] = self.get_rate(json_var['markets'], "Wynik i liczba bramek 3.5",
+                                                      'Remis i Poniżej 3.5')
+        self.dict_sql['lvbet_o_35_x'] = self.get_rate(json_var['markets'], "Wynik i liczba bramek 3.5",
+                                                      'Remis i Powyżej 3.5')
+        self.dict_sql['lvbet_u_35_2'] = self.get_rate(json_var['markets'], "Wynik i liczba bramek 3.5",
+                                                      self.raw_away + ' i Poniżej 3.5')
+        self.dict_sql['lvbet_o_35_2'] = self.get_rate(json_var['markets'], "Wynik i liczba bramek 3.5",
+                                                      self.raw_away + ' i Powyżej 3.5')
+        self.dict_sql['lvbet_btts_yes'] = self.get_rate(json_var['markets'], "Obie drużyny strzelą gola", 'Tak')
+        self.dict_sql['lvbet_btts_no'] = self.get_rate(json_var['markets'], "Obie drużyny strzelą gola", 'Nie')
+        self.dict_sql['lvbet_btts_1'] = self.get_rate(json_var['markets'], "Wynik i obie drużyny strzelą",
+                                                      self.raw_home + ' i (Obie drużyny strzelą - Tak)')
+        self.dict_sql['lvbet_btts_2'] = self.get_rate(json_var['markets'], "Wynik i obie drużyny strzelą",
+                                                      self.raw_away + ' i (Obie drużyny strzelą - Tak)')
+        self.dict_sql['lvbet_btts_x'] = self.get_rate(json_var['markets'], "Wynik i obie drużyny strzelą",
+                                                      'Remis i (Obie drużyny strzelą - Tak)')
+        self.dict_sql['lvbet_btts_no_1'] = self.get_rate(json_var['markets'], "Wynik i obie drużyny strzelą",
+                                                         self.raw_home + ' i (Obie drużyny strzelą - Nie)')
+        self.dict_sql['lvbet_btts_no_2'] = self.get_rate(json_var['markets'], "Wynik i obie drużyny strzelą",
+                                                         self.raw_away + ' i (Obie drużyny strzelą - Nie)')
+        self.dict_sql['lvbet_btts_no_x'] = self.get_rate(json_var['markets'], "Wynik i obie drużyny strzelą",
+                                                         'Remis i (Obie drużyny strzelą - Nie)')
+        self.dict_sql['lvbet_eh_min_1_1'] = handi_dict[-1.0]['1']
+        self.dict_sql['lvbet_eh_min_1_x'] = handi_dict[-1.0]['x']
+        self.dict_sql['lvbet_eh_min_1_2'] = handi_dict[-1.0]['2']
+        self.dict_sql['lvbet_eh_plus_1_1'] = handi_dict[+1.0]['1']
+        self.dict_sql['lvbet_eh_plus_1_x'] = handi_dict[+1.0]['x']
+        self.dict_sql['lvbet_eh_plus_1_2'] = handi_dict[+1.0]['2']
         #self.dict_sql['1_st_goal_1'] = json_var['MarketGroups'][0]['Bets'][get_value(json_var['MarketGroups'][0]['Bets'],'Pierwszy gol','0')]['Odds'][0]['Odd']
 
 
@@ -240,7 +276,8 @@ class football_event:
         #self.get_odds2()
 
         self.prepare_dict_to_sql(self.data)
-        self.save_to_db()
+        #self.save_to_db()
+        save_to_db_common(self, "'"+str(self.date)+"'")
 
 link='https://app.lvbet.pl/_api/v1/offer/matches/full/2974405'
 

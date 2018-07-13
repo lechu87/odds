@@ -223,7 +223,7 @@ class football_event:
                 break
         return name
     def correct_name(self,name2):
-        print ("X:",name2)
+        #print ("X:",name2)
         name=self.find_team_name(name2)
         if (self.home in name.split('/')[0] and '/' in name):
             return self.home+'/'+name.split('/')[1]
@@ -382,115 +382,115 @@ class football_event:
         self.dict_sql['home'] = self.home
         #self.dict_sql['away']=away = self.get_name(data).split(" - ")[1].strip().replace(' ','')
         self.dict_sql['away'] = self.away
-        self.dict_sql['game_1']=self.odds['game'][self.home]
-        self.dict_sql['game_0']=self.odds['game']['X']
-        self.dict_sql['game_2']=self.odds['game'][self.away]
+        self.dict_sql['sts_game_1']=self.odds['game'][self.home]
+        self.dict_sql['sts_game_0']=self.odds['game']['X']
+        self.dict_sql['sts_game_2']=self.odds['game'][self.away]
         try:
-            self.dict_sql['game_10']=self.odds['game'][self.home + '/X']
+            self.dict_sql['sts_game_10']=self.odds['game'][self.home + '/X']
         except:
-            self.dict_sql['game_10'] = self.odds['game'][self.home + 'X']
+            self.dict_sql['sts_game_10'] = self.odds['game'][self.home + 'X']
         try:
-            self.dict_sql['game_02']=self.odds['game'][self.away + '/X']
+            self.dict_sql['sts_game_02']=self.odds['game'][self.away + '/X']
         except:
-            self.dict_sql['game_02'] = self.odds['game'][self.away + 'X']
+            self.dict_sql['sts_game_02'] = self.odds['game'][self.away + 'X']
         try:
-            self.dict_sql['game_12'] = self.odds['game'][self.home + '/' + self.away]
+            self.dict_sql['sts_game_12'] = self.odds['game'][self.home + '/' + self.away]
         except:
-            self.dict_sql['game_12'] = self.odds['game'][self.home + self.away]
+            self.dict_sql['sts_game_12'] = self.odds['game'][self.home + self.away]
         self.dict_sql['data']=self.date.split(' ')[1].split('.')[2]+'-'+self.date.split(' ')[1].split('.')[1]+'-'+self.date.split(' ')[1].split('.')[0]
         self.dict_sql['Sport']=self.discipline
         self.dict_sql['League']=self.league
         self.dict_sql['country']=self.country
-        self.dict_sql['update_time']=self.update_time
+        self.dict_sql['sts_update_time']=self.update_time
         self.dict_sql['hour']=self.hour
-        self.dict_sql['dnb_1']=get_odd_2(self.odds['dnb'],home)
-        self.dict_sql['dnb_2']=get_odd_2(self.odds['dnb'],away)
-        self.dict_sql['o_05']=get_odd_2(self.odds['over0.5'],'+')
-        self.dict_sql['u_05'] = get_odd_2(self.odds['over0.5'], '-')
-        self.dict_sql['o_15'] = get_odd_2(self.odds['over1.5'],'+')
-        self.dict_sql['u_15'] = get_odd_2(self.odds['over1.5'], '-')
-        self.dict_sql['o_25'] = get_odd_2(self.odds['over2.5'],'+')
-        self.dict_sql['u_25'] = get_odd_2(self.odds['over2.5'], '-')
-        self.dict_sql['o_35'] = get_odd_2(self.odds['over3.5'],'+')
-        self.dict_sql['u_35'] = get_odd_2(self.odds['over3.5'], '-')
-        self.dict_sql['o_45'] = get_odd_2(self.odds['over4.5'],'+')
-        self.dict_sql['u_45'] = get_odd_2(self.odds['over4.5'], '-')
-        self.dict_sql['o_55'] = get_odd_2(self.odds['over5.5'],'+')
-        self.dict_sql['u_55'] = get_odd_2(self.odds['over5.5'], '-')
-        self.dict_sql['o_65'] = get_odd_2(self.odds['over6.5'],'+')
-        self.dict_sql['u_65'] = get_odd_2(self.odds['over6.5'], '-')
-        self.dict_sql['o_75'] = get_odd_2(self.odds['over7.5'],'+')
-        self.dict_sql['u_75'] = get_odd_2(self.odds['over7.5'], '-')
-        self.dict_sql['o_85'] = get_odd_2(self.odds['over8.5'],'+')
-        self.dict_sql['u_85'] = get_odd_2(self.odds['over8.5'], '-')
-        self.dict_sql['o_95'] = get_odd_2(self.odds['over9.5'],'+')
-        self.dict_sql['u_95'] = get_odd_2(self.odds['over9.5'], '-')
-        self.dict_sql['ht_ft_11'] = get_odd_2(self.odds['half/end'], '1/1')
-        self.dict_sql['ht_ft_1x'] = get_odd_2(self.odds['half/end'], '1/X')
-        self.dict_sql['ht_ft_2x'] = get_odd_2(self.odds['half/end'], '2/X')
-        self.dict_sql['ht_ft_21'] = get_odd_2(self.odds['half/end'], '2/1')
-        self.dict_sql['ht_ft_22'] = get_odd_2(self.odds['half/end'], '2/2')
-        self.dict_sql['ht_ft_x1'] = get_odd_2(self.odds['half/end'], 'X/1')
-        self.dict_sql['ht_ft_x2'] = get_odd_2(self.odds['half/end'], 'X/2')
-        self.dict_sql['ht_ft_12'] = get_odd_2(self.odds['half/end'], '1/2')
-        self.dict_sql['ht_ft_xx'] = get_odd_2(self.odds['half/end'], 'X/X')
-        self.dict_sql['first_half_1']= get_odd_2(self.odds['1st_half'], home)
-        self.dict_sql['first_half_x'] = get_odd_2(self.odds['1st_half'], 'X')
-        self.dict_sql['first_half_2'] = get_odd_2(self.odds['1st_half'], away)
-        self.dict_sql['first_half_10'] = get_odd_2(self.odds['1st_half'],home + '/X')
-        self.dict_sql['first_half_02'] = get_odd_2(self.odds['1st_half'],away + '/X')
-        self.dict_sql['first_half_12'] = get_odd_2(self.odds['1st_half'],home + '/' + away)
-        self.dict_sql['eh_min_1_1'] = get_odd_2(self.odds['eh-1'],home + '(-1)')
-        self.dict_sql['eh_min_1_x'] = get_odd_2(self.odds['eh-1'], 'X')
-        self.dict_sql['eh_min_1_x2'] = get_odd_2(self.odds['eh-1'],away + '/X')
-        #self.dict_sql['eh-1_2'] = get_odd_2(self.odds['eh-1'], home + '(-1)')
-        self.dict_sql['u_15_1'] = get_odd_2(self.odds['goal1.5/result'],'-1.5/1')
-        self.dict_sql['o_15_1'] = get_odd_2(self.odds['goal1.5/result'],'+1.5/1')
-        self.dict_sql['u_25_1'] = get_odd_2(self.odds['goal2.5/result'],'-2.5/1')
-        self.dict_sql['o_25_1'] = get_odd_2(self.odds['goal2.5/result'],'+2.5/1')
-        self.dict_sql['u_25_x'] = get_odd_2(self.odds['goal2.5/result'],'-2.5/X')
-        self.dict_sql['o_25_x'] = get_odd_2(self.odds['goal2.5/result'],'+2.5/X')
-        self.dict_sql['u_15_x'] = get_odd_2(self.odds['goal1.5/result'],'-1.5/X')
-        self.dict_sql['o_15_x'] = get_odd_2(self.odds['goal1.5/result'],'+1.5/X')
-        self.dict_sql['u_25_2'] = get_odd_2(self.odds['goal2.5/result'],'-2.5/2')
-        self.dict_sql['o_25_2'] = get_odd_2(self.odds['goal2.5/result'],'+2.5/2')
-        self.dict_sql['u_25_1'] = get_odd_2(self.odds['goal1.5/result'], '-1.5/2')
-        self.dict_sql['o_25_1'] = get_odd_2(self.odds['goal1.5/result'], '+1.5/2')
-        self.dict_sql['first_goal_1'] = get_odd_2(self.odds['1st_goal'],home)
-        self.dict_sql['first_goal_2'] = get_odd_2(self.odds['1st_goal'],away)
-        self.dict_sql['first_goal_0'] = get_odd_2(self.odds['1st_goal'],'nikt')
-        self.dict_sql['btts_1'] = get_odd_2(self.odds['game/btts'],'1/tak')
-        self.dict_sql['btts_2'] = get_odd_2(self.odds['game/btts'],'2/tak')
-        self.dict_sql['btts_x'] = get_odd_2(self.odds['game/btts'],'X/tak')
-        self.dict_sql['btts_no_1'] = get_odd_2(self.odds['game/btts'],'1/nie')
-        self.dict_sql['btts_no_2'] = get_odd_2(self.odds['game/btts'],'2/nie')
-        self.dict_sql['btts_no_x'] = get_odd_2(self.odds['game/btts'],'X/nie')
-        self.dict_sql['btts_yes'] =  get_odd_2(self.odds['btts'],'tak')
-        self.dict_sql['btts_no'] =  get_odd_2(self.odds['btts'],'nie')
-        self.dict_sql['corners_o_65'] = get_odd_2(self.odds['corners_over6.5'],'+')
-        self.dict_sql['corners_u_65'] = get_odd_2(self.odds['corners_over6.5'],'-')
-        self.dict_sql['corners_o_75'] = get_odd_2(self.odds['corners_over7.5'], '+')
-        self.dict_sql['corners_u_75'] = get_odd_2(self.odds['corners_over7.5'], '-')
-        self.dict_sql['corners_o_85'] = get_odd_2(self.odds['corners_over8.5'], '+')
-        self.dict_sql['corners_u_85'] = get_odd_2(self.odds['corners_over8.5'], '-')
-        self.dict_sql['corners_o_95'] = get_odd_2(self.odds['corners_over9.5'], '+')
-        self.dict_sql['corners_u_95'] = get_odd_2(self.odds['corners_over9.5'], '-')
-        self.dict_sql['corners_o_105'] = get_odd_2(self.odds['corners_over10.5'], '+')
-        self.dict_sql['corners_u_105'] = get_odd_2(self.odds['corners_over10.5'], '-')
-        self.dict_sql['corners_o_115'] = get_odd_2(self.odds['corners_over11.5'], '+')
-        self.dict_sql['corners_u_115'] = get_odd_2(self.odds['corners_over11.5'], '-')
-        self.dict_sql['corners_o_125'] = get_odd_2(self.odds['corners_over12.5'], '+')
-        self.dict_sql['corners_u_125'] = get_odd_2(self.odds['corners_over12.5'], '-')
-        self.dict_sql['corners_o_135'] = get_odd_2(self.odds['corners_over13.5'], '+')
-        self.dict_sql['corners_u_135'] = get_odd_2(self.odds['corners_over13.5'], '-')
-        self.dict_sql['corners_o_145'] = get_odd_2(self.odds['corners_over14.5'], '+')
-        self.dict_sql['corners_u_145'] = get_odd_2(self.odds['corners_over14.5'], '-')
-        self.dict_sql['corners_o_155'] = get_odd_2(self.odds['corners_over15.5'], '+')
-        self.dict_sql['corners_u_155'] = get_odd_2(self.odds['corners_over15.5'], '-')
-        self.dict_sql['corners_o_165'] = get_odd_2(self.odds['corners_over16.5'], '+')
-        self.dict_sql['corners_u_165'] = get_odd_2(self.odds['corners_over16.5'], '-')
-        self.dict_sql['corners_o_175'] = get_odd_2(self.odds['corners_over17.5'], '+')
-        self.dict_sql['corners_u_175'] = get_odd_2(self.odds['corners_over17.5'], '-')
+        self.dict_sql['sts_dnb_1'] = get_odd_2(self.odds['dnb'], home)
+        self.dict_sql['sts_dnb_2'] = get_odd_2(self.odds['dnb'], away)
+        self.dict_sql['sts_o_05'] = get_odd_2(self.odds['over0.5'], '+')
+        self.dict_sql['sts_u_05'] = get_odd_2(self.odds['over0.5'], '-')
+        self.dict_sql['sts_o_15'] = get_odd_2(self.odds['over1.5'], '+')
+        self.dict_sql['sts_u_15'] = get_odd_2(self.odds['over1.5'], '-')
+        self.dict_sql['sts_o_25'] = get_odd_2(self.odds['over2.5'], '+')
+        self.dict_sql['sts_u_25'] = get_odd_2(self.odds['over2.5'], '-')
+        self.dict_sql['sts_o_35'] = get_odd_2(self.odds['over3.5'], '+')
+        self.dict_sql['sts_u_35'] = get_odd_2(self.odds['over3.5'], '-')
+        self.dict_sql['sts_o_45'] = get_odd_2(self.odds['over4.5'], '+')
+        self.dict_sql['sts_u_45'] = get_odd_2(self.odds['over4.5'], '-')
+        self.dict_sql['sts_o_55'] = get_odd_2(self.odds['over5.5'], '+')
+        self.dict_sql['sts_u_55'] = get_odd_2(self.odds['over5.5'], '-')
+        self.dict_sql['sts_o_65'] = get_odd_2(self.odds['over6.5'], '+')
+        self.dict_sql['sts_u_65'] = get_odd_2(self.odds['over6.5'], '-')
+        self.dict_sql['sts_o_75'] = get_odd_2(self.odds['over7.5'], '+')
+        self.dict_sql['sts_u_75'] = get_odd_2(self.odds['over7.5'], '-')
+        self.dict_sql['sts_o_85'] = get_odd_2(self.odds['over8.5'], '+')
+        self.dict_sql['sts_u_85'] = get_odd_2(self.odds['over8.5'], '-')
+        self.dict_sql['sts_o_95'] = get_odd_2(self.odds['over9.5'], '+')
+        self.dict_sql['sts_u_95'] = get_odd_2(self.odds['over9.5'], '-')
+        self.dict_sql['sts_ht_ft_11'] = get_odd_2(self.odds['half/end'], '1/1')
+        self.dict_sql['sts_ht_ft_1x'] = get_odd_2(self.odds['half/end'], '1/X')
+        self.dict_sql['sts_ht_ft_2x'] = get_odd_2(self.odds['half/end'], '2/X')
+        self.dict_sql['sts_ht_ft_21'] = get_odd_2(self.odds['half/end'], '2/1')
+        self.dict_sql['sts_ht_ft_22'] = get_odd_2(self.odds['half/end'], '2/2')
+        self.dict_sql['sts_ht_ft_x1'] = get_odd_2(self.odds['half/end'], 'X/1')
+        self.dict_sql['sts_ht_ft_x2'] = get_odd_2(self.odds['half/end'], 'X/2')
+        self.dict_sql['sts_ht_ft_12'] = get_odd_2(self.odds['half/end'], '1/2')
+        self.dict_sql['sts_ht_ft_xx'] = get_odd_2(self.odds['half/end'], 'X/X')
+        self.dict_sql['sts_first_half_1'] = get_odd_2(self.odds['1st_half'], home)
+        self.dict_sql['sts_first_half_x'] = get_odd_2(self.odds['1st_half'], 'X')
+        self.dict_sql['sts_first_half_2'] = get_odd_2(self.odds['1st_half'], away)
+        self.dict_sql['sts_first_half_10'] = get_odd_2(self.odds['1st_half'], home + '/X')
+        self.dict_sql['sts_first_half_02'] = get_odd_2(self.odds['1st_half'], away + '/X')
+        self.dict_sql['sts_first_half_12'] = get_odd_2(self.odds['1st_half'], home + '/' + away)
+        self.dict_sql['sts_eh_min_1_1'] = get_odd_2(self.odds['eh-1'], home + '(-1)')
+        self.dict_sql['sts_eh_min_1_x'] = get_odd_2(self.odds['eh-1'], 'X')
+        self.dict_sql['sts_eh_min_1_x2'] = get_odd_2(self.odds['eh-1'], away + '/X')
+        # self.dict_sql['sts_eh-1_2'] = get_odd_2(self.odds['eh-1'], home + '(-1)')
+        self.dict_sql['sts_u_15_1'] = get_odd_2(self.odds['goal1.5/result'], '-1.5/1')
+        self.dict_sql['sts_o_15_1'] = get_odd_2(self.odds['goal1.5/result'], '+1.5/1')
+        self.dict_sql['sts_u_25_1'] = get_odd_2(self.odds['goal2.5/result'], '-2.5/1')
+        self.dict_sql['sts_o_25_1'] = get_odd_2(self.odds['goal2.5/result'], '+2.5/1')
+        self.dict_sql['sts_u_25_x'] = get_odd_2(self.odds['goal2.5/result'], '-2.5/X')
+        self.dict_sql['sts_o_25_x'] = get_odd_2(self.odds['goal2.5/result'], '+2.5/X')
+        self.dict_sql['sts_u_15_x'] = get_odd_2(self.odds['goal1.5/result'], '-1.5/X')
+        self.dict_sql['sts_o_15_x'] = get_odd_2(self.odds['goal1.5/result'], '+1.5/X')
+        self.dict_sql['sts_u_25_2'] = get_odd_2(self.odds['goal2.5/result'], '-2.5/2')
+        self.dict_sql['sts_o_25_2'] = get_odd_2(self.odds['goal2.5/result'], '+2.5/2')
+        self.dict_sql['sts_u_25_1'] = get_odd_2(self.odds['goal1.5/result'], '-1.5/2')
+        self.dict_sql['sts_o_25_1'] = get_odd_2(self.odds['goal1.5/result'], '+1.5/2')
+        self.dict_sql['sts_first_goal_1'] = get_odd_2(self.odds['1st_goal'], home)
+        self.dict_sql['sts_first_goal_2'] = get_odd_2(self.odds['1st_goal'], away)
+        self.dict_sql['sts_first_goal_0'] = get_odd_2(self.odds['1st_goal'], 'nikt')
+        self.dict_sql['sts_btts_1'] = get_odd_2(self.odds['game/btts'], '1/tak')
+        self.dict_sql['sts_btts_2'] = get_odd_2(self.odds['game/btts'], '2/tak')
+        self.dict_sql['sts_btts_x'] = get_odd_2(self.odds['game/btts'], 'X/tak')
+        self.dict_sql['sts_btts_no_1'] = get_odd_2(self.odds['game/btts'], '1/nie')
+        self.dict_sql['sts_btts_no_2'] = get_odd_2(self.odds['game/btts'], '2/nie')
+        self.dict_sql['sts_btts_no_x'] = get_odd_2(self.odds['game/btts'], 'X/nie')
+        self.dict_sql['sts_btts_yes'] = get_odd_2(self.odds['btts'], 'tak')
+        self.dict_sql['sts_btts_no'] = get_odd_2(self.odds['btts'], 'nie')
+        self.dict_sql['sts_corners_o_65'] = get_odd_2(self.odds['corners_over6.5'], '+')
+        self.dict_sql['sts_corners_u_65'] = get_odd_2(self.odds['corners_over6.5'], '-')
+        self.dict_sql['sts_corners_o_75'] = get_odd_2(self.odds['corners_over7.5'], '+')
+        self.dict_sql['sts_corners_u_75'] = get_odd_2(self.odds['corners_over7.5'], '-')
+        self.dict_sql['sts_corners_o_85'] = get_odd_2(self.odds['corners_over8.5'], '+')
+        self.dict_sql['sts_corners_u_85'] = get_odd_2(self.odds['corners_over8.5'], '-')
+        self.dict_sql['sts_corners_o_95'] = get_odd_2(self.odds['corners_over9.5'], '+')
+        self.dict_sql['sts_corners_u_95'] = get_odd_2(self.odds['corners_over9.5'], '-')
+        self.dict_sql['sts_corners_o_105'] = get_odd_2(self.odds['corners_over10.5'], '+')
+        self.dict_sql['sts_corners_u_105'] = get_odd_2(self.odds['corners_over10.5'], '-')
+        self.dict_sql['sts_corners_o_115'] = get_odd_2(self.odds['corners_over11.5'], '+')
+        self.dict_sql['sts_corners_u_115'] = get_odd_2(self.odds['corners_over11.5'], '-')
+        self.dict_sql['sts_corners_o_125'] = get_odd_2(self.odds['corners_over12.5'], '+')
+        self.dict_sql['sts_corners_u_125'] = get_odd_2(self.odds['corners_over12.5'], '-')
+        self.dict_sql['sts_corners_o_135'] = get_odd_2(self.odds['corners_over13.5'], '+')
+        self.dict_sql['sts_corners_u_135'] = get_odd_2(self.odds['corners_over13.5'], '-')
+        self.dict_sql['sts_corners_o_145'] = get_odd_2(self.odds['corners_over14.5'], '+')
+        self.dict_sql['sts_corners_u_145'] = get_odd_2(self.odds['corners_over14.5'], '-')
+        self.dict_sql['sts_corners_o_155'] = get_odd_2(self.odds['corners_over15.5'], '+')
+        self.dict_sql['sts_corners_u_155'] = get_odd_2(self.odds['corners_over15.5'], '-')
+        self.dict_sql['sts_corners_o_165'] = get_odd_2(self.odds['corners_over16.5'], '+')
+        self.dict_sql['sts_corners_u_165'] = get_odd_2(self.odds['corners_over16.5'], '-')
+        self.dict_sql['sts_corners_o_175'] = get_odd_2(self.odds['corners_over17.5'], '+')
+        self.dict_sql['sts_corners_u_175'] = get_odd_2(self.odds['corners_over17.5'], '-')
 
         #print ("DICT: ", self.dict_sql)
         return self.dict_sql
@@ -498,7 +498,8 @@ class football_event:
     def save_to_db(meczyk):
         database_name = 'db.sqlite'
         db = sqlite3.connect(database_name)
-        table="'db_sts'"
+        table="'db_bets'"
+        table2='db_bets'
         columns_string = '("' + '","'.join(meczyk.dict_sql.keys()) + '")'
         values_string = '("' + '","'.join(map(str, meczyk.dict_sql.values())) + '")'
         cur = db.cursor()
@@ -506,20 +507,31 @@ class football_event:
         home="'"+meczyk.home+"'"
         away = "'" + meczyk.away + "'"
         date = "'" + meczyk.date.split(' ')[1].split('.')[2]+'-'+meczyk.date.split(' ')[1].split('.')[1]+'-'+meczyk.date.split(' ')[1].split('.')[0]+ "'"
+        #date = "'" + meczyk.date.split(' ')[1].split('.')[2] + '-' + meczyk.date.split(' ')[1].split('.')[1] + '-' + \
+        #       meczyk.date.split(' ')[1].split('.')[0] + "'"
         #print ("select * from %s where home=%s and away=%s and data=%s" % (table,home,away,date))
         #cur.execute("select * from %s where home=%s and away=%s and data=%s" % (table,home,away,date))
         #data=cur.fetchall()
         #x=[]
         #for i in range(0, len(columns_string) - 1):
         #    x.append((str(columns_string[i]) + "=" + str(values_string[i])))
-        try:
-            sql_command="DELETE FROM %s WHERE home=%s and away=%s and data=%s" % (table,home,away,date)
-            print ("SQL COMMAND:",sql_command)
-            db.execute(sql_command)
-            print ("USUNIĘTO")
-        except:
-            pass
-        sql = """INSERT INTO %s %s
+#        try:
+#            sql_command="DELETE FROM %s WHERE home=%s and away=%s and data=%s" % (table,home,away,date)
+#            print ("SQL COMMAND:",sql_command)
+#            db.execute(sql_command)
+#            print ("USUNIĘTO")
+#        except:
+#            pass
+        #UPDATE employee SET role = 'code_monkey', name='fred' WHERE id = 1;
+        sql_update_command= 'UPDATE ' + str(table) + " SET "
+        print ("SQL UPDATE")
+        for k,v in meczyk.dict_sql.items():
+            sql_update_command = sql_update_command + '"'+str(k) + '"="' + str(v)+'",'
+        #print (sql_update_command)
+        sql_update_cmd=sql_update_command[:-1] + " WHERE home=" + str(home) + "and away = "+ str(away) + " and data = "+str(date)
+        sql_update = """UPDADE %s SET %s = %s WHERE home = %s
+                      and away = %s and data = %s""" % (table, columns_string, values_string,home,away,date)
+        sql_insert = """INSERT INTO %s %s
                      VALUES %s""" % (table, columns_string, values_string)
         #if data is None:
         #    print ("NEW")
@@ -529,9 +541,36 @@ class football_event:
         #    print("UPDATE")
         #    sql = """UPDATE %s SET %s WHERE home=%s and away=%s and date=%s""" % (table, tuple(x),meczyk.home,meczyk.away,meczyk.date)
         #    print ("UPDATE",sql)
-        print (sql)
-        db.execute(sql)
-        db.commit()
+        print (sql_update_cmd)
+        print ("HOME", home)
+        polecenie="SELECT * FROM "+str(table2)+ " WHERE home="+str(home) +" and away=" + str(away) +" and data="+str(date)
+        print(polecenie)
+
+        try:
+            x=cur.execute(polecenie).fetchone()
+        except Exception as e: print(e)
+        print ("Z BAZY",x)
+        print (polecenie)
+        try:
+            if x==None:
+                db.execute(sql_insert)
+                db.commit()
+            else:
+                print("NIE UDALO SIE INS")
+                db.execute(sql_update_cmd)
+                db.commit()
+                print("ALE UDALO SIE UP")
+        except Exception as e: print(e)
+            #
+            #pass
+        #print (sql_update)
+        print (sql_insert)
+#        try:
+#            db.execute(sql_insert)
+#            db.commit()
+#        except:
+#            print ("NIE UDALO SIE INSERTNAC")
+#            pass
 
 
     def __init__(self):
@@ -540,6 +579,8 @@ class football_event:
         self.get_odds(data)
         #print (self.odds)
         self.prepare_dict_to_sql()
+        self.date2 = "'" + self.date.split(' ')[1].split('.')[2] + '-' + self.date.split(' ')[1].split('.')[1] + '-' + \
+               self.date.split(' ')[1].split('.')[0] + "'"
         file=open('odd','w')
         file.write(str(self.odds))
 
@@ -554,6 +595,7 @@ class football_event:
 #meczyk.save_to_db()
 #exit()
 sites=['https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6502&league=43461',
+'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6507&league=4013&t=1526162250',
 'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6521&league=4080',
 'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6534&league=4243',
 'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6534&league=4013',
@@ -602,7 +644,7 @@ sites2=['https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?ac
 
 
         ]
-for site in sites[0:15]:
+for site in sites:
     user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
     headers = {'User-Agent': user_agent, }
     request = urllib2.Request(site, None, headers)
@@ -612,6 +654,7 @@ for site in sites[0:15]:
     #strona=urllib2.urlopen(site).read()
     soup = BeautifulSoup(strona, "html.parser")
     more_bets=soup.find_all('td', {'class': 'support_bets'})
+
     for a in more_bets:
     #    print ("A: ",a)
         try:
@@ -621,7 +664,7 @@ for site in sites[0:15]:
             data=urllib2.urlopen(request).read()
 
             meczyk=football_event()
-            meczyk.save_to_db()
+            save_to_db_common(meczyk,meczyk.date2)
         except:
             logging.basicConfig(filename='logfile.log', level=logging.DEBUG)
             logging.warning("ERROR dla: "+link['href'])
