@@ -20,7 +20,7 @@ class football_event:
         headers = {'User-Agent': user_agent, }
         request = urllib2.Request(site, None, headers)
         response = urllib2.urlopen(request)
-        data = response.read()
+        data = response.read().decode('utf-8')
         soup = BeautifulSoup(data,"html.parser")
         json_var=json.loads(data)
         return json_var
@@ -296,7 +296,7 @@ user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/
 headers = {'User-Agent': user_agent, }
 request = urllib2.Request(sites[0], None, headers)
 response = urllib2.urlopen(request)
-data = response.read()
+data = response.read().decode('utf-8')
 soup = BeautifulSoup(data, "html.parser")
 json_var = json.loads(data)
 #print (json_var)

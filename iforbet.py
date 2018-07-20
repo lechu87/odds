@@ -117,7 +117,7 @@ class football_event:
                 if name not in events_mapping_iforbet.keys():
                     logging.warning("Nieznany zaklad: "+odd_tittle.span.text)
                 self.odds[events_mapping_iforbet[name]["name"]]=defaultdict(str)
-                print ("Span:",odd_tittle.span.text)
+                #print ("Span:",odd_tittle.span.text)
             except:
                 pass
             odd_values=table.find_all('div',{'class':'event-rate'})
@@ -126,13 +126,13 @@ class football_event:
                 rows=odd.find_all('div',{'class':'outcome-row'})
                 if len(rows)==0:
                     odd_name = odd.find('div', {'class': 'outcome-name'})
-                    print ("ODD_name: ", odd_name.text)
+                    #print ("ODD_name: ", odd_name.text)
                     odd_rate = odd.find('span', {'class': 'rate-value'})
                     #print ("ODD_rate: ", odd_rate.text)
                     odd_name_corr=self.extract_team_name(odd_name.text,self.raw_home,self.raw_away)
-                    print ("ODD_NAME", odd_name_corr)
+                    #print ("ODD_NAME", odd_name_corr)
                     try:
-                        print ("NAME:", name)
+                        #print ("NAME:", name)
                         self.odds[events_mapping_iforbet[name]["name"]][odd_name_corr] = odd_rate.text
                     except:
                         logging.warning("Nieznany zaklad 2: "+name)
@@ -151,7 +151,7 @@ class football_event:
                             logging.warning("Nieznany zaklad 3: "+name)
                             pass
         import json
-        print (json.dumps(self.odds, indent=4, sort_keys=False))
+        #print (json.dumps(self.odds, indent=4, sort_keys=False))
         #pp = pprint.PrettyPrinter(depth=3)
         #pp.pprint(self.odds)
         #pprint (self.odds,)

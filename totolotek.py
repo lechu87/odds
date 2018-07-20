@@ -20,7 +20,7 @@ class football_event:
         headers = {'User-Agent': user_agent, }
         request = urllib2.Request(site, None, headers)
         response = urllib2.urlopen(request)
-        data = response.read()
+        data = response.read().decode('utf-8')
         soup = BeautifulSoup(data,"html.parser")
         json_var=json.loads(data)
         return json_var['Response']
@@ -375,7 +375,7 @@ for site in sites:
     request = urllib2.Request(site, None, headers)
     response = urllib2.urlopen(request)
     tournamentid=site.split('&')[2].split('=')[1]
-    data = response.read()
+    data = response.read().decode('utf-8')
     soup = BeautifulSoup(data, "html.parser")
     json_var = json.loads(data)
     ids=[]
