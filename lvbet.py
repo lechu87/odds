@@ -142,7 +142,7 @@ class football_event:
         self.dict_sql['lvbet_u_95'] = goal_dict[9.5]['under']
         self.dict_sql['lvbet_ht_ft_11'] = self.get_rate(json_var['markets'], "Do przerwy/Koniec meczu",
                                                         self.raw_home + '/' + self.raw_home)
-        self.dict_sql['lvbet_ht_ft_1x'] = self.get_rate(json_var['markets'], "Do przerwy/Koniec meczu", '1' + '/Draw')
+        self.dict_sql['lvbet_ht_ft_1x'] = self.get_rate(json_var['markets'], "Do przerwy/Koniec meczu", self.raw_home + '/Remis')
         self.dict_sql['lvbet_ht_ft_11'] = self.get_rate(json_var['markets'], "Do przerwy/Koniec meczu",
                                                         self.raw_home + '/' + self.raw_home)
         self.dict_sql['lvbet_ht_ft_2x'] = self.get_rate(json_var['markets'], "Do przerwy/Koniec meczu",
@@ -279,7 +279,7 @@ class football_event:
         #self.save_to_db()
         save_to_db_common(self, "'"+str(self.date)+"'")
 
-link='https://app.lvbet.pl/_api/v1/offer/matches/full/2974405'
+link='https://app.lvbet.pl/_api/v1/offer/matches/full/5155185'
 
 meczyk=football_event(events_mapping_lvbet,link)
 x=meczyk.open_site(link)
