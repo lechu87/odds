@@ -286,7 +286,7 @@ class football_event:
                     x = col.text.strip().split('\n')
                 #print x
                     try:
-                        print ("XO:",x[0])
+                        #print ("XO:",x[0])
                         self.odds[self.odd_type][self.correct_name(x[0].strip())]=float(x[1].strip())
                     except:
                         #print ("nieznany zaklad:")
@@ -591,17 +591,17 @@ class football_event:
 
 data=codecs.open('www.sts.pl.htm',mode='r',encoding='utf-8').read()
 #data=urllib2.urlopen('https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6507&league=4013&oppty=130931499').read()
-url='https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6527&league=4074&oppty=149243022'
-user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
-headers = {'User-Agent': user_agent, }
-request = urllib2.Request(url, None, headers)
-data=urllib2.urlopen(request).read()
-meczyk=football_event()
-print (meczyk.odds)
-meczyk.prepare_dict_to_sql()
+#url='https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6527&league=4074&oppty=149243022'
+#user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
+#headers = {'User-Agent': user_agent, }
+#request = urllib2.Request(url, None, headers)
+#data=urllib2.urlopen(request).read()
+#meczyk=football_event()
+#print (meczyk.odds)
+#meczyk.prepare_dict_to_sql()
 
-meczyk.save_to_db()
-exit()
+#meczyk.save_to_db()
+#exit()
 sites=['https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6502&league=43461',
 'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6507&league=4013&t=1526162250',
 'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6521&league=4080',
@@ -656,7 +656,7 @@ for site in sites:
     request = urllib2.Request(site, None, headers)
     response = urllib2.urlopen(request)
     strona = response.read()
-
+    print (site)
     #strona=urllib2.urlopen(site).read()
     soup = BeautifulSoup(strona, "html.parser")
     more_bets=soup.find_all('td', {'class': 'support_bets'})
