@@ -197,8 +197,8 @@ class football_event:
         self.away = unify_name(game_teams.split(' - ')[1].strip(), teams, logging)
         self.home_all_names=teams[self.home]
         self.away_all_names=teams[self.away]
-        print (sorted(self.home_all_names,key=len,reverse=True), self.home)
-        print (sorted(self.away_all_names, key=len, reverse=True), self.away)
+        print ("ALL_NAMES_HOME",sorted(self.home_all_names,key=len,reverse=True), self.home)
+        print ("ALL_NAMES_AWAY",sorted(self.away_all_names, key=len, reverse=True), self.away)
 
         self.home_raw=game_teams.split(' - ')[0].strip()
         self.away_raw=game_teams.split(' - ')[1].strip()
@@ -286,6 +286,7 @@ class football_event:
                     x = col.text.strip().split('\n')
                 #print x
                     try:
+                        print ("XO:",x[0])
                         self.odds[self.odd_type][self.correct_name(x[0].strip())]=float(x[1].strip())
                     except:
                         #print ("nieznany zaklad:")
@@ -378,6 +379,7 @@ class football_event:
         away = self.get_name(data).split(" - ")[1].strip().replace(' ','')
         print(home)
         print(away)
+        print ("SELF.HOME",self.home)
         #self.dict_sql['home']=self.get_name(data).split(" - ")[0].strip().replace(' ','')
         self.dict_sql['home'] = self.home
         #self.dict_sql['away']=away = self.get_name(data).split(" - ")[1].strip().replace(' ','')
@@ -385,18 +387,20 @@ class football_event:
         self.dict_sql['sts_game_1']=self.odds['game'][self.home]
         self.dict_sql['sts_game_0']=self.odds['game']['X']
         self.dict_sql['sts_game_2']=self.odds['game'][self.away]
+        home_pos=self.home_all_names.index(self.home)
+        away_pos=self.away_all_names.index(self.away)
         try:
-            self.dict_sql['sts_game_10']=self.odds['game'][self.home + '/X']
+            self.dict_sql['sts_game_10']=self.odds['game'][self.home_all_names[home_pos] + '/X']
         except:
-            self.dict_sql['sts_game_10'] = self.odds['game'][self.home + 'X']
+            self.dict_sql['sts_game_10'] = self.odds['game'][self.home_all_names[home_pos] + 'X']
         try:
-            self.dict_sql['sts_game_02']=self.odds['game'][self.away + '/X']
+            self.dict_sql['sts_game_02']=self.odds['game'][self.away_all_names[away_pos] + '/X']
         except:
-            self.dict_sql['sts_game_02'] = self.odds['game'][self.away + 'X']
+            self.dict_sql['sts_game_02'] = self.odds['game'][self.away_all_names[away_pos] + 'X']
         try:
-            self.dict_sql['sts_game_12'] = self.odds['game'][self.home + '/' + self.away]
+            self.dict_sql['sts_game_12'] = self.odds['game'][self.home_all_names[home_pos] + '/' + self.away]
         except:
-            self.dict_sql['sts_game_12'] = self.odds['game'][self.home + self.away]
+            self.dict_sql['sts_game_12'] = self.odds['game'][self.home_all_names[home_pos] + self.away]
         self.dict_sql['data']=self.date.split(' ')[1].split('.')[2]+'-'+self.date.split(' ')[1].split('.')[1]+'-'+self.date.split(' ')[1].split('.')[0]
         self.dict_sql['Sport']=self.discipline
         self.dict_sql['League']=self.league
@@ -585,15 +589,19 @@ class football_event:
         file.write(str(self.odds))
 
 
-#data=codecs.open('www.sts.pl.htm',mode='r',encoding='utf-8').read()
-#data=urllib2.urlopen('https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6521&league=4080&oppty=90055718').read()
+data=codecs.open('www.sts.pl.htm',mode='r',encoding='utf-8').read()
+#data=urllib2.urlopen('https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6507&league=4013&oppty=130931499').read()
+url='https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6527&league=4074&oppty=149243022'
+user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
+headers = {'User-Agent': user_agent, }
+request = urllib2.Request(url, None, headers)
+data=urllib2.urlopen(request).read()
+meczyk=football_event()
+print (meczyk.odds)
+meczyk.prepare_dict_to_sql()
 
-#meczyk=football_event()
-#print (meczyk.odds)
-#meczyk.prepare_dict_to_sql()
-
-#meczyk.save_to_db()
-#exit()
+meczyk.save_to_db()
+exit()
 sites=['https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6502&league=43461',
 'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6507&league=4013&t=1526162250',
 'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6521&league=4080',
@@ -640,10 +648,8 @@ sites=['https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?act
        'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6480&league=4750',
        'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6480&league=5441',
        'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6480&league=4054']
-sites2=['https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6502&league=43461',
 
-
-        ]
+sites2=['https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6502&league=43461']
 for site in sites:
     user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
     headers = {'User-Agent': user_agent, }
