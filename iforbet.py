@@ -26,7 +26,7 @@ import re
 #print ("DATA:", data)
 #exit()
 #data=codecs.open('fortuna.html',mode='r',encoding='utf-8').read()
-
+logging.basicConfig(filename='logfile_iforbet.log', level=logging.DEBUG)
 class football_event:
     #soup = BeautifulSoup(data,"html.parser")
     logging.basicConfig(filename='logfile_iforbet.log', level=logging.DEBUG)
@@ -43,7 +43,9 @@ class football_event:
         self.json_var=json_var
 #        print (json_var["data"])
         self.raw_home=json_var['data']['eventName'].split(' - ')[0]
+        self.raw_home_part=self.raw_home.split(' ')[0]
         self.raw_away = json_var['data']['eventName'].split(' - ')[1]
+        self.raw_away_part = self.raw_away.split(' ')[0]
         self.home=unify_name(json_var['data']['eventName'].split(' - ')[0],teams,logging)
 #        print ("HHHHOME",self.home)
         self.away=unify_name(json_var['data']['eventName'].split(' - ')[1],teams,logging)
@@ -211,29 +213,39 @@ class football_event:
                 #    logging.warning("Nieznany zaklad: " + head.text.strip())
     def get_rate(self,json, name, raw_home,log=0):
         for i in range(0, len(json['eventGames'])):
-            #print (json[i]['selections'][0]['name'])
             x=''
             error=1
             if json['eventGames'][i]['gameName'].lower() == name.lower():
-                #print ("IIIIIIIIIII",i)
                 for j in range(0, len(json['eventGames'][i]['outcomes'])):
-                    #print ("LENNNNN:",len(json['eventGames'][i]['outcomes']))
-                    if (json['eventGames'][i]['outcomes'][j]['outcomeName']).lower() == (raw_home.lower()):
-                        #print ("JJJJJJJ",j)
-                        #print ("ZNALAZLEM")
-                        #print (json[i]['selections'][j]['rate']['decimal'])
+                    x=json['eventGames'][i]['outcomes'][j]['outcomeName'].lower()
+                    if ' ' in x and 'bramki' not in x:
+                        tmp=x.split(' ')[1]
+                        tmp2=x.split(' ')[0]
+                    else:
+                        tmp="napis_bez_sensu"
+                        tmp2=tmp
+                    if (x in raw_home.lower()):
                         x=json['eventGames'][i]['outcomes'][j]['outcomeOdds']
                         error=0
+                        return x
+                    elif ' ' in x and 'bramki' not in x:
+                        tmp=x.split(' ')[1]
+                        tmp2=x.split(' ')[0]
+                    elif (x.split(' / ')[0] in raw_home.lower() and x.split(' / ')[1] in raw_home.lower()):# or tmp in raw_home.lower() or tmp2 in raw_home.lower():
+                        x = json['eventGames'][i]['outcomes'][j]['outcomeOdds']
+                        error = 0
                         return x
 
                 if error==1 and (self.get_current_time()-datetime.timedelta(days=-3))>self.raw_date:
                     ###ODKOMENTOWAC######
-                    #logging.info("Nie znalazłem zakładu "+str(name)+" "+str(raw_home))
+                    logging.info("Nie znalazłem zakładu "+str(name)+" "+str(raw_home))
                     pass
             else:
                 #
                 #return 1.0
                 continue
+
+
     def remove_pl(self,input_text):
         strange = 'ĄąĆćŚśŻżŹźŁłÓóĘę'
 
@@ -247,23 +259,11 @@ class football_event:
         for i in events_mapping_iforbet.values():
             if i['name'] not in self.odds.keys():
                 self.odds[i['name']]=defaultdict(str)
-
-
-        #Poprawia na potrzeby ubogich meczy:
-        for i in (0.5,1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,9.5):
-            try:
-                self.odds['goals']['Powyżej '+str(i)+' gola']
-            except:
-                self.odds['goals']['Powyżej '+str(i)+' gola']=''
-            try:
-                self.odds['goals']['Poniżej '+str(i)+' gola']
-            except:
-                self.odds['goals']['Poniżej '+str(i)+' gola']=''
         self.dict_sql['home']=self.home
         self.dict_sql['away']=self.away
         #print (self.json_var['data'], "1X2", self.home)
+
         self.dict_sql['iforbet_game_1']=self.get_rate(self.json_var['data'], "1X2", self.raw_home,1)
-        #print ("TO JEST TO:",self.dict_sql)
         self.dict_sql['iforbet_game_0']=self.get_rate(self.json_var['data'], "1X2", "X",1)
         self.dict_sql['iforbet_game_2']=self.get_rate(self.json_var['data'], "1X2", self.raw_away,1)
         self.dict_sql['iforbet_game_10']=self.get_rate(self.json_var['data'], "Podwójna szansa", "1/X",1)
@@ -280,12 +280,13 @@ class football_event:
         self.dict_sql['iforbet_dnb_1']=self.get_rate(self.json_var['data'], "Remis - nie ma zakładu (remis=zwrot)", self.raw_home)
         self.dict_sql['iforbet_dnb_2']=self.get_rate(self.json_var['data'], "Remis - nie ma zakładu (remis=zwrot)", self.raw_away)
         self.dict_sql['iforbet_o_05'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 0.5 bramek", "Powyżej 0.5 bramki")
-        self.dict_sql['iforbet_u_05'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 3.5 bramek", "Poniżej 3.5 bramki")
+        self.dict_sql['iforbet_u_05'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 0.5 bramek", "Poniżej 0.5 bramki")
         self.dict_sql['iforbet_o_15'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 1.5 bramek", "Powyżej 1.5 bramki")
         self.dict_sql['iforbet_u_15'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 1.5 bramek", "Poniżej 1.5 bramki")
         self.dict_sql['iforbet_o_25'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 2.5 bramek", "Powyżej 2.5 bramki",1)
         self.dict_sql['iforbet_u_25'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 2.5 bramek", "Poniżej 2.5 bramki",1)
         self.dict_sql['iforbet_u_35'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 3.5 bramek", "Poniżej 3.5 bramki")
+        self.dict_sql['iforbet_o_35'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 3.5 bramek", "Powyżej 3.5 bramki")
         self.dict_sql['iforbet_o_45'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 4.5 bramek", "Powyżej 4.5 bramki")
         self.dict_sql['iforbet_u_45'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 4.5 bramek", "Poniżej 4.5 bramki")
         self.dict_sql['iforbet_o_55'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 5.5 bramek", "Powyżej 5.5 bramki")
@@ -300,6 +301,7 @@ class football_event:
         self.dict_sql['iforbet_u_95'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 9.5 bramek", "Poniżej 9.5 bramki")
         self.dict_sql['iforbet_ht_ft_11'] = self.get_rate(self.json_var['data'], "Wynik do przerwy/Wynik końcowy", self.raw_home + ' / '+self.raw_home)
         self.dict_sql['iforbet_ht_ft_1x'] = self.get_rate(self.json_var['data'], "Wynik do przerwy/Wynik końcowy", self.raw_home + ' / '+'X')
+        print("TO JEST TO:", self.dict_sql['iforbet_ht_ft_1x'], self.raw_home + ' / '+'X')
         self.dict_sql['iforbet_ht_ft_2x'] = self.get_rate(self.json_var['data'], "Wynik do przerwy/Wynik końcowy", self.raw_away + ' / '+'X')
         self.dict_sql['iforbet_ht_ft_21'] = self.get_rate(self.json_var['data'], "Wynik do przerwy/Wynik końcowy", self.raw_away + ' / '+self.raw_home)
         self.dict_sql['iforbet_ht_ft_22'] = self.get_rate(self.json_var['data'], "Wynik do przerwy/Wynik końcowy", self.raw_away + ' / '+self.raw_away)
@@ -440,7 +442,8 @@ class football_event:
 
 #url='https://www.iforbet.pl/oferta/8/4437,4569,199,511,168,2432,321,159,269,223,147,122,273,660,2902,558,641,289'
 url='https://www.iforbet.pl/oferta/8/321,159,269,223,147,122,273,660,2902,558,641,289,2432'
-url='https://m.iforbet.pl/rest/market/categories/multi/321,159,269,223,147,122,273,660,2902,558,641,289,2432/events'
+url='https://m.iforbet.pl/rest/market/categories/multi/321,159,269,223,147,122,123,273,660,2902,558,641,289,2432,4437,357,555,282,434,511,199/events'
+#url='https://m.iforbet.pl/rest/market/categories/multi/4437/events'
 #url='https://www.iforbet.pl/oferta/8/293,380,398,3372,357,7018,555,3096,120,666,123'
 #url='https://www.iforbet.pl/oferta/8/908,2911'
 user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
@@ -476,22 +479,26 @@ def get_links(url):
 #print (get_links(url))
 
 #exit()
-
-sites2=[4737925]
+x='https://m.iforbet.pl/rest/market/events/4738877'
+sites2=[4738877]
 for sites in get_links(url):
 #for sites in sites2:
     try:
         site = 'https://m.iforbet.pl/rest/market/events/'+str(sites)
-
+        print ("SITE",site)
         request = urllib2.Request(site, None, headers)
         response = urllib2.urlopen(request)
         #print (request)
         data = response.read()
         data = urllib2.urlopen(urllib2.Request(site, None, headers)).read().decode('utf-8')
         #print ("DATA:",data)
-        meczyk = football_event(events_mapping_fortuna,data)
+        try:
+            meczyk = football_event(events_mapping_fortuna,data)
+        except:
+            logging.warning("ERROR dla: " + 'https://m.iforbet.pl/rest/market/events/' + str(sites))
+            continue
     except:
-        logging.WARNING("ERROR dla: " + site)
+        logging.warning("ERROR dla: " + 'https://m.iforbet.pl/rest/market/events/'+str(sites))
         continue
 
 

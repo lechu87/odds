@@ -650,22 +650,30 @@ sites=['https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?act
        'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6480&league=4054']
 
 sites2=['https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6502&league=43461']
-for site in sites:
+for site in sites2:
     user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
     headers = {'User-Agent': user_agent, }
     request = urllib2.Request(site, None, headers)
     response = urllib2.urlopen(request)
     strona = response.read()
     print (site)
+
     #strona=urllib2.urlopen(site).read()
     soup = BeautifulSoup(strona, "html.parser")
+    #print (soup)
     more_bets=soup.find_all('td', {'class': 'support_bets'})
-
+    more_bets = soup.find_all('td')
+    print("MORE",more_bets)
+    print ("JESTEM TU")
+    #more_bets=['https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6499&league=3903&oppty=152636192']
     for a in more_bets:
     #    print ("A: ",a)
         try:
             link=a.find('a', href = True)
+            #link={}
+            #link['href']='https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6499&league=3903&oppty=152636192'
     #    print ("LINK: ", link['href'])
+            print("JESTEM TU TEŻ")
             request = urllib2.Request(link['href'], None, headers)
             data=urllib2.urlopen(request).read()
 

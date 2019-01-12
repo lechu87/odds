@@ -366,7 +366,11 @@ sites=['https://m.totolotek.pl/PalinsestoRest/GetEventsByMarket?filter=Any&sport
        'https://m.totolotek.pl/PalinsestoRest/GetEventsByMarket?filter=Any&sportId=2&tournamentId=2713&gameId=0&gameParam=0',
        'https://m.totolotek.pl/PalinsestoRest/GetEventsByMarket?filter=Any&sportId=2&tournamentId=145&gameId=0&gameParam=0',
        'https://m.totolotek.pl/PalinsestoRest/GetEventsByMarket?filter=Any&sportId=2&tournamentId=1329&gameId=0&gameParam=0',
-       'https://m.totolotek.pl/PalinsestoRest/GetEventsByMarket?filter=Any&sportId=2&tournamentId=165&gameId=0&gameParam=0']
+       'https://m.totolotek.pl/PalinsestoRest/GetEventsByMarket?filter=Any&sportId=2&tournamentId=165&gameId=0&gameParam=0',
+       'https://m.totolotek.pl/PalinsestoRest/GetEventsByMarket?filter=Any&sportId=2&tournamentId=271&gameId=0&gameParam=0',
+       'https://m.totolotek.pl/PalinsestoRest/GetEventsByMarket?filter=Any&sportId=2&tournamentId=135&gameId=0&gameParam=0',
+       'https://m.totolotek.pl/PalinsestoRest/GetEventsByMarket?filter=Any&sportId=2&tournamentId=159&gameId=0&gameParam=0',
+       'https://m.totolotek.pl/PalinsestoRest/GetEventsByMarket?filter=Any&sportId=2&tournamentId=188&gameId=0&gameParam=0']
 #sites=['https://m.totolotek.pl/PalinsestoRest/GetEventsByMarket?filter=Any&sportId=2&tournamentId=2713&gameId=0&gameParam=0',]
 logging.basicConfig(filename='logfile_totolotek.log', level=logging.DEBUG)
 for site in sites:
@@ -394,5 +398,5 @@ for site in sites:
         try:
             meczyk=football_event(events_mapping_totolotek,site)
         except:
-            logging.WARNING("ERROR dla "+site)
+            logging.warning("ERROR dla "+str(site))
             continue

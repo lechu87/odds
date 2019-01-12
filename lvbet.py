@@ -118,8 +118,8 @@ class football_event:
         # self.dict_sql['lvbet_hour']=self.hour
         self.dict_sql['lvbet_update_time'] = self.update_time
         # self.dict_sql['lvbet_country']=self
-        self.dict_sql['lvbet_dnb_1'] = self.get_rate(json_var['markets'], "Zakład bez remisu", 'Drużyna 1')
-        self.dict_sql['lvbet_dnb_2'] = self.get_rate(json_var['markets'], "Zakład bez remisu", 'Drużyna 2')
+        self.dict_sql['lvbet_dnb_1'] = self.get_rate(json_var['markets'], "Remis - Zwrot", 'Drużyna 1')
+        self.dict_sql['lvbet_dnb_2'] = self.get_rate(json_var['markets'], "Remis - Zwrot", 'Drużyna 2')
         self.dict_sql['lvbet_o_05'] = goal_dict[0.5]['over']
         self.dict_sql['lvbet_u_05'] = goal_dict[0.5]['under']
         self.dict_sql['lvbet_o_15'] = goal_dict[1.5]['over']
@@ -291,7 +291,7 @@ x=meczyk.open_site(link)
 #meczyk.get_rate(x['markets'],"Match Result",team)
 #meczyk.prepare_dict_to_sql(x)
 #exit()
-sites=['https://app.lvbet.pl/_api/v1/offer/matches/?is_live=false&sports_groups_ids=754,669,916,775,564,392,671,665,651,791,658,753,666,2345,718']
+sites=['https://app.lvbet.pl/_api/v1/offer/matches/?is_live=false&sports_groups_ids=754,669,916,775,564,392,671,665,651,791,658,753,666,2345,718,604,776,596,676']
 user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
 headers = {'User-Agent': user_agent, }
 request = urllib2.Request(sites[0], None, headers)
@@ -307,42 +307,13 @@ for i in range(0,len(json_var)):
 for game_id in game_ids:
     try:
         link = 'https://app.lvbet.pl/_api/v1/offer/matches/full/'+str(game_id)
+        print (link)
         meczyk = football_event(events_mapping_lvbet, link)
         x = meczyk.open_site(link)
     except:
-        logging.WARNING("ERROR DLA MECZU: "+str(game_id))
+        logging.warning("ERROR DLA MECZU: "+str(game_id))
 
 exit()
 
 
 
-
-#sites=['https://m.totolotek.pl/PalinsestoRest/GetEventsByMarket?filter=Any&sportId=2&tournamentId=2713&gameId=0&gameParam=0',]
-
-for site in sites:
-    user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
-    headers = {'User-Agent': user_agent, }
-    request = urllib2.Request(site, None, headers)
-    response = urllib2.urlopen(request)
-    tournamentid=site.split('&')[2].split('=')[1]
-    data = response.read()
-    soup = BeautifulSoup(data, "html.parser")
-    json_var = json.loads(data)
-    ids=[]
-
-    for element in json_var['Response']['Events']:
-        # print (element)
-        try:
-            if element['Bets'][0]['Odds'][0]['EventId'] not in ids:
-                ids.append(element['Bets'][0]['Odds'][0]['EventId'])
-                # print (element['Bets'][0]['Odds'][0]['EventId'])
-        except:
-            pass
-    for game in ids:
-        site = 'https://m.totolotek.pl/PalinsestoRest/GetEvent?sportId=2&tournamentId='+str(tournamentid)+'&eventId='+str(game)
-        print (site)
-        try:
-            meczyk=football_event(events_mapping_totolotek,site)
-        except:
-            logging.WARNING("ERROR dla "+site)
-            continue
