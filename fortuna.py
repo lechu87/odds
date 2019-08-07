@@ -245,7 +245,7 @@ class football_event:
         date = meczyk.date
         print ("Date:", date)
         #sqldate=meczyk.date.split(' ')[1].split('.')[2]+'-'+meczyk.date.split(' ')[1].split('.')[1]+'-'+meczyk.date.split(' ')[1].split('.')[0]
-        table='"db_fortuna"'
+        table='"db_bets"'
         columns_string = '("' + '","'.join(meczyk.dict_sql.keys()) + '")'
         values_string = '("' + '","'.join(map(str, meczyk.dict_sql.values())) + '")'
         try:

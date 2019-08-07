@@ -9,6 +9,7 @@ import logging
 import datetime
 from collections import defaultdict
 from dictionaries import *
+import json
 import re
 #import requests
 #data = requests.get("https://www.iforbet.pl/zdarzenie/460411")
@@ -25,52 +26,48 @@ import re
 #print ("DATA:", data)
 #exit()
 #data=codecs.open('fortuna.html',mode='r',encoding='utf-8').read()
-
+logging.basicConfig(filename='logfile_iforbet.log', level=logging.DEBUG)
 class football_event:
     #soup = BeautifulSoup(data,"html.parser")
     logging.basicConfig(filename='logfile_iforbet.log', level=logging.DEBUG)
 
     def get_events_mapping(self):
         return self.__events_mapping
+    def get_current_time(self):
+        self.current_time = datetime.datetime.now()
+        return self.current_time
     def get_name(self):
-        soup = BeautifulSoup(data, "html.parser")
+        #soup = BeautifulSoup(data, "html.parser")
         #print (soup)
-        self.game=soup.find('div',{'class':'event-data'})
-        #print (self.game)
-        game_teams=self.game.find_all('h2')
-        self.raw_home = self.correct_stupid_names(game_teams[0].text)
-        self.raw_away = self.correct_stupid_names(game_teams[1].text)
-        self.home=self.correct_stupid_names(unify_name(game_teams[0].text,teams,logging))
-        self.away=self.correct_stupid_names(unify_name(game_teams[1].text,teams,logging))
-        raw_league_name=self.game.find('div',{'id':'event-lvl3-name'}).text+' '+self.game.find('div',{'id':'event-lvl2-name'}).text
-        raw_league=soup.find('span',{'class':'header-navigation-site'}).text
+        json_var=json.loads(data)
+        self.json_var=json_var
+#        print (json_var["data"])
+        self.raw_home=json_var['eventName'].split(' - ')[0]
+        self.raw_home_part=self.raw_home.split(' ')[0]
+        self.raw_away = json_var['data']['eventName'].split(' - ')[1]
+        self.raw_away_part = self.raw_away.split(' ')[0]
+        self.home=unify_name(json_var['data']['eventName'].split(' - ')[0],teams,logging)
+#        print ("HHHHOME",self.home)
+        self.away=unify_name(json_var['data']['eventName'].split(' - ')[1],teams,logging)
+#        raw_league_name=self.game.find('div',{'id':'event-lvl3-name'}).text+' '+self.game.find('div',{'id':'event-lvl2-name'}).text
+#        raw_league=soup.find('span',{'class':'header-navigation-site'}).text
 
         #print ("SOUP:", soup)
-        print ("X: ",raw_league)
-        self.league=unify_name(raw_league_name,leagues,logging)
+        #print ("X: ",raw_league)
+        self.league=unify_name(json_var['data']['category3Name']+' '+json_var['data']['category2Name'],leagues,logging)
         print ("LEAGUE:",self.league)
         print (self.home,self.away)
 
-        raw_date=soup.find_all('div',class_=re.compile('column match-info'))[1].text
+        raw_date=json_var['data']['eventStart']
 
-        #raw_date = soup.find_all('div', class_="small-8 column match-info")
-        #(soup)
-        print ("RAW DATE:",raw_date)
-        cal={'stycznia':'01','lutego':'02','marca':'03','kwietnia':'04','maja':'05','czerwca':'06','lipca':'07',
-             'sierpnia':'08','września':'09','października':'10','listopada':'11','grudnia':'12'}
-        cal2 = {'września': '09'}
-        raw_date2=raw_date
-        for key,v in cal.items():
-            if len(re.findall(key,raw_date))>0:
-                raw_date2=re.sub(key,v,raw_date)
-
-        print ("RAW DATE:", raw_date2)
-
+        date=datetime.datetime.fromtimestamp(raw_date/1000)
+        self.raw_date=date
         current_time=datetime.datetime.now()
-        day=raw_date2.split(',')[1].strip().split(' ')[0]
-        month = raw_date2.split(',')[1].strip().split(' ')[1]
-        hour=raw_date2.split(',')[2].strip().split(':')[0]
-        minute=raw_date2.split(',')[2].strip().split(':')[1]
+
+        day=date.day
+        month = date.month
+        hour=date.hour
+        minute=date.minute
         print ("DAY:",day,month,hour,minute)
         full_date=datetime.datetime(current_time.year,int(month),int(day),int(hour),int(minute))
         self.update_time=str('{:04d}'.format(current_time.year))+'-'+str('{:02d}'.format(current_time.month))+'-'+str('{:02d}'.format(current_time.day))+\
@@ -214,134 +211,169 @@ class football_event:
                 #if head.text.strip() not in self.__events_mapping.keys():
                 #    logging.warning(self.game.text.strip())
                 #    logging.warning("Nieznany zaklad: " + head.text.strip())
+    def get_rate(self,json, name, raw_home,log=0):
+        for i in range(0, len(json['eventGames'])):
+            x=''
+            error=1
+            if json['eventGames'][i]['gameName'].lower() == name.lower():
+                for j in range(0, len(json['eventGames'][i]['outcomes'])):
+                    x=json['eventGames'][i]['outcomes'][j]['outcomeName'].lower()
+                    if ' ' in x and 'bramki' not in x:
+                        tmp=x.split(' ')[1]
+                        tmp2=x.split(' ')[0]
+                    else:
+                        tmp="napis_bez_sensu"
+                        tmp2=tmp
+                    if (x in raw_home.lower()):
+                        x=json['eventGames'][i]['outcomes'][j]['outcomeOdds']
+                        error=0
+                        return x
+                    elif ' ' in x and 'bramki' not in x:
+                        tmp=x.split(' ')[1]
+                        tmp2=x.split(' ')[0]
+                    elif (x.split(' / ')[0] in raw_home.lower() and x.split(' / ')[1] in raw_home.lower()):# or tmp in raw_home.lower() or tmp2 in raw_home.lower():
+                        x = json['eventGames'][i]['outcomes'][j]['outcomeOdds']
+                        error = 0
+                        return x
+
+                if error==1 and (self.get_current_time()-datetime.timedelta(days=-3))>self.raw_date:
+                    ###ODKOMENTOWAC######
+                    logging.info("Nie znalazłem zakładu "+str(name)+" "+str(raw_home))
+                    pass
+            else:
+                #
+                #return 1.0
+                continue
+
+
+    def remove_pl(self,input_text):
+        strange = 'ĄąĆćŚśŻżŹźŁłÓóĘę'
+
+        ascii_replacements = 'AaCcSsZzZzLlOoEe'
+
+        translator = str.maketrans(strange, ascii_replacements)
+        return input_text.translate(translator)
 
     def prepare_dict_to_sql(self):
         self.dict_sql=defaultdict(str)
         for i in events_mapping_iforbet.values():
             if i['name'] not in self.odds.keys():
                 self.odds[i['name']]=defaultdict(str)
-
-
-        #Poprawia na potrzeby ubogich meczy:
-        for i in (0.5,1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,9.5):
-            try:
-                self.odds['goals']['Powyżej '+str(i)+' gola']
-            except:
-                self.odds['goals']['Powyżej '+str(i)+' gola']=''
-            try:
-                self.odds['goals']['Poniżej '+str(i)+' gola']
-            except:
-                self.odds['goals']['Poniżej '+str(i)+' gola']=''
         self.dict_sql['home']=self.home
         self.dict_sql['away']=self.away
-        self.dict_sql['iforbet_game_1']=self.odds['game']['1']
-        self.dict_sql['iforbet_game_0']=self.odds['game']['X']
-        self.dict_sql['iforbet_game_2']=self.odds['game']['2']
-        self.dict_sql['iforbet_game_10']=self.odds['dc']['1/X']
-        self.dict_sql['iforbet_game_02']=self.odds['dc']['X/2']
-        self.dict_sql['iforbet_game_12']=self.odds['dc']['1/2']
+        #print (self.json_var['data'], "1X2", self.home)
+
+        self.dict_sql['iforbet_game_1']=self.get_rate(self.json_var['data'], "1X2", self.raw_home,1)
+        self.dict_sql['iforbet_game_0']=self.get_rate(self.json_var['data'], "1X2", "X",1)
+        self.dict_sql['iforbet_game_2']=self.get_rate(self.json_var['data'], "1X2", self.raw_away,1)
+        self.dict_sql['iforbet_game_10']=self.get_rate(self.json_var['data'], "Podwójna szansa", "1/X",1)
+        self.dict_sql['iforbet_game_02']=self.get_rate(self.json_var['data'], "Podwójna szansa", "X/2",1)
+        self.dict_sql['iforbet_game_12']=self.get_rate(self.json_var['data'], "Podwójna szansa", "1/2",1)
         #self.dict_sql['data']=self.date.split(' ')[1].split('.')[2]+'-'+self.date.split(' ')[1].split('.')[1]+'-'+self.date.split(' ')[1].split('.')[0]
         #self.dict_sql['Sport']=self.sport
         self.dict_sql['League']=self.league
         self.dict_sql['data']=self.date
         self.dict_sql['hour']=self.hour
         self.dict_sql['iforbet_update_time']=self.update_time
-        self.dict_sql['iforbet_o_35'] = self.odds['goals']['Powyżej 3.5 bramki']
+        self.dict_sql['iforbet_o_35'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 3.5 bramek", "Powyżej 3.5 bramki")
         #self.dict_sql['country']=self.
-        self.dict_sql['iforbet_dnb_1']=self.odds['dnb']['1']
-        self.dict_sql['iforbet_dnb_2']=self.odds['dnb']['2']
-        self.dict_sql['iforbet_o_05'] = self.odds['goals']['Powyżej 0.5 bramki']
-        self.dict_sql['iforbet_u_05'] = self.odds['goals']['Poniżej 0.5 bramki']
-        self.dict_sql['iforbet_o_15'] = self.odds['goals']['Powyżej 1.5 bramki']
-        self.dict_sql['iforbet_u_15'] = self.odds['goals']['Poniżej 1.5 bramki']
-        self.dict_sql['iforbet_o_25'] = self.odds['goals']['Powyżej 2.5 bramki']
-        self.dict_sql['iforbet_u_25'] = self.odds['goals']['Poniżej 2.5 bramki']
-        self.dict_sql['iforbet_u_35'] = self.odds['goals']['Poniżej 3.5 bramki']
-        self.dict_sql['iforbet_o_45'] = self.odds['goals']['Powyżej 4.5 bramki']
-        self.dict_sql['iforbet_u_45'] = self.odds['goals']['Poniżej 4.5 bramki']
-        self.dict_sql['iforbet_o_55'] = self.odds['goals']['Powyżej 5.5 bramki']
-        self.dict_sql['iforbet_u_55'] = self.odds['goals']['Poniżej 5.5 bramki']
-        self.dict_sql['iforbet_o_65'] = self.odds['goals']['Powyżej 6.5 bramki']
-        self.dict_sql['iforbet_u_65'] = self.odds['goals']['Poniżej 6.5 bramki']
-        self.dict_sql['iforbet_o_75'] = self.odds['goals']['Powyżej 7.5 bramki']
-        self.dict_sql['iforbet_u_75'] = self.odds['goals']['Poniżej 7.5 bramki']
-        self.dict_sql['iforbet_o_85'] = self.odds['goals']['Powyżej 8.5 bramki']
-        self.dict_sql['iforbet_u_85'] = self.odds['goals']['Poniżej 8.5 bramki']
-        self.dict_sql['iforbet_o_95'] = self.odds['goals']['Powyżej 9.5 bramki']
-        self.dict_sql['iforbet_u_95'] = self.odds['goals']['Poniżej 9.5 bramki']
-        self.dict_sql['iforbet_ht_ft_11'] = self.odds['half/end']['1 / 1']
-        self.dict_sql['iforbet_ht_ft_1x'] = self.odds['half/end']['1 / X']
-        self.dict_sql['iforbet_ht_ft_2x'] = self.odds['half/end']['2 / X']
-        self.dict_sql['iforbet_ht_ft_21'] = self.odds['half/end']['2 / 1']
-        self.dict_sql['iforbet_ht_ft_22'] = self.odds['half/end']['2 / 2']
-        self.dict_sql['iforbet_ht_ft_x1'] = self.odds['half/end']['X / 1']
-        self.dict_sql['iforbet_ht_ft_x2'] = self.odds['half/end']['X / 2']
-        self.dict_sql['iforbet_ht_ft_12'] = self.odds['half/end']['1 / 2']
-        self.dict_sql['iforbet_ht_ft_xx'] = self.odds['half/end']['X / X']
-        self.dict_sql['iforbet_first_half_1']= self.odds['1st_half']['1']
-        self.dict_sql['iforbet_first_half_x'] = self.odds['1st_half']['X']
-        self.dict_sql['iforbet_first_half_2'] = self.odds['1st_half']['2']
-        self.dict_sql['iforbet_first_half_10'] = self.odds['1st_half_dc']['1/X']
-        self.dict_sql['iforbet_first_half_02'] = self.odds['1st_half_dc']['X/2']
-        self.dict_sql['iforbet_first_half_12'] = self.odds['1st_half_dc']['1/2']
+        self.dict_sql['iforbet_dnb_1']=self.get_rate(self.json_var['data'], "Remis - nie ma zakładu (remis=zwrot)", self.raw_home)
+        self.dict_sql['iforbet_dnb_2']=self.get_rate(self.json_var['data'], "Remis - nie ma zakładu (remis=zwrot)", self.raw_away)
+        self.dict_sql['iforbet_o_05'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 0.5 bramek", "Powyżej 0.5 bramki")
+        self.dict_sql['iforbet_u_05'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 0.5 bramek", "Poniżej 0.5 bramki")
+        self.dict_sql['iforbet_o_15'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 1.5 bramek", "Powyżej 1.5 bramki")
+        self.dict_sql['iforbet_u_15'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 1.5 bramek", "Poniżej 1.5 bramki")
+        self.dict_sql['iforbet_o_25'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 2.5 bramek", "Powyżej 2.5 bramki",1)
+        self.dict_sql['iforbet_u_25'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 2.5 bramek", "Poniżej 2.5 bramki",1)
+        self.dict_sql['iforbet_u_35'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 3.5 bramek", "Poniżej 3.5 bramki")
+        self.dict_sql['iforbet_o_35'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 3.5 bramek", "Powyżej 3.5 bramki")
+        self.dict_sql['iforbet_o_45'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 4.5 bramek", "Powyżej 4.5 bramki")
+        self.dict_sql['iforbet_u_45'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 4.5 bramek", "Poniżej 4.5 bramki")
+        self.dict_sql['iforbet_o_55'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 5.5 bramek", "Powyżej 5.5 bramki")
+        self.dict_sql['iforbet_u_55'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 5.5 bramek", "Poniżej 5.5 bramki")
+        self.dict_sql['iforbet_o_65'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 6.5 bramek", "Powyżej 6.5 bramki")
+        self.dict_sql['iforbet_u_65'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 6.5 bramek", "Poniżej 6.5 bramki")
+        self.dict_sql['iforbet_o_75'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 7.5 bramek", "Powyżej 7.5 bramki")
+        self.dict_sql['iforbet_u_75'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 7.5 bramek", "Poniżej 7.5 bramki")
+        self.dict_sql['iforbet_o_85'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 8.5 bramek", "Powyżej 8.5 bramki")
+        self.dict_sql['iforbet_u_85'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 8.5 bramek", "Poniżej 8.5 bramki")
+        self.dict_sql['iforbet_o_95'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 9.5 bramek", "Powyżej 9.5 bramki")
+        self.dict_sql['iforbet_u_95'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 9.5 bramek", "Poniżej 9.5 bramki")
+        self.dict_sql['iforbet_ht_ft_11'] = self.get_rate(self.json_var['data'], "Wynik do przerwy/Wynik końcowy", self.raw_home + ' / '+self.raw_home)
+        self.dict_sql['iforbet_ht_ft_1x'] = self.get_rate(self.json_var['data'], "Wynik do przerwy/Wynik końcowy", self.raw_home + ' / '+'X')
+        print("TO JEST TO:", self.dict_sql['iforbet_ht_ft_1x'], self.raw_home + ' / '+'X')
+        self.dict_sql['iforbet_ht_ft_2x'] = self.get_rate(self.json_var['data'], "Wynik do przerwy/Wynik końcowy", self.raw_away + ' / '+'X')
+        self.dict_sql['iforbet_ht_ft_21'] = self.get_rate(self.json_var['data'], "Wynik do przerwy/Wynik końcowy", self.raw_away + ' / '+self.raw_home)
+        self.dict_sql['iforbet_ht_ft_22'] = self.get_rate(self.json_var['data'], "Wynik do przerwy/Wynik końcowy", self.raw_away + ' / '+self.raw_away)
+        self.dict_sql['iforbet_ht_ft_x1'] = self.get_rate(self.json_var['data'], "Wynik do przerwy/Wynik końcowy", 'X' + ' / '+self.raw_home)
+        self.dict_sql['iforbet_ht_ft_x2'] = self.get_rate(self.json_var['data'], "Wynik do przerwy/Wynik końcowy", 'X' + ' / '+self.raw_away)
+        self.dict_sql['iforbet_ht_ft_12'] = self.get_rate(self.json_var['data'], "Wynik do przerwy/Wynik końcowy", self.raw_home + ' / '+self.raw_away)
+        self.dict_sql['iforbet_ht_ft_xx'] = self.get_rate(self.json_var['data'], "Wynik do przerwy/Wynik końcowy", 'X' + ' / '+'X')
+        self.dict_sql['iforbet_first_half_1']= self.get_rate(self.json_var['data'], "Wynik 1 połowy", self.raw_home)
+        self.dict_sql['iforbet_first_half_x'] = self.get_rate(self.json_var['data'], "Wynik 1 połowy", 'X')
+        self.dict_sql['iforbet_first_half_2'] = self.get_rate(self.json_var['data'], "Wynik 1 połowy", self.raw_away)
+
+        self.dict_sql['iforbet_first_half_10'] = self.get_rate(self.json_var['data'], "Podwójna szansa - 1 połowa", self.raw_home+'/X')
+        self.dict_sql['iforbet_first_half_02'] = self.get_rate(self.json_var['data'], "Podwójna szansa - 1 połowa", 'X/'+self.raw_away)
+        self.dict_sql['iforbet_first_half_12'] = self.get_rate(self.json_var['data'], "Podwójna szansa - 1 połowa", self.raw_home+'/'+self.raw_away)
         #self.dict_sql['iforbet_eh-1_1'] = self.odds['eh-1']['1']
         #self.dict_sql['iforbet_eh-1_x2'] = self.odds['eh-1']['02']
-        self.dict_sql['iforbet_u_15_1'] = self.odds['game/goals']['1 i Poniżej 1.5 bramki']
-        self.dict_sql['iforbet_o_15_1'] = self.odds['game/goals']['1 i Powyżej 1.5 bramki']
-        self.dict_sql['iforbet_u_15_x'] = self.odds['game/goals']['X i Poniżej 1.5 bramki']
-        self.dict_sql['iforbet_o_15_x'] = self.odds['game/goals']['X i Powyżej 1.5 bramki']
-        self.dict_sql['iforbet_u_15_2'] = self.odds['game/goals']['2 i Poniżej 1.5 bramki']
-        self.dict_sql['iforbet_o_15_2'] = self.odds['game/goals']['2 i Powyżej 1.5 bramki']
-        self.dict_sql['iforbet_u_25_1'] = self.odds['game/goals']['1 i Poniżej 2.5 bramki']
-        self.dict_sql['iforbet_o_25_1'] = self.odds['game/goals']['1 i Powyżej 2.5 bramki']
-        self.dict_sql['iforbet_u_25_x'] = self.odds['game/goals']['X i Poniżej 2.5 bramki']
-        self.dict_sql['iforbet_o_25_x'] = self.odds['game/goals']['X i Powyżej 2.5 bramki']
-        self.dict_sql['iforbet_u_25_2'] = self.odds['game/goals']['2 i Poniżej 2.5 bramki']
-        self.dict_sql['iforbet_o_25_2'] = self.odds['game/goals']['2 i Powyżej 2.5 bramki']
-        self.dict_sql['iforbet_u_35_1'] = self.odds['game/goals']['1 i Poniżej 3.5 bramki']
-        self.dict_sql['iforbet_o_35_1'] = self.odds['game/goals']['1 i Powyżej 3.5 bramki']
-        self.dict_sql['iforbet_u_35_x'] = self.odds['game/goals']['X i Poniżej 3.5 bramki']
-        self.dict_sql['iforbet_o_35_x'] = self.odds['game/goals']['X i Powyżej 3.5 bramki']
-        self.dict_sql['iforbet_u_35_2'] = self.odds['game/goals']['2 i Poniżej 3.5 bramki']
-        self.dict_sql['iforbet_o_35_2'] = self.odds['game/goals']['2 i Powyżej 3.5 bramki']
-        self.dict_sql['iforbet_btts_1'] = self.odds['game/btts']['1 i Tak']
-        self.dict_sql['iforbet_btts_2'] = self.odds['game/btts']['2 i Tak']
-        self.dict_sql['iforbet_btts_x'] = self.odds['game/btts']['X i Tak']
-        self.dict_sql['iforbet_btts_no_1'] = self.odds['game/btts']['1 i Nie']
-        self.dict_sql['iforbet_btts_no_2'] = self.odds['game/btts']['2 i Nie']
-        self.dict_sql['iforbet_btts_no_x'] = self.odds['game/btts']['X i Nie']
-        self.dict_sql['iforbet_eh_min_1_1'] = self.odds['ah-']['1 (Handicap 0:1)']
-        self.dict_sql['iforbet_eh_min_1_x'] = self.odds['ah-']['X (Handicap 0:1)']
-        self.dict_sql['iforbet_eh_min_1_2'] = self.odds['ah-']['2 (Handicap 0:1)']
-        self.dict_sql['iforbet_eh_plus_1_1'] = self.odds['ah+']['1 (Handicap 1:0)']
-        self.dict_sql['iforbet_eh_plus_1_x'] = self.odds['ah+']['X (Handicap 1:0)']
-        self.dict_sql['iforbet_eh_plus_1_2'] = self.odds['ah+']['2 (Handicap 1:0)']
-        self.dict_sql['iforbet_btts_yes'] = self.odds['btts']['Tak']
-        self.dict_sql['iforbet_btts_no'] = self.odds['btts']['Nie']
-        self.dict_sql['iforbet_corners_o_65']=self.odds['corners']['Powyżej 6.5 rzutów rożnych']
-        self.dict_sql['iforbet_corners_u_65'] = self.odds['corners']['Poniżej 6.5 rzutów rożnych']
-        self.dict_sql['iforbet_corners_o_75'] = self.odds['corners']['Powyżej 7.5 rzutów rożnych']
-        self.dict_sql['iforbet_corners_u_75'] = self.odds['corners']['Poniżej 7.5 rzutów rożnych']
-        self.dict_sql['iforbet_corners_o_85'] = self.odds['corners']['Powyżej 8.5 rzutów rożnych']
-        self.dict_sql['iforbet_corners_u_85'] = self.odds['corners']['Poniżej 8.5 rzutów rożnych']
-        self.dict_sql['iforbet_corners_o_95'] = self.odds['corners']['Powyżej 9.5 rzutów rożnych']
-        self.dict_sql['iforbet_corners_u_95'] = self.odds['corners']['Poniżej 9.5 rzutów rożnych']
-        self.dict_sql['iforbet_corners_o_105'] = self.odds['corners']['Powyżej 10.5 rzutów rożnych']
-        self.dict_sql['iforbet_corners_u_105'] = self.odds['corners']['Poniżej 10.5 rzutów rożnych']
-        self.dict_sql['iforbet_corners_o_115'] = self.odds['corners']['Powyżej 11.5 rzutów rożnych']
-        self.dict_sql['iforbet_corners_u_115'] = self.odds['corners']['Poniżej 11.5 rzutów rożnych']
-        self.dict_sql['iforbet_corners_o_125'] = self.odds['corners']['Powyżej 12.5 rzutów rożnych']
-        self.dict_sql['iforbet_corners_u_125'] = self.odds['corners']['Poniżej 12.5 rzutów rożnych']
-        self.dict_sql['iforbet_corners_o_135'] = self.odds['corners']['Powyżej 13.5 rzutów rożnych']
-        self.dict_sql['iforbet_corners_u_135'] = self.odds['corners']['Poniżej 13.5 rzutów rożnych']
-        self.dict_sql['iforbet_corners_o_145'] = self.odds['corners']['Powyżej 14.5 rzutów rożnych']
-        self.dict_sql['iforbet_corners_u_145'] = self.odds['corners']['Poniżej 14.5 rzutów rożnych']
-        self.dict_sql['iforbet_corners_o_155'] = self.odds['corners']['Powyżej 15.5 rzutów rożnych']
-        self.dict_sql['iforbet_corners_u_155'] = self.odds['corners']['Poniżej 15.5 rzutów rożnych']
-        self.dict_sql['iforbet_corners_o_165'] = self.odds['corners']['Powyżej 16.5 rzutów rożnych']
-        self.dict_sql['iforbet_corners_u_165'] = self.odds['corners']['Poniżej 16.5 rzutów rożnych']
-        self.dict_sql['iforbet_corners_o_175'] = self.odds['corners']['Powyżej 17.5 rzutów rożnych']
-        self.dict_sql['iforbet_corners_u_175'] = self.odds['corners']['Poniżej 17.5 rzutów rożnych']
+        self.dict_sql['iforbet_u_15_1'] = self.get_rate(self.json_var['data'], "Wynik końcowy i Poniżej/Powyżej 1.5 bramki", self.raw_home+' i Poniżej 1.5 bramki')
+        self.dict_sql['iforbet_o_15_1'] = self.get_rate(self.json_var['data'], "Wynik końcowy i Poniżej/Powyżej 1.5 bramki", self.raw_home+' i Powyżej 1.5 bramki')
+        self.dict_sql['iforbet_u_15_x'] = self.get_rate(self.json_var['data'], "Wynik końcowy i Poniżej/Powyżej 1.5 bramki", 'X i Poniżej 1.5 bramki')
+        self.dict_sql['iforbet_o_15_x'] = self.get_rate(self.json_var['data'], "Wynik końcowy i Poniżej/Powyżej 1.5 bramki", 'X i Powyżej 1.5 bramki')
+        self.dict_sql['iforbet_u_15_2'] = self.get_rate(self.json_var['data'], "Wynik końcowy i Poniżej/Powyżej 1.5 bramki", self.raw_away+' i Poniżej 1.5 bramki')
+        self.dict_sql['iforbet_o_15_2'] = self.get_rate(self.json_var['data'], "Wynik końcowy i Poniżej/Powyżej 1.5 bramki", self.raw_away+' i Powyżej 1.5 bramki')
+        self.dict_sql['iforbet_u_25_1'] = self.get_rate(self.json_var['data'], "Wynik końcowy i Poniżej/Powyżej 2.5 bramki", self.raw_home+' i Poniżej 2.5 bramki')
+        self.dict_sql['iforbet_o_25_1'] = self.get_rate(self.json_var['data'], "Wynik końcowy i Poniżej/Powyżej 2.5 bramki", self.raw_home+' i Powyżej 2.5 bramki')
+        self.dict_sql['iforbet_u_25_x'] = self.get_rate(self.json_var['data'], "Wynik końcowy i Poniżej/Powyżej 2.5 bramki", 'X i Poniżej 2.5 bramki')
+        self.dict_sql['iforbet_o_25_x'] = self.get_rate(self.json_var['data'], "Wynik końcowy i Poniżej/Powyżej 2.5 bramki", 'X i Powyżej 2.5 bramki')
+        self.dict_sql['iforbet_u_25_2'] = self.get_rate(self.json_var['data'], "Wynik końcowy i Poniżej/Powyżej 2.5 bramki", self.raw_away+' i Poniżej 2.5 bramki')
+        self.dict_sql['iforbet_o_25_2'] = self.get_rate(self.json_var['data'], "Wynik końcowy i Poniżej/Powyżej 2.5 bramki", self.raw_away+' i Powyżej 2.5 bramki')
+        self.dict_sql['iforbet_u_35_1'] = self.get_rate(self.json_var['data'], "Wynik końcowy i Poniżej/Powyżej 3.5 bramki", self.raw_home+' i Poniżej 3.5 bramki')
+        self.dict_sql['iforbet_o_35_1'] = self.get_rate(self.json_var['data'], "Wynik końcowy i Poniżej/Powyżej 3.5 bramki", self.raw_home+' i Powyżej 3.5 bramki')
+        self.dict_sql['iforbet_u_35_x'] = self.get_rate(self.json_var['data'], "Wynik końcowy i Poniżej/Powyżej 3.5 bramki", 'X i Poniżej 3.5 bramki')
+        self.dict_sql['iforbet_o_35_x'] = self.get_rate(self.json_var['data'], "Wynik końcowy i Poniżej/Powyżej 3.5 bramki", 'X i Poniżej 3.5 bramki')
+        self.dict_sql['iforbet_u_35_2'] = self.get_rate(self.json_var['data'], "Wynik końcowy i Poniżej/Powyżej 3.5 bramki", self.raw_away+' i Powyżej 3.5 bramki')
+        self.dict_sql['iforbet_o_35_2'] = self.get_rate(self.json_var['data'], "Wynik końcowy i Poniżej/Powyżej 3.5 bramki", self.raw_away+' i Powyżej 3.5 bramki')
+        self.dict_sql['iforbet_btts_1'] = self.get_rate(self.json_var['data'], "Wynik końcowy i obie drużyny strzelą", self.raw_home+' i Tak')
+        self.dict_sql['iforbet_btts_2'] = self.get_rate(self.json_var['data'], "Wynik końcowy i obie drużyny strzelą", self.raw_away+' i Tak')
+        self.dict_sql['iforbet_btts_x'] = self.get_rate(self.json_var['data'], "Wynik końcowy i obie drużyny strzelą", 'X i Tak')
+        self.dict_sql['iforbet_btts_no_1'] = self.get_rate(self.json_var['data'], "Wynik końcowy i obie drużyny strzelą", self.raw_home+' i Nie')
+        self.dict_sql['iforbet_btts_no_2'] = self.get_rate(self.json_var['data'], "Wynik końcowy i obie drużyny strzelą", self.raw_away+' i Nie')
+        self.dict_sql['iforbet_btts_no_x'] = self.get_rate(self.json_var['data'], "Wynik końcowy i obie drużyny strzelą", 'X i Nie')
+        self.dict_sql['iforbet_eh_min_1_1'] = self.get_rate(self.json_var['data'], "Handicap 0:1", self.remove_pl(self.raw_home))
+        self.dict_sql['iforbet_eh_min_1_x'] = self.get_rate(self.json_var['data'], "Handicap 0:1", 'X')
+        self.dict_sql['iforbet_eh_min_1_2'] = self.get_rate(self.json_var['data'], "Handicap 0:1", self.remove_pl(self.raw_away))
+        self.dict_sql['iforbet_eh_plus_1_1'] = self.get_rate(self.json_var['data'], "Handicap 1:0", self.remove_pl(self.raw_home))
+        self.dict_sql['iforbet_eh_plus_1_x'] = self.get_rate(self.json_var['data'], "Handicap 1:0", 'X')
+        self.dict_sql['iforbet_eh_plus_1_2'] = self.get_rate(self.json_var['data'], "Handicap 1:0", self.remove_pl(self.raw_away))
+        self.dict_sql['iforbet_btts_yes'] = self.get_rate(self.json_var['data'], "Obie drużyny strzelą bramkę", 'Tak')
+        self.dict_sql['iforbet_btts_no'] = self.get_rate(self.json_var['data'], "Obie drużyny strzelą bramkę", 'Nie')
+        self.dict_sql['iforbet_corners_o_65']=self.get_rate(self.json_var['data'], "Poniżej/Powyżej 6.5 rzutów rożnych", 'Powyżej 6.5 rzutów rożnych')
+        self.dict_sql['iforbet_corners_u_65'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 6.5 rzutów rożnych", 'Poniżej 6.5 rzutów rożnych')
+        self.dict_sql['iforbet_corners_o_75'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 7.5 rzutów rożnych", 'Powyżej 7.5 rzutów rożnych')
+        self.dict_sql['iforbet_corners_u_75'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 7.5 rzutów rożnych", 'Poniżej 7.5 rzutów rożnych')
+        self.dict_sql['iforbet_corners_o_85'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 8.5 rzutów rożnych", 'Powyżej 8.5 rzutów rożnych')
+        self.dict_sql['iforbet_corners_u_85'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 8.5 rzutów rożnych", 'Poniżej 8.5 rzutów rożnych')
+        self.dict_sql['iforbet_corners_o_95'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 9.5 rzutów rożnych", 'Powyżej 9.5 rzutów rożnych')
+        self.dict_sql['iforbet_corners_u_95'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 9.5 rzutów rożnych", 'Poniżej 9.5 rzutów rożnych')
+        self.dict_sql['iforbet_corners_o_105'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 10.5 rzutów rożnych", 'Powyżej 10.5 rzutów rożnych')
+        self.dict_sql['iforbet_corners_u_105'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 10.5 rzutów rożnych", 'Poniżej 10.5 rzutów rożnych')
+        self.dict_sql['iforbet_corners_o_115'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 11.5 rzutów rożnych", 'Powyżej 11.5 rzutów rożnych')
+        self.dict_sql['iforbet_corners_u_115'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 11.5 rzutów rożnych", 'Poniżej 11.5 rzutów rożnych')
+        self.dict_sql['iforbet_corners_o_125'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 12.5 rzutów rożnych", 'Powyżej 12.5 rzutów rożnych')
+        self.dict_sql['iforbet_corners_u_125'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 12.5 rzutów rożnych", 'Poniżej 12.5 rzutów rożnych')
+        self.dict_sql['iforbet_corners_o_135'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 13.5 rzutów rożnych", 'Powyżej 13.5 rzutów rożnych')
+        self.dict_sql['iforbet_corners_u_135'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 13.5 rzutów rożnych", 'Poniżej 13.5 rzutów rożnych')
+        self.dict_sql['iforbet_corners_o_145'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 14.5 rzutów rożnych", 'Powyżej 14.5 rzutów rożnych')
+        self.dict_sql['iforbet_corners_u_145'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 14.5 rzutów rożnych", 'Poniżej 14.5 rzutów rożnych')
+        self.dict_sql['iforbet_corners_o_155'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 15.5 rzutów rożnych", 'Powyżej 15.5 rzutów rożnych')
+        self.dict_sql['iforbet_corners_u_155'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 15.5 rzutów rożnych", 'Poniżej 15.5 rzutów rożnych')
+        self.dict_sql['iforbet_corners_o_165'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 16.5 rzutów rożnych", 'Powyżej 16.5 rzutów rożnych')
+        self.dict_sql['iforbet_corners_u_165'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 16.5 rzutów rożnych", 'Poniżej 16.5 rzutów rożnych')
+        self.dict_sql['iforbet_corners_o_175'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 17.5 rzutów rożnych", 'Powyżej 17.5 rzutów rożnych')
+        self.dict_sql['iforbet_corners_u_175'] = self.get_rate(self.json_var['data'], "Poniżej/Powyżej 17.5 rzutów rożnych", 'Poniżej 17.5 rzutów rożnych')
         #self.dict_sql['iforbet_1_st_goal_1'] = self.odds['1st_goal'][sehome]
         #self.dict_sql['iforbet_1_st_goal_2'] = self.odds['1st_goal'][away]
         #self.dict_sql['iforbet_1_st_goal_0'] = self.odds['1st_goal']['nikt']
@@ -372,7 +404,7 @@ class football_event:
         sql_insert = """INSERT INTO %s %s
                      VALUES %s""" % (table, columns_string, values_string)
         print (sql_update_cmd)
-        print ("HOME", home)
+
         polecenie="SELECT * FROM "+str(table2)+ " WHERE home="+str(home) +" and away=" + str(away) +" and data="+str(date)
         print(polecenie)
         cur = db.cursor()
@@ -380,7 +412,7 @@ class football_event:
             x=cur.execute(polecenie).fetchone()
         except Exception as e: print(e)
 
-        print (polecenie)
+
         try:
             if x==None:
                 db.execute(sql_insert)
@@ -399,30 +431,44 @@ class football_event:
         self.get_odds2()
 
         self.prepare_dict_to_sql()
-        print ("DATAAAAA:",self.date)
+
         save_to_db_common(self,"'"+str(self.date)+"'")
         #print (self.dict_sql)
         #print ("ODDS:",self.odds)
-#data = urllib2.urlopen(urllib2.Request('https://www.iforbet.pl/zdarzenie/470334',None,headers)).read() # The data u need
-#meczyk=football_event(events_mapping_fortuna)
-#exit()
+
+user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
+headers={'User-Agent':user_agent,}
+url='https://frontapi.iforbet.pl/events/single/10399264'
+data = urllib2.urlopen(urllib2.Request(url,None,headers)).read() # The data u need
+meczyk=football_event(events_mapping_fortuna,url)
+exit()
 
 
 #url='https://www.iforbet.pl/oferta/8/4437,4569,199,511,168,2432,321,159,269,223,147,122,273,660,2902,558,641,289'
 url='https://www.iforbet.pl/oferta/8/321,159,269,223,147,122,273,660,2902,558,641,289,2432'
+url='https://m.iforbet.pl/rest/market/categories/multi/321,159,269,223,147,122,123,273,660,2902,558,641,289,2432,4437,357,555,282,434,511,199/events'
+#url='https://m.iforbet.pl/rest/market/categories/multi/4437/events'
 #url='https://www.iforbet.pl/oferta/8/293,380,398,3372,357,7018,555,3096,120,666,123'
 #url='https://www.iforbet.pl/oferta/8/908,2911'
 user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
 headers={'User-Agent':user_agent,}
 def get_links(url):
-    data = urllib2.urlopen(urllib2.Request(url, None, headers)).read()
+    user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
+    headers = {'User-Agent': user_agent, }
+    request = urllib2.Request(url, None, headers)
+    response = urllib2.urlopen(request)
+    data = response.read().decode('utf-8')
     soup = BeautifulSoup(data, "html.parser")
-    linki = []
-    links=soup.find_all('div',{'class':'event-more'})
-    for link in links:
-        linki.append(str(link).split("'")[1])
-    #self.game = soup.find('div', {'class': 'event-data'})
+    json_var = json.loads(data)
+    linki=[]
+    for i in range(0,len(json_var['data'])):
+        linki.append(json_var['data'][i]['eventId'])
+
+    print(linki)
+
     return linki
+
+
 
 #get_links(url)
     #data = urllib2.urlopen(urllib2.Request('https://www.iforbet.pl/zdarzenie/450168',None,headers)).read() # The data u need
@@ -434,23 +480,29 @@ def get_links(url):
 
 #meczyk.prepare_dict_to_sql()
 ##meczyk.save_to_db()
-print (get_links(url))
+#print (get_links(url))
 
 #exit()
-
-sites2=['https://www.efortuna.pl/pl/strona_glowna/pilka-nozna/puchar-polski']
+x='https://m.iforbet.pl/rest/market/events/4738877'
+sites2=[4738877]
 for sites in get_links(url):
+#for sites in sites2:
     try:
-        site = 'https://www.iforbet.pl/'+sites
-
+        site = 'https://m.iforbet.pl/rest/market/events/'+str(sites)
+        print ("SITE",site)
         request = urllib2.Request(site, None, headers)
         response = urllib2.urlopen(request)
-        print (request)
+        #print (request)
         data = response.read()
-        data = urllib2.urlopen(urllib2.Request(site, None, headers)).read()
-        meczyk = football_event(events_mapping_fortuna,data)
+        data = urllib2.urlopen(urllib2.Request(site, None, headers)).read().decode('utf-8')
+        #print ("DATA:",data)
+        try:
+            meczyk = football_event(events_mapping_fortuna,data)
+        except:
+            logging.warning("ERROR dla: " + 'https://m.iforbet.pl/rest/market/events/' + str(sites))
+            continue
     except:
-        logging.WARNING("ERROR dla: " + site)
+        logging.warning("ERROR dla: " + 'https://m.iforbet.pl/rest/market/events/'+str(sites))
         continue
 
 

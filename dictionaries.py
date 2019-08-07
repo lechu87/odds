@@ -976,19 +976,19 @@ teams = {"Bulgaria":["Bulgaria","Bułgaria"],"Szwecja":["Szwecja"],"Francja":["F
 
 "GKS Tychy": ["GKS Tychy"],
 "Podbeskidzie": ["Podbeskidzie","Podbeskidzie Bielsko Biała"],
-"P.Niepolomice": ["P.Niepolomice","Niepołomice","Puszcza Niepołomice"],
+"P.Niepolomice": ["P.Niepolomice","Niepołomice","Puszcza Niepołomice","P.Niepołomice"],
 "W.Suwalki": ["W.Suwalki","Suwałki","Wigry Suwałki"],
 "Rakow Cz.": ["Rakow Cz.","Rak. Częstochowa","Raków Częstochowa"],
-"Z.Sosnowiec": ["Z.Sosnowiec","Sosnowiec","Zagłębie Sosnowiec","Zagłębie Sosn."],
+"Z.Sosnowiec": ["Z.Sosnowiec","Sosnowiec","Zagłębie Sosnowiec","Zagłębie Sosn.","Zag.Sosnowiec"],
 "Katowice": ["Katowice","GKS Katowice"],
 "O.Opole": ["O.Opole","Opole","Odra Opole"],
 "Ch.Chojnice": ["Ch.Chojnice","Chojnice","Chojniczanka Chojnice"],
 "Ruch Ch.": ["Ruch Ch.","Ruch","Ruch Chorzów"],
 "G.Leczna": ["G.Leczna","G. Łęczna","Górnik Łęczna"],
 "B.Bytow": ["B.Bytow","Bytów","Bytovia Bytów"],
-"Ol.Grudziadz": ["Ol.Grudziadz","Grudziądz","Olimpia Grudziądz"],
+"Ol.Grudziadz": ["Ol.Grudziadz","Grudziądz","Olimpia Grudziądz","Ol.Grudziądz"],
 "S.Olsztyn": ["S.Olsztyn","Olsztyn","Stomil Olsztyn"],
-"M.Legnica": ["M.Legnica","Legnica","Miedź Legnica","MKS Miedź Legnica","Miedź Leg."],
+"M.Legnica": ["M.Legnica","Legnica","Miedź Legnica","MKS Miedź Legnica","Miedź Leg.","Miedź L."],
 "S.Mielec": ["S.Mielec","Mielec","Stal Mielec"],
 "P.Siedlce": ["P.Siedlce","Siedlce","Pogoń Siedlce"],
 "Ch.Glogow": ["Ch.Glogow","Głogów","Chrobry Głogów"],
@@ -998,7 +998,7 @@ teams = {"Bulgaria":["Bulgaria","Bułgaria"],"Szwecja":["Szwecja"],"Francja":["F
 "Kluczbork": ["Kluczbork"],
 "ŁKS Łódź": ["ŁKS Łódź"],
 "Jastrzebie": ["Jastrzebie","Jastrzębie","Jastrzębie Zdrój"],
-"Gar.Krakow": ["Gar.Krakow","Garbarnia","Garbarnia Kraków"],
+"Gar.Krakow": ["Gar.Krakow","Garbarnia","Garbarnia Kraków","Gar.Kraków"],
 "Gw.Koszalin": ["Gw.Koszalin"],
 "S.Tarnobrzeg": ["S.Tarnobrzeg"],
 "ROW Rybnik": ["ROW Rybnik"],
@@ -1006,11 +1006,12 @@ teams = {"Bulgaria":["Bulgaria","Bułgaria"],"Szwecja":["Szwecja"],"Francja":["F
 "G.Wejherowo": ["G.Wejherowo"],
 "Warta Poz.": ["Warta Poz.","Warta","Warta Poznań"],
 "B.Stargard": ["B.Stargard"],
-"Z.Pruszkow": ["Z.Pruszkow"],
-"Belchatow": ["Belchatow"],
-"Ol.Elblag": ["Ol.Elblag"],
+"Z.Pruszkow": ["Z.Pruszkow","Z.Pruszków"],
+"Widzew":["Widzew"],
+"Belchatow": ["Belchatow","Bełchatów"],
+"Ol.Elblag": ["Ol.Elblag","Ol.Elbląg"],
 "St.Wola": ["St.Wola"],
-
+"E.Toruń": ["E.Toruń"],
 "Wolfsberg": ["Wolfsberg","Wolfsberger AC","RZ Pellets WAC","Wolfsberger"],
 "St.Polten": ["St.Polten","SKN St. Polten","St. Polten"],
 "Rapid W.": ["Rapid W.","Rapid Wiedeń","SK Rapid Wien"],
@@ -1368,6 +1369,7 @@ teams = {"Bulgaria":["Bulgaria","Bułgaria"],"Szwecja":["Szwecja"],"Francja":["F
 "Alanya": ["Alanya","Alanyaspor"],
 "Karabuk": ["Karabuk","Kardemir Karabukspor"],
 "Galatasaray": ["Galatasaray","Galatasaray Istambuł","Galatasaray SK"],
+"Ankaragucu":["Ankaragucu"],
 "Sivasspor": ["Sivasspor","Sivas"],
 "Bursaspor": ["Bursaspor","Bursa"],
 "Yeni Malatya": ["Yeni Malatya","Malatya Bld Spor","Malatya","Yeni Malatyaspor 1986"],
@@ -1567,7 +1569,7 @@ leagues = {"Ekstraklasa Polska":["Ekstraklasa","Ekstraklasa Polska","Polska Ekst
                             "UEFA Liga Mistrzów, Grupa A Rozgrywki klubowe","UEFA Liga Mistrzów, Grupa B Rozgrywki klubowe","UEFA Liga Mistrzów, Grupa C Rozgrywki klubowe",
                             "UEFA Liga Mistrzów, Grupa D Rozgrywki klubowe","UEFA Liga Mistrzów, Grupa E Rozgrywki klubowe","UEFA Liga Mistrzów, Grupa F Rozgrywki klubowe",
                             "UEFA Liga Mistrzów, Grupa G Rozgrywki klubowe","UEFA Liga Mistrzów, Grupa H Rozgrywki klubowe","UEFA Liga Mistrzów, Grupa I Rozgrywki klubowe"],"Mistrzostwa Świata":["Kwalifikacje MS-Europa"],"Primera Division":["1.Hiszpania","1 liga Hiszpania","1. Liga Hiszpania","Hiszpania 1. liga","primera-division","Primera Division Hiszpania"],
-           "1.Polska":["1.Polska","1. Liga Polska"],"Ligue 1":["Ligue 1 Francja","1 liga Francja","1.Francja","1. Liga Francja","Francja 1. liga","ligue-1"],"Eredevise":["1 liga Holandia","1.Holandia","1. Liga Holandia","Holandia 1 liga","eredivisie"],"Bundesliga":["Bundesliga Niemcy","1 liga Niemcy","1.Niemcy","1. Liga Niemcy","Niemcy 1. liga","bundesliga"],"1 Portugalia":["1 liga Portugalia","1. Liga Portugalia","1.Portugalia","Portugalia 1 Liga","primeira-liga"],
+           "1.Polska":["1.Polska","1. Liga Polska","Fortuna 1 Liga Polska"],"Ligue 1":["Ligue 1 Francja","1 liga Francja","1.Francja","1. Liga Francja","Francja 1. liga","ligue-1"],"Eredevise":["1 liga Holandia","1.Holandia","1. Liga Holandia","Holandia 1 liga","eredivisie"],"Bundesliga":["Bundesliga Niemcy","1 liga Niemcy","1.Niemcy","1. Liga Niemcy","Niemcy 1. liga","bundesliga"],"1 Portugalia":["1 liga Portugalia","1. Liga Portugalia","1.Portugalia","Portugalia 1 Liga","primeira-liga"],
             "1 Rosja":["1 liga Rosja","1. Liga Rosja","1.Rosja"],"Serie A":['1 liga Włochy',"Serie A Włochy",'1.Wlochy',"1. Liga Włochy","Włochy 1. liga","serie-a"],"Serie B":['2 liga Włochy','2.Wlochy',"2. Liga Włochy","serie-b"],"1 Chorwacja":["1 liga Chorwacja","1. Liga Chorwacja","1.Chorwacja"],"1 Turcja":["Turcja 1 liga.","Turcja 1 liga","1 liga Turcja","1. Liga Turcja","1.Turcja","super-lig"],
            "2 Niemcy":["2 liga Niemcy","2. Liga Niemcy","2.Niemcy","2-bundesliga"],"1 Białoruś":["1 liga Białoruś","1. Liga Białoruś","1.Bialorus"],"1 Brazylia":["1 liga Brazylia","1.Brazylia","1. Liga Brazylia"],"1 Argentyna":["1 liga Argentyna"],"1 Bułgaria":["1 liga Bułgaria","1. Liga Bułgaria","1.Bulgaria"],
            "1 Chile":["1 liga Chile","1.Chile"],"1 Dania":["1 liga Dania","1. Liga Dania","1.Dania"],"1 Grecja":["1 liga Grecja","1. Liga Grecja","1.Grecja","super-league"],"1 Rumunia":["1 liga Rumunia","1. Liga Rumunia","1.Rumunia"],"1 Serbia":["1 liga Serbia","1.Serbia"],
@@ -1697,7 +1699,7 @@ def unify2(raw_name, name_dict,log):
         log.info("Nieznana nazwa2: " + raw_name)
     return corrected_name
 
-def save_to_db_common(meczyk,data):
+def save_to_db_common(meczyk,data='',league=''):
         database_name = 'db.sqlite'
         db = sqlite3.connect(database_name)
         table_name="'db_bets'"
@@ -1709,33 +1711,26 @@ def save_to_db_common(meczyk,data):
         home="'"+meczyk.home+"'"
         away = "'" + meczyk.away + "'"
         date=data
-        #print ("select * from %s where home=%s and away=%s and data=%s" % (table,home,away,date))
-        #cur.execute("select * from %s where home=%s and away=%s and data=%s" % (table,home,away,date))
-        #data=cur.fetchall()
-        #x=[]
-        #for i in range(0, len(columns_string) - 1):
-        #    x.append((str(columns_string[i]) + "=" + str(values_string[i])))
-#        try:
-#            sql_command="DELETE FROM %s WHERE home=%s and away=%s and data=%s" % (table,home,away,date)
-#            print ("SQL COMMAND:",sql_command)
-#            db.execute(sql_command)
-#            print ("USUNIĘTO")
-#        except:
-#            pass
-        #UPDATE employee SET role = 'code_monkey', name='fred' WHERE id = 1;
         sql_update_command= 'UPDATE ' + str(table_name) + " SET "
         print ("SQL UPDATE")
         for k,v in meczyk.dict_sql.items():
             sql_update_command = sql_update_command + '"'+str(k) + '"="' + str(v)+'",'
         #print (sql_update_command)
-        sql_update_cmd=sql_update_command[:-1] + " WHERE home=" + str(home) + "and away = "+ str(away) + " and data = "+str(date)
+        if date=='':
+            sql_update_cmd = sql_update_command[:-1] + " WHERE home=" + str(home) + "and away = " + str(
+                away) + " and League ='" + str(league) +"'"
+        else:
+            sql_update_cmd=sql_update_command[:-1] + " WHERE home=" + str(home) + "and away = "+ str(away) + " and data = "+str(date)
         sql_update = """UPDADE %s SET %s = %s WHERE home = %s
                       and away = %s and data = %s""" % (table_name, columns_string, values_string,home,away,date)
         sql_insert = """INSERT INTO %s %s
                      VALUES %s""" % (table_name, columns_string, values_string)
 
         print (sql_update_cmd)
-        polecenie="SELECT * FROM "+str(table_name)+ " WHERE home="+str(home) +" and away=" + str(away) +" and data="+str(date)
+        if date=='':
+            polecenie = "SELECT * FROM " + str(table_name) + " WHERE home=" + str(home) + " and away=" + str(away) + " and League='" + str(league)+"'"
+        else:
+            polecenie="SELECT * FROM "+str(table_name)+ " WHERE home="+str(home) +" and away=" + str(away) +" and data="+str(date)
         try:
             x=cur.execute(polecenie).fetchone()
         except Exception as e: print(e)

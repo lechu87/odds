@@ -606,24 +606,24 @@ sites=['https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?act
        'https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6480&league=4054']
 
 sites2=['https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6502&league=43461']
-sites2={'https://m.sts.pl/pl/sport/184/6502/43461':'Polska',
+sites2={'https://m.sts.pl/pl/sport/184/6502/74203':'Polska',
         'https://m.sts.pl/pl/sport/184/6502/4264':'Polska',
         'https://m.sts.pl/pl/sport/184/6521/4080':'Anglia',
-        'https://m.sts.pl/pl/sport/184/6507/4013':'Belgia',
-        'https://m.sts.pl/pl/sport/184/6535/3994':'Francja',
+        'https://m.sts.pl/pl/sport/184/6507/74188':'Belgia',
+        'https://m.sts.pl/pl/sport/184/6535/74154':'Francja',
         'https://m.sts.pl/pl/sport/184/6488/3987':'Hiszpania',
         'https://m.sts.pl/pl/sport/184/6482/4079':'Niemcy',
         'https://m.sts.pl/pl/sport/184/6482/3954':'Niemcy',
-        'https://m.sts.pl/pl/sport/184/6490/4032':'Holandia',
-        'https://m.sts.pl/pl/sport/184/6516/4234':'Portugalia',
-        'https://m.sts.pl/pl/sport/184/6508/3996':'Szkocja',
-        'https://m.sts.pl/pl/sport/184/6501/4073':'Włochy',
-        'https://m.sts.pl/pl/sport/184/6501/3986':'Włochy',
-        'https://m.sts.pl/pl/sport/184/6527/4074':'Turcja',
-        'https://m.sts.pl/pl/sport/184/6488/4167':'Hiszpania',
-        'https://m.sts.pl/pl/sport/184/6521/4036':'Anglia'}
-sites3={'https://m.sts.pl/pl/sport/184/6501/3986':'Włochy'}
-for site in sites3:
+        'https://m.sts.pl/pl/sport/184/6490/74202':'Holandia',
+        'https://m.sts.pl/pl/sport/184/6516/74389':'Portugalia',
+        'https://m.sts.pl/pl/sport/184/6508/74191':'Szkocja',
+        'https://m.sts.pl/pl/sport/184/6501/74187':'Włochy',
+        'https://m.sts.pl/pl/sport/184/6501/74195':'Włochy',
+        'https://m.sts.pl/pl/sport/184/6527/74206':'Turcja',
+        'https://m.sts.pl/pl/sport/184/6488/74380':'Hiszpania',
+        'https://m.sts.pl/pl/sport/184/6521/74214':'Anglia'}
+sites3={'https://m.sts.pl/pl/sport/184/6502/74203':'Polska'}
+for site in sites2:
     logging.basicConfig(filename='logfile_sts.log', level=logging.DEBUG)
 
     user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
@@ -631,9 +631,7 @@ for site in sites3:
     request = urllib2.Request(site, None, headers)
     response = urllib2.urlopen(request)
     strona = response.read()
-
     soup = BeautifulSoup(strona, "html.parser")
-
     try:
         league = unify_name(soup.find('div',{'id':'content'}).h1.text.strip()+' '+sites2[site],leagues,logging)
     except:
@@ -645,7 +643,7 @@ for site in sites3:
     more_bets=soup.find_all('a', {'class': 'more'},href=True)
     #more_bets = soup.find_all('td')
     #more_bets=['https://m.sts.pl/pl/sport/184/6502/43461/128429980']
-    print("MORE",more_bets)
+    print("MORE",site,sites2[site],more_bets,file=open('sts.txt','a'))
     print ("JESTEM TU")
     #more_bets=['https://www.sts.pl/pl/oferta/zaklady-bukmacherskie/zaklady-sportowe/?action=offer&sport=184&region=6499&league=3903&oppty=152636192']
     for link in more_bets:

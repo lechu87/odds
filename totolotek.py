@@ -13,7 +13,11 @@ def get_value(json,tittle,fcparam='0'):
 
 class football_event:
     logging.basicConfig(filename='logfile_totolotek.log', level=logging.DEBUG)
-
+    def open_curl(self,site):
+        proc = subprocess.Popen(["curl", site], stdout=subprocess.PIPE)
+        # print(proc.stdout)
+        jjson = proc.stdout.read()
+        return jjson['Response']
     def open_site(self,site):
         #league_list = 'https://m.totolotek.pl/PalinsestoRest/GetEventsByMarket?filter=Any&sportId=2&tournamentId=114&gameId=0&gameParam=0'
         user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
@@ -347,7 +351,8 @@ class football_event:
 
 
     def __init__(self, events_mapping_totolotek, url):
-        self.data=self.open_site(url)
+        #self.data=self.open_site(url)
+        self.data=self.open_curl(url)
         self.__events_mapping=events_mapping_totolotek
         #self.open_site(url)
         self.get_name(self.data)
@@ -356,6 +361,44 @@ class football_event:
         self.prepare_dict_to_sql(self.data)
         #self.save_to_db()
         save_to_db_common(self,"'"+self.date+"'")
+
+
+import time
+from urllib.request import urlopen
+import requests
+
+def test(site):
+    #user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
+    #headers = {'User-Agent': user_agent, }
+    #request = urllib2.Request(site, None, headers)
+    #print ("REQ_DONE")
+    #response = urllib2.urlopen(request)
+    #print ("RES DONE")
+    #time.sleep(2)
+    #html = urlopen.get(url)  # Insert your URL to extract
+    #print (html.json())
+    #soup = BeautifulSoup(html.read());
+
+    #soup = BeautifulSoup(page.text, "lxml")
+    #print(soup)
+    #print (response.read())
+    #tournamentid = site.split('&')[2].split('=')[1]
+    #print("T_ID:",tournamentid)
+    #data = response.readline().decode('utf-8')
+    #print("DATA:",data)
+    #soup = BeautifulSoup(data, "html.parser")
+    r = requests.get('https://m.totolotek.pl/PalinsestoRest/GetEvent?sportId=2&tournamentId=112&eventId=1083958')
+    r.json()
+
+    print(r.json()['Response'])
+#    proc = subprocess.Popen(["curl", site],stdout=subprocess.PIPE)
+    #print(proc.stdout)
+    jjson=r.json()
+    print("JSON:",jjson['Response'])
+
+url='https://m.totolotek.pl/PalinsestoRest/GetEvent?sportId=2&tournamentId=112&eventId=1083958'
+#test(url)
+#exit()
 sites=['https://m.totolotek.pl/PalinsestoRest/GetEventsByMarket?filter=Any&sportId=2&tournamentId=114&gameId=0&gameParam=0',
        'https://m.totolotek.pl/PalinsestoRest/GetEventsByMarket?filter=Any&sportId=2&tournamentId=116&gameId=0&gameParam=0',
        'https://m.totolotek.pl/PalinsestoRest/GetEventsByMarket?filter=Any&sportId=2&tournamentId=112&gameId=0&gameParam=0',
@@ -371,21 +414,30 @@ sites=['https://m.totolotek.pl/PalinsestoRest/GetEventsByMarket?filter=Any&sport
        'https://m.totolotek.pl/PalinsestoRest/GetEventsByMarket?filter=Any&sportId=2&tournamentId=135&gameId=0&gameParam=0',
        'https://m.totolotek.pl/PalinsestoRest/GetEventsByMarket?filter=Any&sportId=2&tournamentId=159&gameId=0&gameParam=0',
        'https://m.totolotek.pl/PalinsestoRest/GetEventsByMarket?filter=Any&sportId=2&tournamentId=188&gameId=0&gameParam=0']
-#sites=['https://m.totolotek.pl/PalinsestoRest/GetEventsByMarket?filter=Any&sportId=2&tournamentId=2713&gameId=0&gameParam=0',]
+sites2=['https://m.totolotek.pl/PalinsestoRest/GetEventsByMarket?filter=Any&sportId=2&tournamentId=2713&gameId=0&gameParam=0']
+#sites2=['https://m.totolotek.pl/PalinsestoRest/GetEventsByMarket?filter=Any&sportId=2&tournamentId=114&gameId=0&gameParam=0']
 logging.basicConfig(filename='logfile_totolotek.log', level=logging.DEBUG)
 for site in sites:
     user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
     headers = {'User-Agent': user_agent, }
     request = urllib2.Request(site, None, headers)
-    response = urllib2.urlopen(request)
-    tournamentid=site.split('&')[2].split('=')[1]
-    data = response.read().decode('utf-8')
-    soup = BeautifulSoup(data, "html.parser")
-    json_var = json.loads(data)
-    ids=[]
-
+    #print (site)
+    try:
+        response = urllib2.urlopen(request)
+        print("wczytane")
+        tournamentid=site.split('&')[2].split('=')[1]
+        print(tournamentid)
+        data = response.read()#.decode('utf-8')
+        #print (data)
+        soup = BeautifulSoup(data, "html.parser")
+        json_var = json.loads(data)
+        #print(json_var)
+        ids=[]
+    except:
+        logging.warning("ERROR dla " + str(site))
+        continue
     for element in json_var['Response']['Events']:
-        # print (element)
+        print (element)
         try:
             if element['Bets'][0]['Odds'][0]['EventId'] not in ids:
                 ids.append(element['Bets'][0]['Odds'][0]['EventId'])
