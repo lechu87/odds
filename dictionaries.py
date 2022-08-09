@@ -950,15 +950,16 @@ teams = {"Bulgaria":["Bulgaria","Bułgaria"],"Szwecja":["Szwecja"],"Francja":["F
          "Legia Warszawa": ["Legia", "Legia W.","Legia Warszawa"],
          "Wisła Płock": ["W.Płock", "W.Plock", "Wisła Płock", "Wisla Plock", "Plock", "Płock","W. Płock"],
          "Gornik Zabrze": ["Gornik Z.","G. Zabrze","Górnik Zabrze","GórnikZabrze","G.Zabrze"],
-         "Slask Wroclaw": ["Slask W.","Śląsk","Śląsk Wrocław"], "Cracovia": ["Cracovia","Cracovia ","Cracovia Kraków"], "Nieciecza": ["Nieciecza","Termalica Bruk-Bet Nieciecza"], "Korona K.": ["Korona K.","Korona","Korona Kielce"],
+         "Slask Wroclaw": ["Slask W.","Śląsk","Śląsk Wrocław"], "Cracovia": ["KS Cracovia","Cracovia","Cracovia ","Cracovia Kraków"], "Nieciecza": ["Termalica Nieciecza","Nieciecza","Termalica Bruk-Bet Nieciecza"], "Korona K.": ["Korona K.","Korona","Korona Kielce"],
          "Piast G.": ["Piast G.","Piast","Piast Gliwice","Piast Gl."], "Wisla K.": ["Wisla K.","W. Kraków","Wisła Kraków"],
          "Lechia G.": ["Lechia G.","Lechia","Lechia Gdańsk","Lechia Gdansk"], "Sandecja N.S.": ["Sandecja N.S.","Sandecja","Sandecja Nowy Sącz"], "Pogon Sz.": ["Pogon Sz.","Pogoń","Pogoń Szczecin"],
          "Lech P.": ["Lech P.","Lech","Lech Poznań","KKS Lech Poznań"], "Arka G.": ["Arka G.","Arka","Arka Gdynia"], "Zag.Lubin": ["Zag.Lubin","Lubin","Zagłębie Lubin"],"Jagiellonia":["Jagiellonia","Jagiellonia Białystok","Jagiellonia."],
+         
 
          "Bournemouth": ["Bournemouth","Bournemouth AFC","AFC Bournemouth"],"Manch.City": ["Manch.City","Manch. City","Man.City","Manchester City","Man. City"],"Cr.Palace": ["Cr.Palace","Cr. Palace","Crystal Palace","Crystal Palace FC"],
          "Swansea": ["Swansea","Swansea City"],"Huddersfield": ["Huddersfield","Huddersfield Town"],"Southampton": ["Southampton","Southampton FC"],"Newcastle": ["Newcastle","Newcastle United"],
          "West Ham": ["West Ham","West Ham United"],"Watford": ["Watford","Watford FC"],"Brighton": ["Brighton","FC Brighton & Hove Albion","Brighton and Hove Albion"],"Manch.Utd.": ["Manch.Utd.","Manch. Utd","Manchester United","Man. Utd"],
-         "Leicester": ["Leicester","Leicester City","Leicester City FC"],"Chelsea": ["Chelsea","Chelsea Londyn","Chelsea FC"],"Everton": ["Everton","FC Everton","Everton FC"],"W.B.A.": ["W.B.A.","WBA","West Bromwich Albion","West Bromwich"],"Stoke": ["Stoke","Stoke City","Stoke City FC"],
+         "Leicester": ["Leicester","Leicester City","Leicester City FC"],"Chelsea": ["Chelsea","Chelsea Londyn","Chelsea FC"],"Everton": ["Everton","FC Everton","Everton FC"],"W.B.A.": ["West Brom","W.B.A.","WBA","West Bromwich Albion","West Bromwich"],"Stoke": ["Stoke","Stoke City","Stoke City FC"],
          "Liverpool": ["Liverpool","FC Liverpool","Liverpool FC"],"Arsenal": ["Arsenal","Arsenal Londyn","Arsenal L.","Arsenal FC"],"Tottenham": ["Tottenham","Tottenham Hotspur","Tottenham Hotspur FC"],"Burnley": ["Burnley","FC Burnley","Burnley FC"],
 
          "S.Sebastian": ["S.Sebastian","Sociedad","Real Sociedad"],"Villarreal": ["Villarreal","FC Villarreal","Villarreal CF"],"Betis": ["Betis","Betis Sewilla","Real Betis"],"Celta Vigo": ["Celta Vigo","Celta","Celta de Vigo"],
@@ -967,9 +968,10 @@ teams = {"Bulgaria":["Bulgaria","Bułgaria"],"Szwecja":["Szwecja"],"Francja":["F
          "Espanyol": ["Espanyol","Espanyol Barcelona","RCD Espanyol"],"Leganes": ["Leganes","CD Leganes","Cd Leganes"],"Getafe": ["Getafe","FC Getafe","Getafe CF"],"Valencia": ["Valencia","FC Valencia","FC Valencia","Valencia CF"],"AS Roma": ["AS Roma"],
          "Atl.Madryt": ["Atl.Madryt"],"Barcelona": ["Barcelona","FC Barcelona"],"FC Sevilla": ["FC Sevilla","Sevilla"],"Real M.": ["Real M.","Real Madryt","Real Madryt CF"],
 
-         "Skenderbeu Korce":['Skenderbeu Korce'],"Apollon Lim.":['Apollon Lim.',"Apollon Limassol FC"],"Szerif Tiraspol":['Szerif Tiraspol',"FC Sheriff Tiraspol"],"H.Beer Sheva":['H.Beer Sheva',"Hapoel Beer Sheva"],
-         "Luhansk":['Luhansk',"Zoria Ługańsk"],"Ros.Trondheim":['Ros.Trondheim',"Rosenborg BK"],"Vardar Skopje":['Vardar Skopje'],"Mac.Tel Aviv":['Mac.Tel Aviv',"Maccabi Tel Aviv"],"FK Astana":['FK Astana',"FC Astana"],
+         "Skenderbeu Korce":['Skenderbeu Korce'],"Apollon Lim.":['Apollon Limassol','Apollon Lim.',"Apollon Limassol FC"],"Szerif Tiraspol":['Sheriff Tiraspol','Szerif Tiraspol',"FC Sheriff Tiraspol"],"H.Beer Sheva":['H.Beer Sheva',"Hapoel Beer Sheva"],
+         "Luhansk":['Luhansk',"Zoria Ługańsk"],"Ros.Trondheim":['Ros.Trondheim',"Rosenborg BK"],"Vardar Skopje":['Vardar Skopje'],"Maccabi Haifa":["Maccabi Haifa"],"Mac.Tel Aviv":['Mac.Tel Aviv',"Maccabi Tel Aviv"],"FK Astana":['FK Astana',"FC Astana"],
          "Karabach":["Karabach","Qarabag FK"],"Maribor":["Maribor","NK Maribor"],"Apoel Nik.":["Apoel Nik.","Apoel Nikozja","Ap. Nikozja"],
+         "Pjunik Erywań":["Pjunik Erywań"],
 
 
 
@@ -978,7 +980,7 @@ teams = {"Bulgaria":["Bulgaria","Bułgaria"],"Szwecja":["Szwecja"],"Francja":["F
 "Podbeskidzie": ["Podbeskidzie","Podbeskidzie Bielsko Biała"],
 "P.Niepolomice": ["P.Niepolomice","Niepołomice","Puszcza Niepołomice","P.Niepołomice"],
 "W.Suwalki": ["W.Suwalki","Suwałki","Wigry Suwałki"],
-"Rakow Cz.": ["Rakow Cz.","Rak. Częstochowa","Raków Częstochowa"],
+"Rakow Cz.": ["Rakow Cz.","Rak. Częstochowa","Raków Częstochowa","KS Raków Częstochowa"],
 "Z.Sosnowiec": ["Z.Sosnowiec","Sosnowiec","Zagłębie Sosnowiec","Zagłębie Sosn.","Zag.Sosnowiec"],
 "Katowice": ["Katowice","GKS Katowice"],
 "O.Opole": ["O.Opole","Opole","Odra Opole"],
@@ -993,8 +995,11 @@ teams = {"Bulgaria":["Bulgaria","Bułgaria"],"Szwecja":["Szwecja"],"Francja":["F
 "P.Siedlce": ["P.Siedlce","Siedlce","Pogoń Siedlce"],
 "Ch.Glogow": ["Ch.Glogow","Głogów","Chrobry Głogów"],
 "R.Zdzieszowice":["R.Zdzieszowice"],
+"Resovia Rzeszów":["Resovia Rzeszów"],
+"Stal Rzeszów":["Stal Rzeszów"],
+"Skra Częstochowa":["Skra Częstochowa"],
          
-"R.Radom": ["R.Radom"],
+"R.Radom": ["R.Radom","Radomiak Radom","RKS Radomiak Radom"],
 "Kluczbork": ["Kluczbork"],
 "ŁKS Łódź": ["ŁKS Łódź"],
 "Jastrzebie": ["Jastrzebie","Jastrzębie","Jastrzębie Zdrój"],
@@ -1007,7 +1012,7 @@ teams = {"Bulgaria":["Bulgaria","Bułgaria"],"Szwecja":["Szwecja"],"Francja":["F
 "Warta Poz.": ["Warta Poz.","Warta","Warta Poznań"],
 "B.Stargard": ["B.Stargard"],
 "Z.Pruszkow": ["Z.Pruszkow","Z.Pruszków"],
-"Widzew":["Widzew"],
+"Widzew":["Widzew","Widzew Łódź"],
 "Belchatow": ["Belchatow","Bełchatów"],
 "Ol.Elblag": ["Ol.Elblag","Ol.Elbląg"],
 "St.Wola": ["St.Wola"],
@@ -1022,8 +1027,13 @@ teams = {"Bulgaria":["Bulgaria","Bułgaria"],"Szwecja":["Szwecja"],"Francja":["F
 "Salzburg": ["Salzburg","FC Salzburg","R.B. Salzburg","Red Bull Salzburg","RB Salzburg"],
 "Admira": ["Admira","FC Admira Wacker","VfB Admira Wacker Modling"],
 "Austria W.": ["Austria W.","Austria Wiedeń","Austria Wiedeń","FK Austria Wiedeń","Aus. Wiedeń"],
-"TSV Hartberg":["TSV Hartberg","Tsv Hartberg"],
+"TSV Hartberg":["TSV Hartberg","Tsv Hartberg","Hartberg"],
 "Wacker Innsbruck":["FC Wacker Innsbruck","W. Innsbruck","Wacker Innsbruck"],
+"Ried":["SV Ried","Ried"],
+"Lustenau":["A. Lustenau","Lustenau","SC Austria Lustenau"],
+"Tirol":["Tirol","WSG Wattens"],
+"Klagenfurt":["A. Klagenfurt","Klagenfurt","SK Austria Klagenfurt"],
+
 "Kortrijk": ["Kortrijk","KV Kortrijk"],
 "Mouscron Per.": ["Mouscron Per.","Royal Mouscron","Mouscron Peruwelz","Royal Mouscron-Peruwelz","Mouscron"],
 "Charleroi": ["Charleroi","Royal Charleroi SC"],
@@ -1041,7 +1051,10 @@ teams = {"Bulgaria":["Bulgaria","Bułgaria"],"Szwecja":["Szwecja"],"Francja":["F
 "FC Antwerp": ["FC Antwerp","Royal Antwerpia","Royal Antwerp Fc","Royal Antwerp FC","Antwerpia"],
 "Anderlecht":["Anderlecht","RSC Anderlecht"],
 "Cercle Brugge":["Cercle Brugge KSV","Cercle Brugge","CS Brugge"],
-
+"Union Saint-Gilloise":["Union Saint-Gilloise","Royale Union Saint-Gilloise"],
+"Westerlo":["KVC Westerlo","Westerlo","VC Westerlo"],
+"Seraing":["RFC Seraing","Seraing","Seraing United"],
+"Leuven":["OH Leuven","Leuven","Oud-Heverlee Leuven"],
 
 "D.Mogilev": ["D.Mogilev","FC Dniepr Mogilev","Mogilev"],
 "T.Zhodino": ["T.Zhodino","Torpedo-Belaz","Zhodino"],
@@ -1149,6 +1162,7 @@ teams = {"Bulgaria":["Bulgaria","Bułgaria"],"Szwecja":["Szwecja"],"Francja":["F
 "Pilzno": ["Pilzno","Viktoria Pilzno","Plzen","V. Pilzno"],
 "Ostrawa": ["Ostrawa","FC Banik Ostrawa"],
 "Sonderjyske": ["Sonderjyske"],
+"Bodo/Glimt":["Bodo/Glimt"],
 "Odense": ["Odense","Odense BK"],
 "Silkeborg": ["Silkeborg","Silkeborg IF"],
 "Hobro": ["Hobro","Hobro IK"],
@@ -1171,12 +1185,17 @@ teams = {"Bulgaria":["Bulgaria","Bułgaria"],"Szwecja":["Szwecja"],"Francja":["F
 "Troyes": ["Troyes","Troyes AC","ES Troyes AC"],
 "Caen": ["Caen","SM Caen"],
 "Metz": ["Metz","FC Metz"],
-"Grenoble Foot 38":["Grenoble Foot 38"],
+"Grenoble Foot 38":["Grenoble Foot 38","Grenoble"],
+"Bastia":["SC Bastia","Bastia"],
+"Quevilly Rouen":["Quevilly Rouen","US Quevilly Rouen Metropole"],
 "Dijon": ["Dijon","Dijon Fco","Dijon FC"],
+"Pau":["Pau","Pau FC"],
 "Montpellier": ["Montpellier","HSC Montpellier","Montpellier HSC"],
 "Toulouse": ["Toulouse","FC Toulouse","Toulouse FC"],
 "Rennes": ["Rennes","Stade Rennes","Stade Rennais"],
 "Guingamp": ["Guingamp","EA Guingamp"],
+"Stade Lavallois":["Stade Lavallois MFC","Stade Lavallois","Stade Lavallois Mayenne FC"],
+"Annecy":["Annecy FC","Annecy"],
 "Strasbourg": ["Strasbourg","Racing Strasbourg","RC Strasbourg Alsace","RC Strasbourg Alsace"],
 "Angers": ["Angers","SCO Angers","Angers SCO"],
 "Lille": ["Lille","OSC Lille","Lille OSC"],
@@ -1201,6 +1220,9 @@ teams = {"Bulgaria":["Bulgaria","Bułgaria"],"Szwecja":["Szwecja"],"Francja":["F
 "Aris Thessaloniki":["Aris Thessaloniki","Aris Thessal."],
 "OFI Crete":["OFI Crete","OFI Kreta"],
 "Asteras": ["Asteras","Asteras Tripolis"],
+"Ionikos Nikea":["Ionikos Nikea"],
+"Volos NFC":["Volos NFC"],
+
 "Breda": ["Breda","NAC Breda"],
 "Sp.Rotterdam": ["Sp.Rotterdam","Sparta Rotterdam","Sp. Rotterdam","Sparta R"],
 "Vitesse Arnhem": ["Vitesse Arnhem","Vitesse"],
@@ -1211,6 +1233,7 @@ teams = {"Bulgaria":["Bulgaria","Bułgaria"],"Szwecja":["Szwecja"],"Francja":["F
 "Tw.Enschede": ["Tw.Enschede","Twente","Twente Enschede","FC Twente"],
 "Heracles": ["Heracles","Heracles Almelo"],
 "Excelsior": ["Excelsior","SBV Excelsior","Excelsior Rotterdam"],
+"Cambuur":["Cambuur Leeuwarden","Cambuur","SC Cambuur Leeuwarden"],
 "Tilburg": ["Tilburg","Willem II","Willem II Tilburg"],
 "Venlo": ["Venlo","VVV Venlo","VVV-Venlo"],
 "Ajax": ["Ajax","Ajax Amsterdam"],
@@ -1222,14 +1245,18 @@ teams = {"Bulgaria":["Bulgaria","Bułgaria"],"Szwecja":["Szwecja"],"Francja":["F
 "De Graafschap":["De Graafschap","Graafschap"],
 "Fortuna Sittard":["Fortuna Sittard","Sittard","F. Sittard"],
 "FC Emmen":["FC Emmen","Emmen"],
+"Waalwijk":["Waalwijk","RKC Waalwijk"],
+"Volendam":["FC Volendam","Volendam"],
+"NEC Nijmegen":["NEC Nijmegen","Nijmegen"],
+"Go Ahead":["Go Ahead Eagles","Go Ahead","Go Ahead Eagles Deventer"],
 
-"1.FC Koln": ["1.FC Koln","FC Koeln","1. FC Koln","1. FC Cologne","Koln"],
+"1.FC Koln": ["1.FC Koln","FC Koeln","1. FC Koln","1. FC Cologne","Koln","FC Koln"],
 "Bayern M.": ["Bayern M.","Bayern","Bayern Monachium","FC Bayern Monachium"],
 "Hamburg": ["Hamburg","Hamburger SV","Hamburger"],
 "Augsburg": ["Augsburg","FC Augsburg"],
 "M gladbach": ["M gladbach","M Gladbach","Borussia M'gladbach","B. Mgladbach","Borussia Monchengladbach","Moenchengladbach"],
 "Werder B.": ["Werder B.","Werder","Werder Brema","SV Werder Brema"],
-"Eint.Frankfurt": ["Eint.Frankfurt","Ein. Frankfurt","Eintracht Frankfurt","Eint. Frankfurt"],
+"Eint.Frankfurt": ["Eint.Frankfurt","Ein. Frankfurt","Eintracht Frankfurt","Eint. Frankfurt","Frankfurt"],
 "Wolfsburg": ["Wolfsburg","VfL Wolfsburg"],
 "Leverkusen": ["Leverkusen","Bayer Leverkusen","B. Leverkusen"],
 "Hoffenheim": ["Hoffenheim","1899 Hoffenheim","TSG 1899 Hoffenheim"],
@@ -1244,7 +1271,7 @@ teams = {"Bulgaria":["Bulgaria","Bułgaria"],"Szwecja":["Szwecja"],"Francja":["F
 
 "Belenenses": ["Belenenses","Belenenses Lizbona","CF Os Belenenses"],
 "Setubal": ["Setubal","Vitoria FC Setubal","V. Setubal","Vitoria Setubal"],
-"Benfica": ["Benfica","Benfica Lizbona","SL Benfica"],
+"Benfica": ["Benfica","Benfica Lizbona","SL Benfica","Benfica Lisbon","Benfica Lisbona"],
 "Sporting L.": ["Sporting L.","Sp. Lizbona","Sporting CP","Sporting Lizbona","Sp.Lizbona","Sporting"],
 "Ferreira": ["Ferreira","P. Ferreira","FC Pacos Ferreira","Pacos Ferreira"],
 "Guimaraes": ["Guimaraes","V. Guimaraes","Vitoria Guimaraes"],
@@ -1256,6 +1283,11 @@ teams = {"Bulgaria":["Bulgaria","Bułgaria"],"Szwecja":["Szwecja"],"Francja":["F
 "Rio Ave": ["Rio Ave","Rio Ave FC","Rio Ave Fc"],
 "Boavista": ["Boavista","Boavista FC","Boavista Porto"],
 "Aves": ["Aves","CD Das Aves", "Desportivo Aves","CD Aves"],
+"FC Arouca":["FC Arouca","Arouca"],
+"FC Vizela":["FC Vizela","Vizela"],
+"Famalicao":["Famalicao","FC Famalicao"],
+"Gil Vicente":["Gil Vicente"],
+"Casa Pia Atletico":["Casa Pia Atletico","Casa Pia AC"],
 "Estoril": ["Estoril","GD Estoril Praia","Estoril Praia"],
 "Braga": ["Braga","Sporting Braga","SC Braga"],
 "Portimao": ["Portimao","Portimonense SC","Portimonense Sc","Portimonense"],
@@ -1332,10 +1364,10 @@ teams = {"Bulgaria":["Bulgaria","Bułgaria"],"Szwecja":["Szwecja"],"Francja":["F
 "Partick": ["Partick","Partick Thistle FC"],
 "Aberdeen": ["Aberdeen","FC Aberdeen","Aberdeen FC"],
 "Celtic": ["Celtic","Celtic Glasgow","Celtic FC"],
-"FC Dundee": ["FC Dundee","Dundee FC"],
+"FC Dundee": ["FC Dundee","Dundee FC","Dundee United"],
 "Hibernian": ["Hibernian","Hibernian Edinburgh FC","Hibernian FC"],
 "Ross": ["Ross","Ross County","Ross County FC"],
-"Gl.Rangers": ["Gl.Rangers","Rangers","Glasgow Rangers"],
+"Gl.Rangers": ["Gl.Rangers","Rangers","Glasgow Rangers","Rangers F.C"],
 "Livingston FC":["Livingston FC","Livingston"],
 "St Mirren FC":["St Mirren FC","St. Mirren","FC St. Mirren","St Mirren"],
 "AFC Eskilstuna": ["AFC Eskilstuna","Eskilstuna"],
@@ -1350,7 +1382,7 @@ teams = {"Bulgaria":["Bulgaria","Bułgaria"],"Szwecja":["Szwecja"],"Francja":["F
 "Ostersund": ["Ostersund","Ostersunds","Ostersunds FK","Ostersunds Fk"],
 "Elfsborg": ["Elfsborg"],
 "Halmstad": ["Halmstad","Halmstads"],
-"Malmo FF": ["Malmo FF","Malmoe"],
+"Malmo FF": ["Malmo FF","Malmoe","Malmo"],
 "IFK Goeteborg": ["IFK Goeteborg"],
 "Sarpsborg":["Sarpsborg"],
 "Basel": ["Basel","FC Basel"],
@@ -1361,15 +1393,18 @@ teams = {"Bulgaria":["Bulgaria","Bułgaria"],"Szwecja":["Szwecja"],"Francja":["F
 "Lugano": ["Lugano","AC Lugano"],
 "Thun": ["Thun"],
 "Luzern": ["Luzern"],
-"FC Zurich": ["FC Zurich"],
+"FC Zurich": ["FC Zurich","Zurich"],
 "Sion": ["Sion"],
 "St.Gallen": ["St.Gallen","St. Gallen"],
 "YB Bern": ["YB Bern","Young Boys","BSC Young Boys Berno"],
 "Neuchatel Xamax":["Neuchatel Xamax"],
 "Alanya": ["Alanya","Alanyaspor"],
+"Umraniyespor":["Umraniyespor"],
+"Gaziantep":["Gaziantep"],
+"Fatih Karagumruk":["Fatih Karagumruk"],
 "Karabuk": ["Karabuk","Kardemir Karabukspor"],
 "Galatasaray": ["Galatasaray","Galatasaray Istambuł","Galatasaray SK"],
-"Ankaragucu":["Ankaragucu"],
+"Ankaragucu":["Ankaragucu","MKE Ankaragucu"],
 "Sivasspor": ["Sivasspor","Sivas"],
 "Bursaspor": ["Bursaspor","Bursa"],
 "Yeni Malatya": ["Yeni Malatya","Malatya Bld Spor","Malatya","Yeni Malatyaspor 1986"],
@@ -1379,11 +1414,15 @@ teams = {"Bulgaria":["Bulgaria","Bułgaria"],"Szwecja":["Szwecja"],"Francja":["F
 "Trabzonspor": ["Trabzonspor","Trabzon"],
 "Kayserispor": ["Kayserispor","Kayseri"],
 "Osmanli": ["Osmanli","Osmanlispor","Osmanlispor FK"],
-"Basaksehir": ["Basaksehir","Basaksehir FK","Buyuksehir","Buyuksehir Belediye Erzurumspor","Erzurumspor"],
+"Basaksehir": ["Basaksehir","Basaksehir FK","Buyuksehir","Buyuksehir Belediye Erzurumspor","Erzurumspor","Istanbul Basaksehir"],
 "Rize":["Rize","Caykur Rizespor"],
+"Adana Demirspor":["Adana Demirspor"],
+"Giresunspor":["Giresunspor"],
 "Konyaspor": ["Konyaspor","Konya","Torku Konyaspor"],
 "Akhisar": ["Akhisar","Akhisar Bld Spor","Akhisar Belediyespor"],
 "Kasimpasa": ["Kasimpasa"],
+"Hatayspor":["Hatayspor"],
+"Istanbulspor AS":["Istanbulspor AS","Istanbulspor"],
 "Genclerbirligi": ["Genclerbirligi"],
 "Fenerbahce": ["Fenerbahce"],
 "Bangor": ["Bangor"],
@@ -1420,6 +1459,7 @@ teams = {"Bulgaria":["Bulgaria","Bułgaria"],"Szwecja":["Szwecja"],"Francja":["F
 "Napoli": ["Napoli","SSC Napoli"],
 "Inter M.": ["Inter M.","Inter","Inter Mediolan"],
 "AC Torino": ["AC Torino","Torino","FC Turyn","FC Torino","Torino FC"],
+"AC Monza":["AC Monza Brianz","AC Monza"],
 "Sassuolo": ["Sassuolo","US Sassuolo"],
 "AC Milan": ["AC Milan","Milan"],
 "Cagliari": ["Cagliari"],
@@ -1432,13 +1472,17 @@ teams = {"Bulgaria":["Bulgaria","Bułgaria"],"Szwecja":["Szwecja"],"Francja":["F
 "A.Bergamo": ["A.Bergamo","Atalanta","Atalanta Bergamo","Atalanta Bergamasca Calcio"],
 "Spal": ["Spal","Spal 2013"],
 "Udinese": ["Udinese","Udinese Calcio"],
+"Pisa":["SC Pisa","AC Pisa"],
+"Como":["Como Calcio","Como"],
+"Reggio Calabria":["Reggio Calabria","ASD Reggio Calabria"],
+
 
 "Bristol C.": ["Bristol C.","Bristol","Bristol City"],
 "Aston Villa": ["Aston Villa"],
 "Hull": ["Hull","Hull City"],
 "Bolton": ["Bolton","Bolton Wanderers"],
 "Barnsley": ["Barnsley"],
-"Sunderland": ["Sunderland"],
+"Sunderland": ["Sunderland","Sunderland AFC"],
 "Birmingham": ["Birmingham","Birmingham City FC","Birmingham City","Birmingham City"],
 "Reading": ["Reading","Reading FC"],
 "Brentford": ["Brentford","Brentford FC"],
@@ -1449,6 +1493,7 @@ teams = {"Bulgaria":["Bulgaria","Bułgaria"],"Szwecja":["Szwecja"],"Francja":["F
 "Q.P.R.": ["Q.P.R.","QPR","Queens Park Rangers"],
 "Ipswich": ["Ipswich","Ipswich Town"],
 "Fulham": ["Fulham","Fulham FC"],
+"Luton Town":["Luton Town","Luton"],
 "Middlesbr.": ["Middlesbr.","Middlesbrough","Middlesbrough FC","FC Middlesbrough"],
 "Preston": ["Preston","Preston North End"],
 "Millwall": ["Millwall","Millwall FC"],
@@ -1458,6 +1503,9 @@ teams = {"Bulgaria":["Bulgaria","Bułgaria"],"Szwecja":["Szwecja"],"Francja":["F
 "Derby": ["Derby","Derby County"],
 "Nottingham": ["Nottingham","Nottingham Forest"],
 "Leeds": ["Leeds","Leeds United"],
+"Coventry City":["Coventry City","Coventry"],
+"Blackpool FC":["Blackpool FC","Blackpool"],
+
 "Wigan": ["Wigan","Wigan Athletic FC","Wigan Athletic"],
 "Rotherham":["Rotherham","Rotherham United","Rotherham Utd"],
 "Albacete": ["Albacete","Albacete Balompie"],
@@ -1467,7 +1515,7 @@ teams = {"Bulgaria":["Bulgaria","Bułgaria"],"Szwecja":["Szwecja"],"Francja":["F
 "Elche":["Elche","Elche CF"],
 "Rayo Majadahonda":["CF Rayo Majadahonda","Rayo Majadahonda"],
 "Extremadura":["Extremadura","UD Extremadura"],
-"Mallorca":["RCD Mallorca"],
+"Mallorca":["RCD Mallorca","Mallorca"],
 "Huesca": ["Huesca","SD Huesca"],
 "Lorca": ["Lorca","Lorca CF"],
 "Atl.Sevilla": ["Atl.Sevilla","Sevilla II","Sevilla Atletico"],
@@ -1478,35 +1526,46 @@ teams = {"Bulgaria":["Bulgaria","Bułgaria"],"Szwecja":["Szwecja"],"Francja":["F
 "Oviedo": ["Oviedo","Real Oviedo"],
 "Gijon": ["Gijon","Sporting Gijon"],
 "Lugo": ["Lugo","CD Lugo"],
-"Saragossa": ["Saragossa","Real Saragossa"],
+"Saragossa": ["Saragossa","Real Saragossa","Real Zaragoza"],
 "Granada": ["Granada","Granada CF"],
 "Cadiz": ["Cadiz","Cadiz CF"],
 "Alcorcon": ["Alcorcon","Alcorcon AD","AD Alcorcon"],
 "Reus": ["Reus","Reus Deportiu","CF Reus Deportiu"],
 "Gim.Tarragona": ["Gim.Tarragona","Tarragona","Gimnastic de Tarragona"],
 "Barcelona II": ["Barcelona II","Barcelona B","FC Barcelona B"],
-"Tenerife": ["Tenerife","Tenerife CD"],
-
+"Tenerife": ["Tenerife","Tenerife CD","CD Tenerife"],
+"Racing Santander":["Racing Santander"],
+"Mirandes":["CD Mirandes","Mirandes"],
+"Tenerife":["CD Tenerife","Tenerife"],
+"Cartagena":["FC Cartagena","Cartagena"],
+"Villarreal CF B":["Villarreal CF B"],
+"UD Ibiza Eivissa":["UD Ibiza Eivissa","Ibiza Eivissa"],
+"SD Ponferradina":["SD Ponferradina","Ponferradina"],
+"Burgos FC":["Burgos FC"],
+"FC Andorra":["FC Andorra"],
 "Duisburg": ["Duisburg","MSV Duisburg"],
 "Darmstadt 98": ["Darmstadt 98","SV Darmstadt 98","Darmstadt"],
-"Furth": ["Furth","Greuther Furth","Gr. Furth"],
+"Hansa Rostock":["Hansa Rostock","FC Hansa Rostock"],
+"Furth": ["Furth","Greuther Furth","Gr. Furth","SpVgg Greuther Furth"],
 "Ingolstadt": ["Ingolstadt","FC Ingolstadt"],
 "Aue": ["Aue","Erzgebirge Aue","FC Erzgebirge Aue"],
-"Nurnberg": ["Nurnberg","FC Nuremberg","1. FC Nurnberg","Nuernberg"],
-"Regensburg": ["Regensburg","Jahn Regensburg"],
+"Nurnberg": ["Nurnberg","FC Nuremberg","1. FC Nurnberg","Nuernberg","Nuremberg"],
+"Regensburg": ["Regensburg","Jahn Regensburg","SSV Jahn Regensburg"],
 "Kiel": ["Kiel","Holstein Kiel"],
+"Magdeburg":["Magdeburg","Magdeburg","1.FC Magdeburg"],
 "St.Pauli": ["St.Pauli","St. Pauli","FC St. Pauli"],
-"Heidenheim": ["Heidenheim","FC Heidenheim"],
+"Heidenheim": ["Heidenheim","FC Heidenheim","FC Heidenheim","1.FC Heidenheim 1846","1. FC Heidenheim"],
 "Bochum": ["Bochum","VfL Bochum"],
 "Drezno": ["Drezno","Dyn. Drezno","Dynamo Drezno"],
 "Sandhausen": ["Sandhausen","SV Sandhausen"],
 "Dusseldorf": ["Dusseldorf","F. Dusseldorf","Fortuna Dusseldorf"],
 "Un. Berlin": ["Un. Berlin","Union Berlin","FC Union Berlin","1. FC Union Berlin"],
-"Bielefeld": ["Bielefeld","Arminia Bielefeld"],
+"Bielefeld": ["Bielefeld","Arminia Bielefeld","DSC Arminia Bielefeld"],
 "K lautern": ["K lautern","Kaiserslautern","1. FC Kaiserslautern"],
 "Braunschweig": ["Braunschweig","Brunszwik","Eintracht Braunschweig"],
 "FC Magdeburg":["FC Magdeburg"],
 "Paderborn":["Paderborn","SC Paderborn","SC Paderborn 07"],
+"Karlsruher":["Karlsruher","Karlsruher SC"],
 
 "Parma": ["Parma","Parma Calcio 1913 S.r.l.","FC Parma"],
 "Cremona": ["Cremona","US Cremonese","Cremonese"],
@@ -1524,7 +1583,7 @@ teams = {"Bulgaria":["Bulgaria","Bułgaria"],"Szwecja":["Szwecja"],"Francja":["F
 "Frosinone": ["Frosinone","Frosinone Calcio"],
 "Ternana": ["Ternana","Ternana Calcio"],
 "Empoli": ["Empoli","FC Empoli","Empoli FC"],
-"Venezia": ["Venezia"],
+"Venezia": ["Venezia","SSC Venezia"],
 "Salernitana": ["Salernitana","US Salernitana 1919"],
 "Pescara": ["Pescara","Pescara Calcio"],
 "Foggia": ["Foggia","Foggia Calcio"],
@@ -1534,6 +1593,9 @@ teams = {"Bulgaria":["Bulgaria","Bułgaria"],"Szwecja":["Szwecja"],"Francja":["F
 "Lecce":["Lecce","US Lecce"],
 "Padova":["Padova","Calcio Padova"],
 "Cesena": ["Cesena","AC Cesena"],
+"Modena":["FC Modena","Modena"],
+"Sudtirol":["FC Sudtirol","Sudtirol"],
+
 "Bourg": ["Bourg"],
 "GFC Ajaccio": ["GFC Ajaccio","Gazelec Ajaccio"],
 "Brest": ["Brest"],
@@ -1543,8 +1605,8 @@ teams = {"Bulgaria":["Bulgaria","Bułgaria"],"Szwecja":["Szwecja"],"Francja":["F
 "Paris FC": ["Paris FC"],
 "Auxerre": ["Auxerre","AJ Auxerre"],
 "Quevilly": ["Quevilly"],
-"Clermont": ["Clermont"],
-"Sochaux": ["Sochaux"],
+"Clermont": ["Clermont","Clermont Foot"],
+"Sochaux": ["Sochaux","FC Sochaux Montbeliard"],
 "Chateauroux": ["Chateauroux"],
 "Tours": ["Tours"],
 "AC Ajaccio": ["AC Ajaccio","Gazelec FCO Ajaccio"],
@@ -1558,23 +1620,31 @@ teams = {"Bulgaria":["Bulgaria","Bułgaria"],"Szwecja":["Szwecja"],"Francja":["F
 "MTK Budapeszt":["MTK Budapeszt"],
 "MOL Vidi":["MOL Vidi"],
 "Kisvarda":["Kisvarda"],
-
+"Zalgiris Vilnius":["Zalgiris Vilnius","Zalgiris Wilno","Zalgiris"],
+"Ferencvarosi":["Ferencvarosi","Ferencvarosi TC"],
+"AEK Larnaca":["AEK Larnaca","Larnaca"],
+"Dudelange":["F91 Dudelange","Dudelange"],
+"HJK Helsinki":["HJK Helsinki"],
+"FC Linfield":["FC Linfield","Linfield"],
+"Shamrock Rovers":["Shamrock Rovers"],
+"Shkupi Skopje":["KF Shkupi Skopje","Shkupi Skopje"],
+"Rodez Aveyron":["Rodez Aveyron","Rodez AF"],
 
          }
 leagues=defaultdict(str)
-leagues = {"Ekstraklasa Polska":["Ekstraklasa","Ekstraklasa Polska","Polska Ekstraklasa.","ekstraklasa"],"Premiership":["Premier League Anglia","1.Anglia","1 liga Anglia","1. Liga Anglia","Anglia 1. Liga","Premier League","premier-league"],"2 Anglia":["Anglia 2 Liga","2. Liga Anglia","2 liga Anglia","2.Anglia","championship"],
-           "Liga Mistrzow":["UEFA Liga Mistrzów, Faza pucharowa Rozgrywki klubowe","UEFA Liga Mistrzów, Faza pucharowa Rozgrywki klubowe ","Liga Mistrzów.","Liga Mistrzów Rozgrywki klubowe","Liga Mistrzów Rozgrywki klubowe ","Liga Mistrzow","Liga Mistrzów Rozgr. klubowe","UEFA Liga Mistrzów","UEFA Liga Mistrzów, Grupa A Międzynarodowe Klubów","UEFA Liga Mistrzów, Grupa B Międzynarodowe Klubów","UEFA Liga Mistrzów, Grupa C Międzynarodowe Klubów",
+leagues = {"Ekstraklasa Polska":["Ekstraklasa","Ekstraklasa Polska","Polska Ekstraklasa.","ekstraklasa"],"Premiership":["Premier League Anglia","1.Anglia","1 liga Anglia","1. Liga Anglia","Anglia 1. Liga","Premier League","premier-league"],"2 Anglia":["Championship Anglia","Anglia 2 Liga","2. Liga Anglia","2 liga Anglia","2.Anglia","championship"],
+           "Liga Mistrzow":["Liga Mistrzów Klubowe","UEFA Liga Mistrzów, Faza pucharowa Rozgrywki klubowe","UEFA Liga Mistrzów, Faza pucharowa Rozgrywki klubowe ","Liga Mistrzów.","Liga Mistrzów Rozgrywki klubowe","Liga Mistrzów Rozgrywki klubowe ","Liga Mistrzow","Liga Mistrzów Rozgr. klubowe","UEFA Liga Mistrzów","UEFA Liga Mistrzów, Grupa A Międzynarodowe Klubów","UEFA Liga Mistrzów, Grupa B Międzynarodowe Klubów","UEFA Liga Mistrzów, Grupa C Międzynarodowe Klubów",
            "UEFA Liga Mistrzów, Grupa D Międzynarodowe Klubów","UEFA Liga Mistrzów, Grupa E Międzynarodowe Klubów","UEFA Liga Mistrzów, Grupa F Międzynarodowe Klubów","UEFA Liga Mistrzów, Grupa G Międzynarodowe Klubów"
 ,"UEFA Liga Mistrzów, Grupa H Międzynarodowe Klubów","UEFA Liga Mistrzów, Grupa I Międzynarodowe Klubów",
                             "UEFA Liga Mistrzów, Grupa A Rozgrywki klubowe","UEFA Liga Mistrzów, Grupa B Rozgrywki klubowe","UEFA Liga Mistrzów, Grupa C Rozgrywki klubowe",
                             "UEFA Liga Mistrzów, Grupa D Rozgrywki klubowe","UEFA Liga Mistrzów, Grupa E Rozgrywki klubowe","UEFA Liga Mistrzów, Grupa F Rozgrywki klubowe",
-                            "UEFA Liga Mistrzów, Grupa G Rozgrywki klubowe","UEFA Liga Mistrzów, Grupa H Rozgrywki klubowe","UEFA Liga Mistrzów, Grupa I Rozgrywki klubowe"],"Mistrzostwa Świata":["Kwalifikacje MS-Europa"],"Primera Division":["1.Hiszpania","1 liga Hiszpania","1. Liga Hiszpania","Hiszpania 1. liga","primera-division","Primera Division Hiszpania"],
-           "1.Polska":["1.Polska","1. Liga Polska","Fortuna 1 Liga Polska"],"Ligue 1":["Ligue 1 Francja","1 liga Francja","1.Francja","1. Liga Francja","Francja 1. liga","ligue-1"],"Eredevise":["1 liga Holandia","1.Holandia","1. Liga Holandia","Holandia 1 liga","eredivisie"],"Bundesliga":["Bundesliga Niemcy","1 liga Niemcy","1.Niemcy","1. Liga Niemcy","Niemcy 1. liga","bundesliga"],"1 Portugalia":["1 liga Portugalia","1. Liga Portugalia","1.Portugalia","Portugalia 1 Liga","primeira-liga"],
-            "1 Rosja":["1 liga Rosja","1. Liga Rosja","1.Rosja"],"Serie A":['1 liga Włochy',"Serie A Włochy",'1.Wlochy',"1. Liga Włochy","Włochy 1. liga","serie-a"],"Serie B":['2 liga Włochy','2.Wlochy',"2. Liga Włochy","serie-b"],"1 Chorwacja":["1 liga Chorwacja","1. Liga Chorwacja","1.Chorwacja"],"1 Turcja":["Turcja 1 liga.","Turcja 1 liga","1 liga Turcja","1. Liga Turcja","1.Turcja","super-lig"],
-           "2 Niemcy":["2 liga Niemcy","2. Liga Niemcy","2.Niemcy","2-bundesliga"],"1 Białoruś":["1 liga Białoruś","1. Liga Białoruś","1.Bialorus"],"1 Brazylia":["1 liga Brazylia","1.Brazylia","1. Liga Brazylia"],"1 Argentyna":["1 liga Argentyna"],"1 Bułgaria":["1 liga Bułgaria","1. Liga Bułgaria","1.Bulgaria"],
+                            "UEFA Liga Mistrzów, Grupa G Rozgrywki klubowe","UEFA Liga Mistrzów, Grupa H Rozgrywki klubowe","UEFA Liga Mistrzów, Grupa I Rozgrywki klubowe"],"Mistrzostwa Świata":["Kwalifikacje MS-Europa"],"Primera Division":["LaLiga Hiszpania","1.Hiszpania","1 liga Hiszpania","1. Liga Hiszpania","Hiszpania 1. liga","primera-division","Primera Division Hiszpania"],
+           "1.Polska":["Polska 1. Liga Polska","1.Polska","1. Liga Polska","Fortuna 1 Liga Polska"],"Ligue 1":["Ligue 1 Francja","1 liga Francja","1.Francja","1. Liga Francja","Francja 1. liga","ligue-1"],"Eredevise":["Eredivisie Holandia","1 liga Holandia","1.Holandia","1. Liga Holandia","Holandia 1 liga","eredivisie"],"Bundesliga":["Bundesliga Niemcy","1 liga Niemcy","1.Niemcy","1. Liga Niemcy","Niemcy 1. liga","bundesliga"],"1 Portugalia":["Portugalia 1. Liga Portugalia","1 liga Portugalia","1. Liga Portugalia","1.Portugalia","Portugalia 1 Liga","primeira-liga"],
+            "1 Rosja":["1 liga Rosja","1. Liga Rosja","1.Rosja"],"Serie A":['1 liga Włochy',"Serie A Włochy",'1.Wlochy',"1. Liga Włochy","Włochy 1. liga","serie-a"],"Serie B":['Serie B Włochy','2 liga Włochy','2.Wlochy',"2. Liga Włochy","serie-b"],"1 Chorwacja":["1 liga Chorwacja","1. Liga Chorwacja","1.Chorwacja"],"1 Turcja":["Turcja 1. Liga Turcja","Turcja 1 liga.","Turcja 1 liga","1 liga Turcja","1. Liga Turcja","1.Turcja","super-lig"],
+           "2 Niemcy":["2. Bundesliga Niemcy","2 liga Niemcy","2. Liga Niemcy","2.Niemcy","2-bundesliga"],"1 Białoruś":["1 liga Białoruś","1. Liga Białoruś","1.Bialorus"],"1 Brazylia":["1 liga Brazylia","1.Brazylia","1. Liga Brazylia"],"1 Argentyna":["1 liga Argentyna"],"1 Bułgaria":["1 liga Bułgaria","1. Liga Bułgaria","1.Bulgaria"],
            "1 Chile":["1 liga Chile","1.Chile"],"1 Dania":["1 liga Dania","1. Liga Dania","1.Dania"],"1 Grecja":["1 liga Grecja","1. Liga Grecja","1.Grecja","super-league"],"1 Rumunia":["1 liga Rumunia","1. Liga Rumunia","1.Rumunia"],"1 Serbia":["1 liga Serbia","1.Serbia"],
-           "1 Szkocja":["Szkocja 1 Liga","Szkocja 1 Liga","1. Liga Szkocja","1 liga Szkocja","1.Szkocja","scottish-premiership"],"1 Szwajcaria":["1 liga Szwajcaria","1.Szwajcaria"],"1 Szwecja":["1 liga Szwecja","1.Szwecja"],"1 Walia":["1 liga Walia","1.Walia"],"1 Węgry":["1 liga Węgry","1. Liga Węgry","1.Wegry"],
-           "Ligue 2":['2 liga Francja',"2.Francja","ligue-2"],"2 Hiszpania":["Hiszpania 2 liga",'2 liga Hiszpania','2.Hiszpania','2. Liga Hiszpania','segunda-division'],"1 Polska":['1 liga Polska'],"Liga Europy":['Liga Europy',"UEFA Liga Europejska, Grupa A Międzynarodowe Klubów"
+           "1 Szkocja":["Szkocja 1. Liga Szkocja","Szkocja 1 Liga","Szkocja 1 Liga","1. Liga Szkocja","1 liga Szkocja","1.Szkocja","scottish-premiership"],"1 Szwajcaria":["1 liga Szwajcaria","1.Szwajcaria"],"1 Szwecja":["1 liga Szwecja","1.Szwecja"],"1 Walia":["1 liga Walia","1.Walia"],"1 Węgry":["1 liga Węgry","1. Liga Węgry","1.Wegry"],
+           "Ligue 2":['Ligue 2 Francja','2 liga Francja',"2.Francja","ligue-2"],"2 Hiszpania":["Hiszpania 2 liga",'2 liga Hiszpania','2.Hiszpania','2. Liga Hiszpania','segunda-division'],"1 Polska":['1 liga Polska'],"Liga Europy":['Liga Europy Klubowe','Liga Europy',"UEFA Liga Europejska, Grupa A Międzynarodowe Klubów"
     , "UEFA Liga Europejska, Grupa B Międzynarodowe Klubów","UEFA Liga Europejska, Grupa C Międzynarodowe Klubów","UEFA Liga Europejska, Grupa D Międzynarodowe Klubów"
 ,"UEFA Liga Europejska, Grupa E Międzynarodowe Klubów","UEFA Liga Europejska, Grupa F Międzynarodowe Klubów","UEFA Liga Europejska, Grupa G Międzynarodowe Klubów"
 ,"UEFA Liga Europejska, Grupa H Międzynarodowe Klubów","UEFA Liga Europejska, Grupa I Międzynarodowe Klubów","UEFA Liga Europejska, Grupa J Międzynarodowe Klubów"
@@ -1583,8 +1653,8 @@ leagues = {"Ekstraklasa Polska":["Ekstraklasa","Ekstraklasa Polska","Polska Ekst
            "MS kwale":["Kwalifikacje MS-Ameryka Pld.","Kwalifikacje MS-Azja","Kwalifikacje MS-Afryka","Kwalifikacje MS-Europa","Kwalifikacje MS-Ameryka Pld.","elim. MŚ (Europa) Rozgr. międzynarodowe",
                        "elim. MŚ (Amer. Płd.) Rozgr. międzynarodowe","elim. MŚ (CONCACAF) Rozgr. międzynarodowe","elim. MŚ (Azja) Rozgr. międzynarodowe","elim. MŚ (Afryka) Rozgr. międzynarodowe"],
            "Spotkania towarzyskie":["Spotkania towarzyskie","mecze towarzyskie  Rozgr. międzynarodowe"],
-           "Polska - puchar":["Polska - puchar"],"2.Polska":['2.Polska'],"1.Belgia":['1.Belgia',"1. Liga Belgia","Belgia 1 liga","jupiler-pro-league","1 liga Belgia"],"1.Czechy":['1.Czechy',"1. Liga Czechy"],"1.Slowacja":['1.Slowacja',"1. Liga Słowacja"],"Elite League U20":['Elite League U20'],"1.Austria":['1.Austria',"1. Liga Austria","1 liga Austria"],
-           "Puchar króla":['copa-del-rey'],
+           "Polska - puchar":["Polska - puchar"],"2.Polska":['2.Polska'],"1.Belgia":["Belgia 1. Liga Belgia",'1.Belgia',"1. Liga Belgia","Belgia 1 liga","jupiler-pro-league","1 liga Belgia"],"1.Czechy":['1.Czechy',"1. Liga Czechy"],"1.Slowacja":['1.Slowacja',"1. Liga Słowacja"],"Elite League U20":['Elite League U20'],"1.Austria":['bundesliga Austria','Austria 1. Liga Austria','1.Austria',"1. Liga Austria","1 liga Austria"],
+           "Puchar króla":['copa-del-rey'],"Superpuchar Europy":["Superpuchar Europy Klubowe","Superpuchar Europy"],
 
 
            }
@@ -1699,8 +1769,43 @@ def unify2(raw_name, name_dict,log):
         log.info("Nieznana nazwa2: " + raw_name)
     return corrected_name
 
-def save_to_db_common(meczyk,data='',league=''):
-        database_name = 'db.sqlite'
+def save_to_db_common(meczyk):
+    database_name = 'odds_new.sqlite'
+    db = sqlite3.connect(database_name)
+    table_name="'db_bets'"
+    print ("tabela:",table_name)
+    columns_string = '("' + '","'.join(meczyk.dict_sql.keys()) + '")'
+    values_string = '("' + '","'.join(map(str, meczyk.dict_sql.values())) + '")'
+
+    cur = db.cursor()
+    #print ("SELECT:")
+    home = meczyk.home
+    print (home)
+    away = meczyk.away
+    bet = meczyk.bet
+    print (bet)
+    print (meczyk.data)
+    date="'" + meczyk.data + "'"
+    
+    polecenie="SELECT * FROM "+str(table_name)+ " WHERE \"bet\"=\""+str(bet)+"\" and \"home\"="+"\""+str(home) +"\""+" and \"away\"=" +"\""+ str(away) +"\""+" and \"data\"="+str(date)+""
+    delete_command="DELETE FROM "+str(table_name)+ " WHERE \"bet\"=\""+str(bet)+"\" and \"home\"="+"\""+str(home) +"\""+" and \"away\"=" +"\""+ str(away) +"\""+" and \"data\"="+str(date)+""
+    insert_command="""INSERT INTO %s %s
+                     VALUES %s""" % (table_name, columns_string, values_string)
+    try:
+        cur.execute(delete_command)
+    except Exception as e: 
+        pass
+    try:
+        cur.execute(insert_command)
+        db.commit()
+        print ("INSERT done",insert_command)
+    except Exception as e:
+        print (e)
+        print (insert_command)
+    
+
+def save_to_db_common_old(meczyk,data='',league=''):
+        database_name = 'odds_new.sqlite'
         db = sqlite3.connect(database_name)
         table_name="'db_bets'"
         table2_name='db_bets'
@@ -1710,6 +1815,7 @@ def save_to_db_common(meczyk,data='',league=''):
         #print ("SELECT:")
         home="'"+meczyk.home+"'"
         away = "'" + meczyk.away + "'"
+        bet = "'" + meczyk.bet + "'"
         date=data
         sql_update_command= 'UPDATE ' + str(table_name) + " SET "
         print ("SQL UPDATE")
@@ -1722,7 +1828,7 @@ def save_to_db_common(meczyk,data='',league=''):
         else:
             sql_update_cmd=sql_update_command[:-1] + " WHERE home=" + str(home) + "and away = "+ str(away) + " and data = "+str(date)
         sql_update = """UPDADE %s SET %s = %s WHERE home = %s
-                      and away = %s and data = %s""" % (table_name, columns_string, values_string,home,away,date)
+                      and away = %s and data = %s and bet = %s""" % (table_name, columns_string, values_string,home,away,date,bet)
         sql_insert = """INSERT INTO %s %s
                      VALUES %s""" % (table_name, columns_string, values_string)
 
@@ -1748,13 +1854,4 @@ def save_to_db_common(meczyk,data='',league=''):
                 db.commit()
                 print("ALE UDALO SIE UP")
         except Exception as e: print(e)
-            #
-            #pass
-        #print (sql_update)
-
-#        try:
-#            db.execute(sql_insert)
-#            db.commit()
-#        except:
-#            print ("NIE UDALO SIE INSERTNAC")
-#            pass
+            
